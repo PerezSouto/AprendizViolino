@@ -22,8 +22,12 @@ div#banner {
     background-position: center;
     background-repeat: no-repeat;
 }
-header nav {text-align: right;padding: 10px;
-background-color: #64406C;}
+header nav {
+    text-align: right;
+    padding: 10px;
+    background-color: #64406C;
+    box-shadow: 0px 4px 6px -2px #64406C ;
+}
 
 nav a {
     font-family: "Ubuntu", sans-serif;
@@ -39,10 +43,12 @@ main { min-width: 350px; max-width: 800px;
 
 main > article#livro > div#capa > img{
     height: 300px;
+    padding-top: 25px;
 }
 h1 {
     font-family: "Ubuntu", sans-serif;
     text-align: center;
+    padding-top: 10px;
 }
 p {
     font-family: "Ubuntu", sans-serif;
