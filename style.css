@@ -4,9 +4,9 @@
 
 header {width: 100%;text-align: center;}
 div#banner {
-    background: url('imagens/header.jpg');
+    background: url('imagens/header-g.jpg');
     width: 100%;
-    height: 170px;
+    height: 160px;
     /*aspect-ratio: 19 / 4; */
     background-size:cover;
     background-position: center;
