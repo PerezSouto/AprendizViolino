@@ -24,5 +24,9 @@ p {
     text-indent: 20px;
 } 
 
+#bohumil > iframe{
+    width: 100%;
+}
+
 footer { background-color:#5B426A; padding: 15px;}
 footer > p {text-align: center;}
