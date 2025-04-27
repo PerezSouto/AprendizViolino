@@ -18,6 +18,10 @@ main { min-width: 350px; max-width: 1000px;
     margin: auto;
 }
 
+main > article#livro > div#capa > img{
+    height: 300px;
+}
+
 p {
     text-align: justify;
     text-indent: 20px;
