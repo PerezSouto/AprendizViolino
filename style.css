@@ -41,11 +41,24 @@ main { min-width: 350px; max-width: 800px;
     padding: 10px;
 }
 
+main > article#livro > div#capa{
+    text-align: center;
+}
+
 main > article#livro > div#capa > img{
     height: 300px;
     padding-top: 25px;
 }
-h1 {
+
+main> article#depoimentos > h2{
+    padding: 15px;
+}
+
+main > article#depoimentos > p{
+    font-size: 0.8em;
+}
+
+h1, h2 {
     font-family: "Ubuntu", sans-serif;
     text-align: center;
     padding-top: 10px;
@@ -59,10 +72,6 @@ p {
     text-indent: 20px;
     line-height: 1.6em;
 } 
-
-#bohumil > iframe{
-    width: 100%;
-}
 
 footer { background-color:#64406C; padding: 15px;}
 footer > p {
