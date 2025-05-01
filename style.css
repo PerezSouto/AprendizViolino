@@ -94,4 +94,11 @@ div#fotokeeyth{
     text-align: center;
 }
 
-/* Página do certificado*/
+/* Página do ebook*/
+div#ebook {
+    text-align: center;
+}
+
+div#ebook > img{
+    width: 50%;padding-bottom: 15px;
+}
