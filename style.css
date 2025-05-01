@@ -109,3 +109,13 @@ ul#creditos{
     font-family: "Ubuntu", sans-serif;
     font-size: 0.8em;
 }
+
+/* Página o musical*/
+div#capamusical{
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+div#capamusical >img{
+    width: 70%;
+}
