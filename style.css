@@ -100,7 +100,8 @@ div#ebook {
 }
 
 div#ebook > img{
-    width: 50%;padding-bottom: 15px;
+    width: 60%;
+    padding-bottom: 15px;
 }
 
 ul#creditos{
