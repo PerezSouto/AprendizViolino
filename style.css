@@ -43,7 +43,7 @@ main { min-width: 350px; max-width: 800px;
     padding: 20px;
 }
 
-h1, h2 {
+h1, h2, h3 {
     font-family: "Ubuntu", sans-serif;
     text-align: center;
     padding-top: 20px;
@@ -101,4 +101,10 @@ div#ebook {
 
 div#ebook > img{
     width: 50%;padding-bottom: 15px;
+}
+
+ul#creditos{
+    list-style-position: inside;
+    font-family: "Ubuntu", sans-serif;
+    font-size: 0.8em;
 }
