@@ -193,3 +193,12 @@ div#capamusical >img{
 #credanima{
     font-size: small;
 }
+
+/* Página Certificado*/
+#edital{
+    padding-top: 20px;
+    font-size: 15px;
+    list-style-position: inside;
+    font-family: Arial,sans-serif;
+    line-height: 1.5em;
+}
