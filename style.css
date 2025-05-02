@@ -26,7 +26,7 @@ div#banner {
     background-repeat: no-repeat;
 }
 
-#iconemenu{
+#iconeburger{
     display: block;
     color:white;
     text-align: left;
@@ -35,7 +35,7 @@ div#banner {
     box-shadow: -2px 4px 5px -2px #64406ca2;
 }
 
-#iconemenu:hover{
+#iconeburger:hover{
     color: yellow;
     cursor: pointer;
 }
