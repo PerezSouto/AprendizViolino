@@ -52,9 +52,9 @@ nav#hamburguer {
 nav#hamburguer > a {
     display: block;
     font-family: "Ubuntu", sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     color: white;
-    padding:10px;
+    padding:11px;
     text-decoration: none;
 }
 
