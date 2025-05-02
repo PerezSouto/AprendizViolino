@@ -131,6 +131,10 @@ main > article#livro > div#capa{
 main > article#livro > div#capa > img{
         height: 300px;
 }
+
+main >article#livro > h1{
+    font-size: 1.4em;
+}
     
 main> article#depoimentos > h3{
         padding: 15px;
