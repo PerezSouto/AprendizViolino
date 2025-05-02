@@ -97,6 +97,7 @@ p {
     padding: 8px;
     border: 3px solid #007C4A;
     border-radius: 15px;
+    box-shadow: 1px 2px 4px #0024157a;
 }
 
 .botaocomprar:hover{
@@ -164,4 +165,9 @@ div#capamusical{
 
 div#capamusical >img{
     width: 70%;
+}
+
+/* Página Animações*/
+.creditos{
+    font-size: small;
 }
