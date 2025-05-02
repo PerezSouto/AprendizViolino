@@ -104,6 +104,16 @@ p {
     color: yellow;
 }
 
+.conteinervideo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ifvideo{
+text-align: center;
+padding-bottom: 10px;
+}
+
 footer { background-color:#64406C; padding: 15px;}
 footer > p {
     font-family: "Ubuntu", sans-serif;
