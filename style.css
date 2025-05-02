@@ -3,6 +3,7 @@
 /* Configurações
 Cores:
 -Roxo:#64406C
+-Verde:#007C4A
 
 Fontes:
 -Ubunto:8 styles,Light 300,Regular 400,Medium 500,Bold 700,Light 300,Italic,Regular 400 Italic Medium 500 Italic Bold 700 Italic
@@ -13,7 +14,7 @@ Fontes:
 
 *{ margin:0px; padding: 0px;}
 
-/*Header e navegador e configurações gerais para todas páginas*/
+/*Header, navegador e configurações gerais para todas páginas*/
 
 header {width: 100%;text-align: center;}
 div#banner {
@@ -57,6 +58,21 @@ p {
     text-align: left;
     line-height: 1.6em;
 } 
+
+.botaocomprar{
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bolder;
+    color: white;
+    background: linear-gradient(to bottom, #007C4A, #01bd72);
+    padding: 8px;
+    border: 3px solid #007C4A;
+    border-radius: 15px;
+}
+
+.botaocomprar:hover{
+    color: yellow;
+}
 
 footer { background-color:#64406C; padding: 15px;}
 footer > p {
