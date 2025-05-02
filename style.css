@@ -25,19 +25,48 @@ div#banner {
     background-position: center;
     background-repeat: no-repeat;
 }
-header nav {
-    text-align: right;
-    padding: 10px;
+
+#iconemenu{
+    display: block;
+    color:white;
+    text-align: left;
+    padding: 5px 0px 5px 15px;
     background-color: #64406C;
-    box-shadow: 0px 4px 6px -2px #64406ca2 ;
+    box-shadow: -2px 4px 5px -2px #64406ca2;
 }
 
-nav a {
+#iconemenu:hover{
+    color: yellow;
+    cursor: pointer;
+}
+
+nav#hamburguer {
+    display: none;
+    width: 140px;
+    text-align: left;
+    padding: 10px;
+    background-color: #64406C;
+    box-shadow: 4px 4px 5px -2px #64406ca2 ;
+}
+
+nav#hamburguer > a {
+    display: block;
     font-family: "Ubuntu", sans-serif;
     font-size: 14px;
     color: white;
     padding:10px;
-    text-decoration: none;}
+    text-decoration: none;
+}
+
+nav#hamburguer > a:hover{
+    color: yellow;
+}
+
+nav#menugrande{
+    display: none;
+}
+
+
 
 main { min-width: 350px; max-width: 800px;
     margin: auto;
