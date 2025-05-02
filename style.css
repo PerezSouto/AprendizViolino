@@ -92,8 +92,9 @@ main > article#livro > div#capa > img{
         height: 300px;
 }
     
-main> article#depoimentos > h2{
+main> article#depoimentos > h3{
         padding: 15px;
+        padding-top: 40px;
 }
     
 main > article#depoimentos > p{
