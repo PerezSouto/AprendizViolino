@@ -145,7 +145,8 @@ main > article#livro > div#capa{
 }
     
 main > article#livro > div#capa > img{
-        height: 300px;
+        /*height: 300px; */
+        width: 40%;
 }
 
 main >article#livro > h1{
