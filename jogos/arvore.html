@@ -13,7 +13,6 @@
       align-items: flex-start;
       flex-wrap: wrap;
       padding: 20px 20px 0px 20px;
-      gap: 40px;
     }
 
     h1 {
@@ -24,9 +23,9 @@
 
     .arvore-container {
       position: relative;
-      width: 80%;
+      width: 100%;
       aspect-ratio: 3 / 4;
-      background-image: url('fundo.jpg');
+      background-image: url('fundo2.jpg');
       background-size: cover;
       background-position: center;
     }
@@ -59,12 +58,12 @@
     .notas {
       position: absolute;
       display: flex;
-      right: 15%;
-      margin-top: 22%;
-      margin-right: 5%;
       flex-direction: column;
-      gap: 6px;
+      right: 5%;
       z-index: 4;
+      margin-top: 41%;
+      margin-right: 5%;
+      gap: 5px;
     }
 
     .nota {
@@ -76,7 +75,7 @@
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 1em;
+      font-size: 3vw;
       cursor: pointer;
       transition: 0.2s;
       box-shadow: 2px 4px 4px 1px rgba(0, 15, 3, 0.753);
@@ -89,50 +88,29 @@
     }
 
     .slot.destacado {
-      outline: 3px solid #2196f3;
+      outline: 3px solid #f0f321;
       outline-offset: -3px;
     }
 
     #mensagem {
-      width: 100%;
+      position: absolute;
+      width: 30%;
+      height: 10%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
       font-family: Georgia, 'Times New Roman', Times, serif;
-      text-align: center;
-      font-size: 2em;
-      min-height: 1.4em;
-    }
+      font-size: 3.5vw;
+      top: 61.3%;
+      left: 2%;
+      transition: background-color 0.3s ease;
 
-    @media (max-width: 600px) {
-      body {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .notas {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin-top: 20px;
-      }
-
-      .nota {
-        width: 50px;
-        height: 50px;
-        font-size: 0.9em;
-      }
     }
   </style>
 </head>
 <body>
-
-  <div class="notas" id="notas">
-    <div class="nota">Dó</div>
-    <div class="nota">Ré</div>
-    <div class="nota">Mi</div>
-    <div class="nota">Fá</div>
-    <div class="nota">Sol</div>
-    <div class="nota">Lá</div>
-    <div class="nota">Si</div>
-  </div>
 
   <div class="arvore-container" id="arvore">
     <div class="slot slot1"></div>
@@ -143,9 +121,17 @@
     <div class="slot slot6"></div>
     <div class="slot slot7"></div>
     <div class="slot slot8"></div>
+    <div id="mensagem"></div>
+    <div class="notas" id="notas">
+      <div class="nota">Dó</div>
+      <div class="nota">Mi</div>
+      <div class="nota">Si</div>
+      <div class="nota">Ré</div>
+      <div class="nota">Sol</div>
+      <div class="nota">Fá</div>
+      <div class="nota">Lá</div>
+    </div>
   </div>
-
-  <div id="mensagem"></div>
 
   <script>
     let notaSelecionada = null;
