@@ -254,15 +254,23 @@ div#capamusical >img{
     border-top-left-radius: 10px;
     font-size: 1.4em;
 }
+.conteinerjogos h2{
+}
 
 .conteinerjogos > h2, h3, p{
     text-align: left;
     padding: 10px 15px 10px 15px;
 }
 
+.botao-jogo{
+    display: flex;
+    justify-content: center;
+}
+
 .botaojogar{
     width: 150px;
     text-align: center;
+    margin: 5px;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bolder;
@@ -277,6 +285,7 @@ div#capamusical >img{
 .botaojogarpdf{
     width: 150px;
     text-align: center;
+    margin: 5px;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bolder;
