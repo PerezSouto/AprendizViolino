@@ -186,6 +186,8 @@ ul#creditos{
     list-style-position: inside;
     font-family: "Ubuntu", sans-serif;
     font-size: 0.8em;
+    margin-top: -10px;
+    padding-left: 15px;
 }
 
 /* Página o musical*/
