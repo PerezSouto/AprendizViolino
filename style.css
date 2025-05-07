@@ -263,6 +263,25 @@ div#capamusical >img{
     padding: 10px 15px 10px 15px;
 }
 
+.interiorjogo{
+    display: flex;
+}
+
+.interiorjogo > div{
+    border: 1px solid black;
+    width: 40%;
+}
+
+.interiorjogo > div > img{
+    flex-grow: 1;
+    width: 100%;
+    border: 1px solid black;
+}
+.interiorjogo > p {
+    flex-grow: 1;
+    border: 1px solid;
+}
+
 .botao-jogo{
     display: flex;
     justify-content: center;
