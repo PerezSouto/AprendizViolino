@@ -316,3 +316,10 @@ div#capamusical >img{
     border-radius: 15px;
     box-shadow: 1px 2px 4px #0024157a;
 }
+
+/* Página Dados*/
+.conteinerdados{
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+}
