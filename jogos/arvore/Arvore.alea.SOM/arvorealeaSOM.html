@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Árvore Musical</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #e0f7e9;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      padding: 20px 20px 0px 20px;
+    }
+
+    h1 {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .arvore-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background-image: url('fundo2.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .slot {
+      position: absolute;
+      width: 9%;
+      aspect-ratio: 1 / 1;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 2px solid #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Posição dos slots em valores relativos */
+    .slot1 { top: 87.5%; left: 45%; }
+    .slot2 { top: 80%; left: 45%; }
+    .slot3 { top: 72.5%; left: 45%; }
+    .slot4 { top: 65%; left: 45%; }
+    .slot5 { top: 57.5%; left: 45%; }
+    .slot6 { top: 50%; left: 45%; }
+    .slot7 { top: 42.5%; left: 45%; }
+    .slot8 { top: 34.5%; left: 45%; }
+
+    .notas {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      right: 5%;
+      z-index: 4;
+      margin-top: 41%;
+      margin-right: 5%;
+      gap: 5px;
+    }
+
+    .nota {
+      width: 9vw;
+      height: 9vw;
+      background-color: #8eee9b;
+      border: 2px solid #015817;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 3vw;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 2px 4px 4px 1px rgba(0, 15, 3, 0.753);
+    }
+
+    .nota.selecionada {
+      background-color: #4caf50;
+      color: white;
+      border-color: #2e7d32;
+    }
+
+    .slot.destacado {
+      outline: 3px solid #f0f321;
+      outline-offset: -3px;
+    }
+
+    #mensagem {
+      position: absolute;
+      width: 30%;
+      height: 10%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: 3.5vw;
+      top: 61.3%;
+      left: 2%;
+      transition: background-color 0.3s ease;
+
+    }
+  </style>
+</head>
+<body>
+
+  <div class="arvore-container" id="arvore">
+    <div class="slot slot1"></div>
+    <div class="slot slot2"></div>
+    <div class="slot slot3"></div>
+    <div class="slot slot4"></div>
+    <div class="slot slot5"></div>
+    <div class="slot slot6"></div>
+    <div class="slot slot7"></div>
+    <div class="slot slot8"></div>
+    <div id="mensagem"></div>
+
+    
+
+    <div class="notas" id="notas">
+      <div class="nota">Dó</div>
+      <div class="nota">Mi</div>
+      <div class="nota">Si</div>
+      <div class="nota">Ré</div>
+      <div class="nota">Sol</div>
+      <div class="nota">Fá</div>
+      <div class="nota">Lá</div>
+    </div>
+  </div>
+
+
+  <script>
+    const todasNotas = ['Dó', 'Ré', 'Mi', 'Fá', 'Sol', 'Lá', 'Si'];
+  
+    let notaSelecionada = null;
+    let slotInicial = Math.floor(Math.random() * 8);
+    let indiceNotaInicial = Math.floor(Math.random() * 7);
+    let direcao = 'ascendente'; // Sempre ascendente
+    let sequenciaFinal = new Array(8);
+  
+    // Gera a sequência correta com base no slot e nota iniciais
+    for (let i = 0; i < 8; i++) {
+      let deslocamento = i - slotInicial;
+      let index = (indiceNotaInicial + deslocamento + todasNotas.length) % todasNotas.length;
+      sequenciaFinal[i] = todasNotas[index];
+    }
+  
+    const slots = document.querySelectorAll('.slot');
+    const mensagemDiv = document.getElementById('mensagem');
+  
+    // Preenche o slot sorteado
+    slots[slotInicial].textContent = todasNotas[indiceNotaInicial];
+    slots[slotInicial].classList.add('destacado');
+    slots[slotInicial].style.backgroundColor = '#c8e6c9';
+  
+    console.log("Sequência correta:", sequenciaFinal);
+    console.log("Slot inicial:", slotInicial);
+    console.log("Nota inicial:", todasNotas[indiceNotaInicial]);
+  
+    const nomesArquivo = {
+      'Dó': 'do',
+      'Ré': 're',
+      'Mi': 'mi',
+      'Fá': 'fa',
+      'Sol': 'sol',
+      'Lá': 'la',
+      'Si': 'si'
+    };
+  
+    // Clique nas notas
+    document.querySelectorAll('.nota').forEach(nota => {
+      nota.addEventListener('click', () => {
+        document.querySelectorAll('.nota').forEach(n => n.classList.remove('selecionada'));
+        nota.classList.add('selecionada');
+        notaSelecionada = nota.textContent;
+      });
+    });
+  
+    // Clique nos slots
+    slots.forEach((slot, index) => {
+      slot.addEventListener('click', () => {
+        if (index === slotInicial) return; // Impede edição do slot inicial
+  
+        if (notaSelecionada) {
+          const notaEsperada = sequenciaFinal[index];
+  
+          if (notaSelecionada === notaEsperada) {
+            slot.textContent = notaSelecionada;
+            slot.classList.add('destacado');
+            slot.style.backgroundColor = '#c8e6c9';
+  
+            mensagemDiv.textContent = 'Acertou!';
+            mensagemDiv.style.color = 'green';
+  
+            // Verifica se todos os slots estão corretamente preenchidos
+            const todosPreenchidos = Array.from(slots).every((s, i) => {
+              return s.textContent === sequenciaFinal[i];
+            });
+  
+            if (todosPreenchidos) {
+              mensagemDiv.textContent = '🎉 Parabéns!';
+              mensagemDiv.style.color = 'blue';
+  
+              const audioVitoria = new Audio('sons/success.mp3');
+              audioVitoria.play();
+            }
+  
+          } else {
+            mensagemDiv.textContent = 'Nota errada!'//Era "${notaEsperada}".`;
+            mensagemDiv.style.color = 'red';
+          }
+          
+          notaSelecionada = null;
+          document.querySelectorAll('.nota').forEach(n => n.classList.remove('selecionada'));
+  
+        } else if (slot.textContent !== '') {
+          slot.textContent = '';
+          slot.classList.remove('destacado');
+          slot.style.backgroundColor = 'rgba(255,255,255,0.8)';
+        }
+      });
+    });
+  </script>
+  
+
+</body>
+</html>
