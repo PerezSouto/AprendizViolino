@@ -21,35 +21,47 @@
     </div>
   </div>
 
-  <button id="botao" onclick="rollDice()">Rolar Dado</button>
+  <button id="botao" onclick="rolarDado()">Rolar Dado</button>
 
-  <script>
-const rotations = {
-  1: [0,   0],
-  2: [90,  0],
-  3: [0, -90],
-  4: [0,  90],
-  5: [-90, 0],
-  6: [0, 180]
-};
+<script>
+  const dado = document.getElementById('cube');
+  let ultimosResultados = [];
+  let rotacaoExtra = 0;
 
-let totalX = 0;
-let totalY = 0;
+  function rolarDado() {
+    // Gera número novo que não repete mais de 2 vezes
+    let novoValor;
+    do {
+      novoValor = Math.floor(Math.random() * 6) + 1;
+    } while (
+    ultimosResultados.length > 0 &&
+    ultimosResultados[ultimosResultados.  length - 1] === novoValor
+    );
 
-function rollDice() {
-  const cube = document.getElementById('cube');
-  const result = Math.floor(Math.random() * 6) + 1;
-  const [faceX, faceY] = rotations[result];
+    // Atualiza histórico
+    ultimosResultados.push(novoValor);
+    if (ultimosResultados.length > 2) ultimosResultados.shift();
 
-  // Força muitos giros completos antes de chegar na rotação final
-  const extraTurns = 2; // número de giros completos (360º x N)
-  totalX += 360 * extraTurns + faceX - (totalX % 360);
-  totalY += 360 * extraTurns + faceY - (totalY % 360);
+    // Orientações fixas para cada face
+    const rotacoesFixas = {
+      1: [0, 0],
+      2: [0, 180],
+      3: [0, -90],
+      4: [0, 90],
+      5: [-90, 0],
+      6: [90, 0],
+    };
 
-  cube.style.transition = "transform 2s ease-out";
-  cube.style.transform = `rotateX(${totalX}deg) rotateY(${totalY}deg)`;
-}
+    const [baseX, baseY] = rotacoesFixas[novoValor];
 
-  </script>
+    // A cada jogada, somamos 720° para forçar nova rotação animada
+    rotacaoExtra += 720;
+
+    const finalX = baseX + rotacaoExtra;
+    const finalY = baseY + rotacaoExtra;
+
+    dado.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
+  }
+</script>
 </body>
 </html>
