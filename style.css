@@ -272,6 +272,10 @@ div#capamusical >img{
     width: 40%;
 }
 
+.interiorjogo>p{
+    width: 30%;
+}
+
 .interiorjogo > div > img{
     flex-grow: 1;
     width: 100%;
