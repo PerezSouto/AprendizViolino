@@ -133,57 +133,74 @@
     </div>
   </div>
 
-  <script>
-    let notaSelecionada = null;
+<script>
+  let notaSelecionada = null;
 
-    const respostasCorretas = {
-      slot1: 'Dó',
-      slot2: 'Ré',
-      slot3: 'Mi',
-      slot4: 'Fá',
-      slot5: 'Sol',
-      slot6: 'Lá',
-      slot7: 'Si',
-      slot8: 'Dó',
-    };
+const respostasCorretas = {
+  slot1: 'Dó',
+  slot2: 'Ré',
+  slot3: 'Mi',
+  slot4: 'Fá',
+  slot5: 'Sol',
+  slot6: 'Lá',
+  slot7: 'Si',
+  slot8: 'Dó',
+};
 
-    const mensagemDiv = document.getElementById('mensagem');
+const mensagemDiv = document.getElementById('mensagem');
 
-    document.querySelectorAll('.nota').forEach(nota => {
-      nota.addEventListener('click', () => {
-        document.querySelectorAll('.nota').forEach(n => n.classList.remove('selecionada'));
-        nota.classList.add('selecionada');
-        notaSelecionada = nota.textContent;
-      });
-    });
+document.querySelectorAll('.nota').forEach(nota => {
+  nota.addEventListener('click', () => {
+    document.querySelectorAll('.nota').forEach(n => n.classList.remove('selecionada'));
+    nota.classList.add('selecionada');
+    notaSelecionada = nota.textContent;
+  });
+});
 
-    document.querySelectorAll('.slot').forEach(slot => {
-      slot.addEventListener('click', () => {
-        const slotId = slot.classList[1]; // ex: "slot1"
+document.querySelectorAll('.slot').forEach(slot => {
+  slot.addEventListener('click', () => {
+    const slotId = slot.classList[1]; // ex: "slot1"
 
-        if (notaSelecionada) {
-          if (notaSelecionada === respostasCorretas[slotId]) {
-            slot.textContent = notaSelecionada;
-            slot.classList.add('destacado');
-            slot.style.backgroundColor = '#c8e6c9'; // verde claro
-            mensagemDiv.textContent = 'Acertou!';
-            mensagemDiv.style.color = 'green';
-          } else {
-            mensagemDiv.textContent = 'Nota errada!';
-            mensagemDiv.style.color = 'red';
-          }
+    if (notaSelecionada) {
+      if (notaSelecionada === respostasCorretas[slotId]) {
+        slot.textContent = notaSelecionada;
+        slot.classList.add('destacado');
+        slot.style.backgroundColor = '#c8e6c9'; // verde claro
+        mensagemDiv.textContent = 'Acertou!';
+        mensagemDiv.style.color = 'green';
 
-          notaSelecionada = null;
-          document.querySelectorAll('.nota').forEach(n => n.classList.remove('selecionada'));
-        } else if (slot.textContent !== '') {
-          slot.textContent = '';
-          slot.classList.remove('destacado');
-          slot.style.backgroundColor = 'rgba(255,255,255,0.8)';
-          mensagemDiv.textContent = '';
+        // Verifica se todos os slots estão corretos
+        const todosSlots = document.querySelectorAll('.slot');
+        const todosPreenchidos = Array.from(todosSlots).every(s => {
+          const id = s.classList[1];
+          return s.textContent === respostasCorretas[id];
+        });
+
+        if (todosPreenchidos) {
+          mensagemDiv.textContent = '🎉 Parabéns!';
+          mensagemDiv.style.color = 'blue';
+
+          const audioVitoria = new Audio('sons/success.mp3');
+          audioVitoria.play();
         }
-      });
-    });
-  </script>
+
+      } else {
+        mensagemDiv.textContent = 'Nota errada!';
+        mensagemDiv.style.color = 'red';
+      }
+
+      notaSelecionada = null;
+      document.querySelectorAll('.nota').forEach(n => n.classList.remove('selecionada'));
+    } else if (slot.textContent !== '') {
+      slot.textContent = '';
+      slot.classList.remove('destacado');
+      slot.style.backgroundColor = 'rgba(255,255,255,0.8)';
+      mensagemDiv.textContent = '';
+    }
+  });
+});
+
+</script>
 
 </body>
 </html>
