@@ -257,30 +257,51 @@
     });
   });
 
-  function rolarDado() {
+
   const dado = document.getElementById('dado');
-  const valor = Math.floor(Math.random() * 6) + 1;
+  let ultimosResultados = [];
+  let rotacaoExtra = 0;
 
-  const rotacoesBase = {
-    1: [0, 0],
-    2: [0, 180],
-    3: [0, -90],
-    4: [0, 90],
-    5: [-90, 0],
-    6: [90, 0],
-  };
+  function rolarDado() {
+    // Gera número novo que não repete mais de 2 vezes
+    let novoValor;
+    do {
+      novoValor = Math.floor(Math.random() * 6) + 1;
+    } while (
+      ultimosResultados.length >= 2 &&
+      ultimosResultados[0] === novoValor &&
+      ultimosResultados[1] === novoValor
+    );
 
-  const [baseX, baseY] = rotacoesBase[valor];
+    // Atualiza histórico
+    ultimosResultados.push(novoValor);
+    if (ultimosResultados.length > 2) ultimosResultados.shift();
 
-  // Roda duas voltas completas (720°) antes de alinhar com a face
-  const extraX = 720;
-  const extraY = 720;
+    // Orientações fixas para cada face
+    const rotacoesFixas = {
+      1: [0, 0],
+      2: [0, 180],
+      3: [0, -90],
+      4: [0, 90],
+      5: [-90, 0],
+      6: [90, 0],
+    };
 
-  const finalX = baseX + extraX;
-  const finalY = baseY + extraY;
+    const [baseX, baseY] = rotacoesFixas[novoValor];
 
-  dado.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
-}
+    // A cada jogada, somamos 720° para forçar nova rotação animada
+    rotacaoExtra += 720;
+
+    const finalX = baseX + rotacaoExtra;
+    const finalY = baseY + rotacaoExtra;
+
+    dado.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
+  }
+
+
+
+
+
 
 
 
