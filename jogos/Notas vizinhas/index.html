@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Árvore Musical</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #e0f7e9;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      padding: 20px 20px 0px 20px;
+    }
+
+    h1 {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .arvore-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background-image: url('fundo3.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .slot {
+      position: absolute;
+      width: 9%;
+      aspect-ratio: 1 / 1;
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 2px solid #444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Posição dos slots em valores relativos */
+    .slot1 { top: 11%; left: 15.5%; }
+    .slot2 { top: 3.4%; left: 25.3%; }
+    .slot3 { top: 18.7%; left: 58.2%; }
+    .slot4 { top: 11.4%; left: 69.6%; }
+    .slot5 { top: 18.7%; left: 80.2%; }
+    .slot6 { top: 36%; left: 10.5%; }
+    .slot7 { top: 36.2%; left: 32.6%; }
+    .slot8 { top: 43.7%; left: 21.5%; }
+    .slot9 { top: 39.9%; left: 68%; }
+    .slot10 { top: 47.5%; left: 77.8%; }
+    .slot11 { top: 65.3%; left: 27.5%; }
+    .slot12 { top: 58.5%; left: 39.5%; }
+    .slot13 { top: 65.4%; left: 51%; }
+    .slot14 { top: 73.1%; left: 60.8%; }
+
+.notas {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  top: 85%;       /* Exato percentual dentro da árvore */
+  left: 25%;      /* Centralizado horizontalmente */
+  transform: translateX(-50%);
+  gap: 1%;
+  z-index: 4;
+}
+
+.nota {
+  width: 9%;
+  padding: 12%;
+  aspect-ratio: 1 / 1;
+  background-color: #8eee9b;
+  border: 0.2vw solid #015817;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 3vw;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0.3vw 0.6vw 0.6vw 0.1vw rgba(0, 15, 3, 0.753);
+}
+
+
+    .nota.selecionada {
+      background-color: #4caf50;
+      color: white;
+      border-color: #2e7d32;
+    }
+
+    .slot.destacado {
+      outline: 3px solid #f0f321;
+      outline-offset: -3px;
+    }
+
+    #mensagem {
+      position: absolute;
+      width: 30%;
+      height: 10%;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: 3.5vw;
+      top: 61.3%;
+      left: 2%;
+      transition: background-color 0.3s ease;
+
+    }
+  </style>
+</head>
+<body>
+
+  <div class="arvore-container" id="arvore">
+    <div class="slot slot1"></div>
+    <div class="slot slot2"></div>
+    <div class="slot slot3"></div>
+    <div class="slot slot4"></div>
+    <div class="slot slot5"></div>
+    <div class="slot slot6"></div>
+    <div class="slot slot7"></div>
+    <div class="slot slot8"></div>
+    <div class="slot slot9"></div>
+    <div class="slot slot10"></div>
+    <div class="slot slot11"></div>
+    <div class="slot slot12"></div>
+    <div class="slot slot13"></div>
+    <div class="slot slot14"></div>
+    <div class="notas" id="notas">
+      <div class="nota">Dó</div>
+      <div class="nota">Ré</div>
+      <div class="nota">Mi</div>
+      <div class="nota">Fá</div>
+      <div class="nota">Sol</div>
+      <div class="nota">Lá</div>
+      <div class="nota">Si</div>
+    </div>
+  </div>
+
+</body>
+  <script>
+    let notaSelecionada = null;
+
+    // Quando clica em uma nota, marca/desmarca
+    document.querySelectorAll('.nota').forEach(nota => {
+      nota.addEventListener('click', () => {
+        // Limpa seleção anterior
+        document.querySelectorAll('.nota').forEach(n => n.classList.remove('selecionada'));
+        // Seleciona a nova
+        nota.classList.add('selecionada');
+        notaSelecionada = nota.textContent;
+      });
+    });
+
+    // Quando clica em um slot, preenche com a nota e muda o background
+    document.querySelectorAll('.slot').forEach(slot => {
+      slot.addEventListener('click', () => {
+        if (notaSelecionada) {
+          slot.textContent = notaSelecionada;
+          slot.style.fontSize = '2.5vw';
+          slot.style.color = 'black';
+          slot.style.backgroundColor = '#8eee9b'; // verde claro
+        }
+      });
+    });
+  </script>
+
+</html>
