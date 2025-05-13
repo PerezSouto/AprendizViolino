@@ -327,3 +327,21 @@ div#capamusical >img{
     display: flex;
     flex-direction: column;
 }
+
+/* Página contato*/
+#contato{
+    margin: 0 auto;
+    background-color:#007c4ae3 ;
+    border-radius: 20px;
+    max-width: 400px;
+    text-align: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    box-shadow: 3px 5px 4px rgba(0, 0, 0, 0.582);
+}
+
+#contato > p, h3{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
