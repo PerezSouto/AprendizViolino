@@ -203,6 +203,9 @@ div#capamusical >img{
 #credanima{
     font-size: small;
 }
+#animacoes>article>section>p{
+    text-align: center;
+}
 
 /* Página Certificado*/
 #edital{
@@ -211,6 +214,9 @@ div#capamusical >img{
     list-style-position: inside;
     font-family: Arial,sans-serif;
     line-height: 1.5em;
+}
+#edital > li > a{
+    color: black;
 }
 
 /* Página oficinas*/
@@ -344,4 +350,8 @@ div#capamusical >img{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+/*Página artigos*/
+#artigos>p>a{
+    color:#007C4A;
 }
