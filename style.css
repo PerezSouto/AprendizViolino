@@ -164,14 +164,25 @@ main > article#livro > div#capa > img{
 main >article#livro > h1{
     font-size: 1.4em;
 }
-    
-main> article#depoimentos > h3{
+
+article#depoimentosfundo{
+    width: 100%;
+    background: #007C4A;
+}
+article>div#depoimentos{
+    min-width: 350px; max-width: 800px;
+    margin: auto;
+    margin-top: 10px;
+    padding: 20px;
+}
+
+article > div#depoimentos > h1{
         padding: 15px;
-        padding-top: 40px;
 }
     
-main > article#depoimentos > p{
-        font-size: 0.8em;
+article > div#depoimentos > p{
+        font-size: 1em;
+        padding-bottom: 20px;
 }
 
 /* Página da autora*/
@@ -274,12 +285,12 @@ div#capamusical >img{
     border-top-left-radius: 10px;
     font-size: 1.4em;
 }
-.conteinerjogos h2{
-}
 
-.conteinerjogos > h2, h3, p{
+.conteinerjogos > h2,
+.conteinerjogos h3,
+.conteinerjogos p {
     text-align: left;
-    padding: 10px 15px 10px 15px;
+    padding: 10px 15px;
 }
 
 .interiorjogo{
