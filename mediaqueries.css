@@ -35,6 +35,15 @@ Grandes telas: acima de 1200px.
     div#banner{
         height: 300px;
     }
+    /*Menu*/
+    #iconeburger{
+        display: none;
+    }
+    nav#menugrande{
+    display: block;
+}
+
+
     /*Página autora*/
     img#fotoautora{
     width: 40%;

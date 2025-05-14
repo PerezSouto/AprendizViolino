@@ -64,6 +64,19 @@ nav#hamburguer > a:hover{
 
 nav#menugrande{
     display: none;
+    background: #64406C;
+    padding: 12px;
+    box-shadow: 4px 4px 5px -2px #64406ca2 ;
+}
+nav#menugrande>a{
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    font-size: 1.1em;
+}
+
+nav#menugrande>a:hover{
+    color: yellow;
 }
 
 html, main{
