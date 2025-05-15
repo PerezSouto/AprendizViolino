@@ -171,6 +171,7 @@ main >article#livro > h1{
 article#depoimentosfundo{
     width: 100%;
     background: #007C4A;
+    box-shadow: 4px 4px 5px 2px rgba(0, 0, 0, 0.459) ;
 }
 article>div#depoimentos{
     min-width: 350px; max-width: 800px;
@@ -439,7 +440,7 @@ div#capamusical >img{
 .carousel-item {
   flex-shrink: 0;
   scroll-snap-align: center;
-  background-color: #1a1a1a;
+  background-color: #64406ca8;
   color: #fff;
   border-radius: 10px;
   padding: 10px;
@@ -455,7 +456,7 @@ div#capamusical >img{
 /* Telas pequenas: 1 item por vez */
 @media (max-width: 600px) {
   .carousel-item {
-    width: 50%;
+    width: 40%;
   }
   .carousel-container::before,
 .carousel-container::after {
@@ -466,14 +467,14 @@ div#capamusical >img{
 /* Telas médias: 2 itens */
 @media (min-width: 601px) and (max-width: 1024px) {
   .carousel-item {
-    width: 35%;
+    width: 25%;
   }
 }
 
 /* Telas grandes: 3 itens */
 @media (min-width: 1025px) {
   .carousel-item {
-    width: 20%;
+    width: 15%;
   }
 }
 
