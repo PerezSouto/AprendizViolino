@@ -62,6 +62,54 @@
                 <p><i>"As Aventuras Musicais de Aipim - O Aprendiz de Violino, não pretende substituir nenhuma metodologia de ensino, mas já nasce insubstituivel."</i> <strong>- Profª. Dra. Mariana Salles.</strong></p>
         </div>
     </article>
+    <article id="artcarrousel">
+        <h1>Explore</h1>
+            <div class="carousel-container">
+            <button class="arrow left" onclick="scrollCarousel(-1)"><span class="material-symbols-outlined">
+        arrow_back_ios
+        </span></button>
+
+      <div class="carousel" id="carousel">
+        <div class="carousel-item">
+          <img src="pexels-dropshado-32071751.jpg" alt="Hogwarts" />
+          <p>Jogos</p>
+        </div>
+        <div class="carousel-item">
+          <img src="pexels-dropshado-32071751.jpg" alt="Spells" />
+          <p>Ebbok Piano</p>
+        </div>
+        <div class="carousel-item">
+          <img src="pexels-dropshado-32071751.jpg" alt="Characters" />
+          <p>Oficinas</p>
+        </div>
+        <div class="carousel-item">
+          <img src="pexels-dropshado-32071751.jpg" alt="Characters" />
+          <p>Autora</p>
+        </div>
+        <div class="carousel-item">
+          <img src="pexels-dropshado-32071751.jpg" alt="Movies" />
+          <p>A Autora</p>
+        </div>
+        <div class="carousel-item">
+          <img src="pexels-dropshado-32071751.jpg" alt="Books" />
+          <p>Certificado</p>
+        </div>
+          <div class="carousel-item">
+          <img src="pexels-dropshado-32071751.jpg" alt="Books" />
+          <p>Artigos</p>
+        </div>
+          <div class="carousel-item">
+          <img src="pexels-dropshado-32071751.jpg" alt="Books" />
+          <p>Animações</p>
+        </div>
+      </div>
+
+      <button class="arrow right" onclick="scrollCarousel(1)"><span class="material-symbols-outlined">
+        arrow_forward_ios
+        </span></button>
+    </div>
+
+    </article>
     <footer>
         <p> &copy; 2017-2025 O Aprendiz de Violino</p>
         <div class="redes">
@@ -79,6 +127,89 @@
                     hamburguer.style.display = 'block'
                 }
             }
+
+        //Script do carrousel
+          const carousel = document.getElementById("carousel");
+
+function duplicateItems() {
+  const originalItems = Array.from(carousel.children);
+
+  originalItems.forEach(item => {
+    const cloneStart = item.cloneNode(true);
+    cloneStart.classList.add('clone');
+    carousel.insertBefore(cloneStart, carousel.firstChild);
+  });
+
+  originalItems.forEach(item => {
+    const cloneEnd = item.cloneNode(true);
+    cloneEnd.classList.add('clone');
+    carousel.appendChild(cloneEnd);
+  });
+}
+
+function centerCarousel() {
+  const items = carousel.querySelectorAll(".carousel-item");
+  const third = Math.floor(items.length / 3);
+  const middleItem = items[third];
+  const scrollPos = middleItem.offsetLeft - (carousel.offsetWidth / 2) + (middleItem.offsetWidth / 2);
+
+  // Remove transição para reposicionar instantaneamente
+  carousel.style.scrollBehavior = "auto";
+  carousel.scrollLeft = scrollPos;
+
+  // Reativa transição suave após reposicionar
+  setTimeout(() => {
+    carousel.style.scrollBehavior = "smooth";
+  }, 50);
+}
+
+function handleInfiniteScroll() {
+  const items = carousel.querySelectorAll(".carousel-item");
+  const itemWidth = items[0].offsetWidth + 20;
+  const totalItems = items.length;
+  const third = totalItems / 3;
+
+  const scrollLeft = carousel.scrollLeft;
+  const maxScrollLeft = carousel.scrollWidth;
+  
+  // Buffer maior para antecipar o reposicionamento
+  const buffer = itemWidth * 1.5; 
+
+  // Limites ajustados com buffer
+  const firstCloneBoundary = itemWidth * (third) - buffer;
+  const lastCloneBoundary = itemWidth * (third * 2) + buffer;
+
+  if (scrollLeft < firstCloneBoundary) {
+    carousel.style.scrollBehavior = "auto";
+    carousel.scrollLeft = scrollLeft + itemWidth * third;
+    setTimeout(() => {
+      carousel.style.scrollBehavior = "smooth";
+    }, 50);
+  } else if (scrollLeft > lastCloneBoundary) {
+    carousel.style.scrollBehavior = "auto";
+    carousel.scrollLeft = scrollLeft - itemWidth * third;
+    setTimeout(() => {
+      carousel.style.scrollBehavior = "smooth";
+    }, 50);
+  }
+}
+
+
+function scrollCarousel(direction) {
+  const itemWidth = carousel.querySelector(".carousel-item").offsetWidth + 20;
+  carousel.scrollBy({ left: direction * itemWidth, behavior: "smooth" });
+}
+
+window.addEventListener("load", () => {
+  duplicateItems();
+  centerCarousel();
+  carousel.addEventListener("scroll", () => {
+    requestAnimationFrame(handleInfiniteScroll);
+  });
+});
+
+window.addEventListener("resize", centerCarousel);
+
 
     </script>
 </body>

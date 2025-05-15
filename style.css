@@ -382,3 +382,126 @@ div#capamusical >img{
 #artigos>p>a{
     color:#007C4A;
 }
+
+/*Carrousel*/
+.carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  margin: 50px auto;
+  background:white;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-sizing: border-box;
+
+  /* adicionando para o fade */
+  mask-image: none;
+}
+
+.carousel-container::before,
+.carousel-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 120px;  /* aumenta a largura do fade para 120px */
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.carousel-container::before {
+  left: 0;
+  background: linear-gradient(to right, white 0%, rgba(255,255,255,0.98) 50%, rgba(255,255,255,0) 100%);
+}
+
+.carousel-container::after {
+  right: 0;
+  background: linear-gradient(to left, white 0%, rgba(255,255,255,0.98) 50%, rgba(255,255,255,0) 100%);
+}
+
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  gap: 20px;
+  padding: 10px;
+  flex: 1; /* ocupa toda a largura disponível */
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-item {
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  background-color: #1a1a1a;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.carousel-item:hover {
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+/* Telas pequenas: 1 item por vez */
+@media (max-width: 600px) {
+  .carousel-item {
+    width: 50%;
+  }
+  .carousel-container::before,
+.carousel-container::after {
+  display: none;
+}
+}
+
+/* Telas médias: 2 itens */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .carousel-item {
+    width: 35%;
+  }
+}
+
+/* Telas grandes: 3 itens */
+@media (min-width: 1025px) {
+  .carousel-item {
+    width: 20%;
+  }
+}
+
+
+.carousel-item img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 50%;
+  z-index: 6;
+  transition: background 0.3s;
+  color: #000;
+}
+
+.arrow.left {
+  left: 10px;
+}
+
+.arrow.right {
+  right: 10px;
+}
