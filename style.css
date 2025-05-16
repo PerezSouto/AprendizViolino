@@ -385,13 +385,38 @@ div#capamusical >img{
 }
 
 /*Carrousel*/
+#titulocarousel{
+    padding-top: 50px;
+    margin-bottom: -20px;
+    font-family:;
+}
+
+.title-with-lines {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: 2rem;
+  position: relative;
+  gap: 1rem;
+}
+
+.title-with-lines::before,
+.title-with-lines::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgb(7, 7, 7), transparent);
+}
+
 .carousel-container {
   position: relative;
   display: flex;
   align-items: center;
   overflow: hidden;
   width: 100%;
-  margin: 50px auto;
+  margin: 10px auto;
+  margin-bottom: 50px;
   background:#f8f8f8;
   padding: 20px 40px;
   border-radius: 10px;
