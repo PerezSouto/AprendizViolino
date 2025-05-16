@@ -70,16 +70,16 @@
         </span></button>
 
       <div class="carousel" id="carousel">
-        <div class="carousel-item">
-          <a href="Jogos.html">
-            <img src="imagens/img-carousel/jogos.png" alt="Imagem jogos" />
-            <p>Jogos</p>
+          <div class="carousel-item">
+          <a href="artigos.html">
+            <img src="imagens/img-carousel/Artigos.png" alt="imagem artigos" />
+            <p>Artigos</p>
           </a>
-        </div>
-        <div class="carousel-item">
-          <a href="ebook.html">
-            <img src="imagens/img-carousel/ebook.png" alt="Spells" />
-            <p>Ebook Piano</p>
+          </div>
+          <div class="carousel-item">
+          <a href="autora.html">
+            <img src="imagens/img-carousel/autora.png" alt="foto da autora"/>
+            <p>A Autora</p>
           </a>
         </div>
         <div class="carousel-item">
@@ -95,21 +95,21 @@
           </a>
         </div>
         <div class="carousel-item">
-          <a href="autora.html">
-            <img src="imagens/img-carousel/autora.png" alt="foto da autora"/>
-            <p>A Autora</p>
+          <a href="Jogos.html">
+            <img src="imagens/img-carousel/jogos.png" alt="Imagem jogos" />
+            <p>Jogos</p>
+          </a>
+        </div>
+        <div class="carousel-item">
+          <a href="ebook.html">
+            <img src="imagens/img-carousel/ebook.png" alt="Spells" />
+            <p>Ebook Piano</p>
           </a>
         </div>
         <div class="carousel-item">
           <a href="certificado.html">
             <img src="imagens/img-carousel/Certificado.png" alt="Imagem certificado" />
             <p>Certificado</p>
-          </a>
-        </div>
-          <div class="carousel-item">
-          <a href="artigos.html">
-            <img src="imagens/img-carousel/Artigos.png" alt="imagem artigos" />
-            <p>Artigos</p>
           </a>
         </div>
           <div class="carousel-item">
@@ -164,20 +164,23 @@ function duplicateItems() {
 }
 
 function centerCarousel() {
-  const items = carousel.querySelectorAll(".carousel-item");
-  const third = Math.floor(items.length / 3);
-  const middleItem = items[third];
-  const scrollPos = middleItem.offsetLeft - (carousel.offsetWidth / 2) + (middleItem.offsetWidth / 2);
+  const allItems = carousel.querySelectorAll(".carousel-item");
+  const clones = carousel.querySelectorAll(".carousel-item.clone");
+  const originalItems = Array.from(allItems).filter(item => !item.classList.contains("clone"));
+  
+  const middleIndex = Math.floor(originalItems.length / 2);
+  const middleItem = originalItems[middleIndex];
 
   // Remove transição para reposicionar instantaneamente
   carousel.style.scrollBehavior = "auto";
-  carousel.scrollLeft = scrollPos;
+  carousel.scrollLeft = middleItem.offsetLeft - (carousel.offsetWidth / 2) + (middleItem.offsetWidth / 2);
 
   // Reativa transição suave após reposicionar
   setTimeout(() => {
     carousel.style.scrollBehavior = "smooth";
   }, 50);
 }
+
 
 function handleInfiniteScroll() {
   const items = carousel.querySelectorAll(".carousel-item");
