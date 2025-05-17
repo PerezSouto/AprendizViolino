@@ -360,7 +360,6 @@ div#capamusical >img{
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 6px;
     margin: 5px;
     text-decoration: none;
     font-family: Arial, Helvetica, sans-serif;
