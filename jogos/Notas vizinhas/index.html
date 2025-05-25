@@ -12,7 +12,7 @@
       justify-content: center;
       align-items: flex-start;
       flex-wrap: wrap;
-      padding: 20px 20px 0px 20px;
+      padding: 20px;
     }
 
     h1 {
@@ -24,10 +24,14 @@
     .arvore-container {
       position: relative;
       width: 100%;
+      max-width: 600px; /* Added max-width for better responsiveness */
       aspect-ratio: 3 / 4;
-      background-image: url('fundo3.jpg');
+      background-image: url('fundo3.jpg'); /* Make sure this image path is correct! */
       background-size: cover;
       background-position: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added a subtle shadow */
+      border-radius: 8px;
+      overflow: hidden; /* Ensures content stays within bounds */
     }
 
     .slot {
@@ -43,18 +47,20 @@
       font-weight: bold;
       font-size: 1em;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease; /* Added color transition */
+      color: #333; /* Default text color for slots */
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2); /* Added text shadow for readability */
     }
 
-    /* Posição dos slots em valores relativos */
+    /* Slot positioning - these are already in your CSS */
     .slot1 { top: 11%; left: 15.5%; }
     .slot2 { top: 3.4%; left: 25.3%; }
     .slot3 { top: 18.7%; left: 58.2%; }
     .slot4 { top: 11.4%; left: 69.6%; }
     .slot5 { top: 18.7%; left: 80.2%; }
     .slot6 { top: 36%; left: 10.5%; }
-    .slot7 { top: 36.2%; left: 32.6%; }
-    .slot8 { top: 43.7%; left: 21.5%; }
+    .slot8 { top: 36.2%; left: 32.6%; }
+    .slot7 { top: 43.7%; left: 21.5%; }
     .slot9 { top: 39.9%; left: 68%; }
     .slot10 { top: 47.5%; left: 77.8%; }
     .slot11 { top: 65.3%; left: 27.5%; }
@@ -62,117 +68,352 @@
     .slot13 { top: 65.4%; left: 51%; }
     .slot14 { top: 73.1%; left: 60.8%; }
 
-.notas {
-  position: absolute;
-  display: flex;
-  flex-direction: row;
-  top: 85%;       /* Exato percentual dentro da árvore */
-  left: 25%;      /* Centralizado horizontalmente */
-  transform: translateX(-50%);
-  gap: 1%;
-  z-index: 4;
-}
+    /* Initial colors for specific slots, as per your original CSS */
+    .slot1, .slot3, .slot6, .slot9, .slot11 {
+      background-color: #f0f321;
+    }
 
-.nota {
-  width: 9%;
-  padding: 12%;
-  aspect-ratio: 1 / 1;
-  background-color: #8eee9b;
-  border: 0.2vw solid #015817;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 3vw;
-  cursor: pointer;
-  transition: 0.2s;
-  box-shadow: 0.3vw 0.6vw 0.6vw 0.1vw rgba(0, 15, 3, 0.753);
-}
+    /* Styles for correct/incorrect placement feedback */
+    .slot.correct {
+        background-color: #4CAF50; /* Green for correct placement */
+        color: white;
+        border-color: #2e7d32;
+    }
 
+    .slot.incorrect {
+        background-color: #f44336; /* Red for incorrect placement */
+        color: white;
+        border-color: #d32f2f;
+    }
+
+    .notas {
+      position: absolute;
+      display: flex;
+      flex-direction: row;
+      top: 85%;
+      left: 50%; /* Center the notes better */
+      transform: translateX(-50%);
+      gap: 1%;
+      z-index: 4;
+      width: 90%; /* Adjust width for better responsiveness */
+      justify-content: center; /* Center items within notes container */
+    }
+
+    .nota {
+      width: 12%; /* Adjusted width to fit notes better, considering gap */
+      aspect-ratio: 1 / 1;
+      background-color: #8eee9b;
+      border: 0.2vw solid #015817;
+      border-radius: 50%; /* Make notes circular */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.5vw; /* Adjusted font size for responsiveness */
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0.3vw 0.6vw 0.6vw 0.1vw rgba(0, 15, 3, 0.753);
+      color: #015817; /* Darker text for notes */
+    }
 
     .nota.selecionada {
       background-color: #4caf50;
       color: white;
       border-color: #2e7d32;
-    }
-
-    .slot.destacado {
-      outline: 3px solid #f0f321;
-      outline-offset: -3px;
+      transform: scale(1.1); /* Slightly enlarge when selected */
     }
 
     #mensagem {
       position: absolute;
-      width: 30%;
-      height: 10%;
-      aspect-ratio: 1 / 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: 2%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #f44336;
+      color: white;
       font-weight: bold;
-      font-family: Georgia, 'Times New Roman', Times, serif;
-      font-size: 3.5vw;
-      top: 61.3%;
-      left: 2%;
-      transition: background-color 0.3s ease;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1.5em;
+      text-align: center;
+      display: none;
+      z-index: 10;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
 
+    #mensagem.show {
+        display: block;
+        animation: fadeOut 3s forwards; /* Animation to fade out */
+    }
+
+    @keyframes fadeOut {
+        0% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { opacity: 0; display: none; }
+    }
+
+    /* Optional: Style for slots that are not yet active/available for interaction */
+    .slot.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Style for slots that are currently active and awaiting input */
+    .slot.active {
+        border: 3px dashed #007bff; /* Highlight active slot */
+        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
     }
   </style>
 </head>
 <body>
 
-  <div class="arvore-container" id="arvore">
-    <div class="slot slot1"></div>
-    <div class="slot slot2"></div>
-    <div class="slot slot3"></div>
-    <div class="slot slot4"></div>
-    <div class="slot slot5"></div>
-    <div class="slot slot6"></div>
-    <div class="slot slot7"></div>
-    <div class="slot slot8"></div>
-    <div class="slot slot9"></div>
-    <div class="slot slot10"></div>
-    <div class="slot slot11"></div>
-    <div class="slot slot12"></div>
-    <div class="slot slot13"></div>
-    <div class="slot slot14"></div>
-    <div class="notas" id="notas">
-      <div class="nota">Dó</div>
-      <div class="nota">Ré</div>
-      <div class="nota">Mi</div>
-      <div class="nota">Fá</div>
-      <div class="nota">Sol</div>
-      <div class="nota">Lá</div>
-      <div class="nota">Si</div>
-    </div>
+<div class="arvore-container" id="arvore">
+  <div id="mensagem">Nota errada!</div>
+  <div class="slot slot1" data-slot-id="1"></div>
+  <div class="slot slot2" data-slot-id="2"></div>
+  <div class="slot slot3" data-slot-id="3"></div>
+  <div class="slot slot4" data-slot-id="4"></div>
+  <div class="slot slot5" data-slot-id="5"></div>
+  <div class="slot slot6" data-slot-id="6"></div>
+  <div class="slot slot7" data-slot-id="7"></div>
+  <div class="slot slot8" data-slot-id="8"></div>
+  <div class="slot slot9" data-slot-id="9"></div>
+  <div class="slot slot10" data-slot-id="10"></div>
+  <div class="slot slot11" data-slot-id="11"></div>
+  <div class="slot slot12" data-slot-id="12"></div>
+  <div class="slot slot13" data-slot-id="13"></div>
+  <div class="slot slot14" data-slot-id="14"></div>
+  <div class="notas" id="notas">
+    <div class="nota">Dó</div>
+    <div class="nota">Ré</div>
+    <div class="nota">Mi</div>
+    <div class="nota">Fá</div>
+    <div class="nota">Sol</div>
+    <div class="nota">Lá</div>
+    <div class="nota">Si</div>
   </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const notas = document.querySelectorAll('.nota');
+        const slots = document.querySelectorAll('.slot');
+        const mensagem = document.getElementById('mensagem');
+        let notaSelecionada = null; // Stores the currently selected note element
+
+        // Define the musical scale
+        const musicalScale = ['Dó', 'Ré', 'Mi', 'Fá', 'Sol', 'Lá', 'Si'];
+
+        // Store the notes placed in each slot
+        const placedNotes = {}; // e.g., { '1': 'Dó', '2': 'Ré', ... }
+
+        // Keep track of the current active slot that the user should fill
+        let currentSlotIndex = 1; // Start with slot 1
+
+        // Function to get the next ascending note
+        function getNextNote(currentNote) {
+            const currentIndex = musicalScale.indexOf(currentNote);
+            if (currentIndex === -1) return null; // Note not found
+            return musicalScale[(currentIndex + 1) % musicalScale.length];
+        }
+
+        // Function to get the next descending note
+        function getPreviousNote(currentNote) {
+            const currentIndex = musicalScale.indexOf(currentNote);
+            if (currentIndex === -1) return null; // Note not found
+            // Use (currentIndex - 1 + length) % length to handle wrapping around from 'Dó' to 'Si'
+            return musicalScale[(currentIndex - 1 + musicalScale.length) % musicalScale.length];
+        }
+
+        // Function to determine the correct note for a given slot based on the rules
+        function getExpectedNote(slotId) {
+            const id = parseInt(slotId);
+
+            switch (id) {
+                case 1:
+                    // Slot 1: Livre escolha (any note is correct initially)
+                    return 'free';
+                case 2:
+                    // Slot 2: ascendente do slot 1
+                    const noteFromSlot1 = placedNotes['1'];
+                    return noteFromSlot1 ? getNextNote(noteFromSlot1) : null;
+                case 3:
+                    // Slot 3: Livre escolha
+                    return 'free';
+                case 4:
+                    // Slot 4: ascendente do slot 3
+                    const noteFromSlot3 = placedNotes['3'];
+                    return noteFromSlot3 ? getNextNote(noteFromSlot3) : null;
+                case 5:
+                    // Slot 5: descendente do slot 4
+                    const noteFromSlot4 = placedNotes['4'];
+                    return noteFromSlot4 ? getPreviousNote(noteFromSlot4) : null;
+                case 6:
+                    // Slot 6: Livre escolha
+                    return 'free';
+                case 7:
+                    // Slot 7: descendente do slot 6
+                    const noteFromSlot6 = placedNotes['6'];
+                    return noteFromSlot6 ? getPreviousNote(noteFromSlot6) : null;
+                case 8:
+                    // Slot 8: ascendente do slot 7
+                    const noteFromSlot7 = placedNotes['7'];
+                    return noteFromSlot7 ? getNextNote(noteFromSlot7) : null;
+                case 9:
+                    // Slot 9: Livre escolha
+                    return 'free';
+                case 10:
+                    // Slot 10: descendente do Slot 9
+                    const noteFromSlot9 = placedNotes['9'];
+                    return noteFromSlot9 ? getPreviousNote(noteFromSlot9) : null;
+                case 11:
+                    // Slot 11: Livre escolha
+                    return 'free';
+                case 12:
+                    // Slot 12: ascendente do slot 11
+                    const noteFromSlot11 = placedNotes['11'];
+                    return noteFromSlot11 ? getNextNote(noteFromSlot11) : null;
+                case 13:
+                    // Slot 13: descendente do slot 12
+                    const noteFromSlot12 = placedNotes['12'];
+                    return noteFromSlot12 ? getPreviousNote(noteFromSlot12) : null;
+                case 14:
+                    // Slot 14: descendente do slot 13
+                    const noteFromSlot13 = placedNotes['13'];
+                    return noteFromSlot13 ? getPreviousNote(noteFromSlot13) : null;
+                default:
+                    return null; // Should not happen
+            }
+        }
+
+        // Initialize game state: disable all slots except the first one
+        function initializeGame() {
+            slots.forEach(slot => {
+                slot.classList.add('disabled');
+                slot.style.pointerEvents = 'none'; // Make slots unclickable
+            });
+            const firstSlot = document.querySelector(`.slot${currentSlotIndex}`);
+            if (firstSlot) {
+                firstSlot.classList.remove('disabled');
+                firstSlot.classList.add('active'); // Highlight active slot
+                firstSlot.style.pointerEvents = 'auto'; // Make first slot clickable
+            }
+        }
+
+        // Update active slot highlighting
+        function updateActiveSlot() {
+            slots.forEach(slot => {
+                slot.classList.remove('active');
+            });
+            const nextActiveSlot = document.querySelector(`.slot${currentSlotIndex}`);
+            if (nextActiveSlot) {
+                nextActiveSlot.classList.add('active');
+                nextActiveSlot.classList.remove('disabled');
+                nextActiveSlot.style.pointerEvents = 'auto';
+            }
+        }
+
+        // Event listener for selecting a note from the bottom bar
+        notas.forEach(nota => {
+            nota.addEventListener('click', () => {
+                if (notaSelecionada) {
+                    notaSelecionada.classList.remove('selecionada');
+                }
+                nota.classList.add('selecionada');
+                notaSelecionada = nota;
+            });
+        });
+
+        // Event listener for placing a note in a slot
+        slots.forEach(slot => {
+            slot.addEventListener('click', () => {
+                const slotId = slot.dataset.slotId; // Get the ID from the data attribute
+
+                // Check if this is the currently active slot
+                if (parseInt(slotId) !== currentSlotIndex) {
+                    showMessage('Você precisa preencher a flor ' + currentSlotIndex + ' primeiro!');
+                    return; // Prevent interaction with inactive slots
+                }
+
+                if (notaSelecionada) {
+                    const notaValue = notaSelecionada.textContent;
+                    const expectedNote = getExpectedNote(slotId);
+
+                    // Clear previous feedback classes
+                    slot.classList.remove('correct', 'incorrect');
+
+                    let isCorrect = false;
+
+                    if (expectedNote === 'free') {
+                        isCorrect = true; // Any note is correct for 'free' slots
+                    } else if (expectedNote !== null) {
+                        isCorrect = (notaValue === expectedNote);
+                    } else {
+                        // This means a preceding slot hasn't been filled yet, or logic error
+                        showMessage('Erro: A nota esperada não pode ser determinada. Preencha as flores anteriores.');
+                        // Re-enable the slot if it was temporarily disabled due to dependency
+                        slot.classList.remove('disabled');
+                        slot.style.pointerEvents = 'auto';
+                        return;
+                    }
+
+
+                    if (isCorrect) {
+                        slot.textContent = notaValue;
+                        slot.classList.add('correct');
+                        placedNotes[slotId] = notaValue; // Store the correctly placed note
+
+                        // Disable the slot after correct placement
+                        slot.style.pointerEvents = 'none';
+                        slot.classList.remove('active'); // Remove active highlight
+
+                        // *** REMOVED THE LINE THAT HIDES THE NOTE ***
+                        // notaSelecionada.style.visibility = 'hidden'; 
+
+                        // Deselect the note
+                        notaSelecionada.classList.remove('selecionada');
+                        notaSelecionada = null;
+
+                        // Move to the next slot
+                        currentSlotIndex++;
+                        if (currentSlotIndex <= slots.length) {
+                            updateActiveSlot(); // Highlight the next active slot
+                        } else {
+                            // All slots filled! Game over/win condition.
+                            showMessage('Parabéns! Você completou o jogo!');
+                            // You might want to add a reset button or other game-ending logic here.
+                        }
+
+                    } else {
+                        // Incorrect placement
+                        slot.classList.add('incorrect');
+                        showMessage('Nota errada! A nota esperada é ' + (expectedNote !== null && expectedNote !== 'free' ? expectedNote : 'uma nota específica'));
+                        setTimeout(() => {
+                            slot.classList.remove('incorrect');
+                        }, 1000); // 1 second delay
+
+                        // Deselect the note even on incorrect placement
+                        notaSelecionada.classList.remove('selecionada');
+                        notaSelecionada = null;
+                    }
+                } else {
+                    showMessage('Por favor, selecione uma nota primeiro!');
+                }
+            });
+        });
+
+        // Function to display messages (e.g., "Nota errada!")
+        function showMessage(msg) {
+            mensagem.textContent = msg;
+            mensagem.classList.add('show');
+            mensagem.addEventListener('animationend', () => {
+                mensagem.classList.remove('show');
+            }, { once: true });
+        }
+
+        // Start the game when the page loads
+        initializeGame();
+    });
+</script>
 
 </body>
-  <script>
-    let notaSelecionada = null;
-
-    // Quando clica em uma nota, marca/desmarca
-    document.querySelectorAll('.nota').forEach(nota => {
-      nota.addEventListener('click', () => {
-        // Limpa seleção anterior
-        document.querySelectorAll('.nota').forEach(n => n.classList.remove('selecionada'));
-        // Seleciona a nova
-        nota.classList.add('selecionada');
-        notaSelecionada = nota.textContent;
-      });
-    });
-
-    // Quando clica em um slot, preenche com a nota e muda o background
-    document.querySelectorAll('.slot').forEach(slot => {
-      slot.addEventListener('click', () => {
-        if (notaSelecionada) {
-          slot.textContent = notaSelecionada;
-          slot.style.fontSize = '2.5vw';
-          slot.style.color = 'black';
-          slot.style.backgroundColor = '#8eee9b'; // verde claro
-        }
-      });
-    });
-  </script>
-
 </html>
