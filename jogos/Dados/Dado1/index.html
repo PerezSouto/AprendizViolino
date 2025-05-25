@@ -3,65 +3,287 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dado 3D</title>
+  <title>Dado Musical 3D</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chicle&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chicle&display=swap" rel="stylesheet">
+  <style>
+
+  body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Alinha ao topo */
+  min-height: 100vh;           /* Altura mínima da viewport */
+  padding: 20px;               /* Espaço interno para evitar corte */
+  background: url(img/fundo.png) no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  box-sizing: border-box;
+}
+
+#selecao-ritmos {
+  background: rgba(255, 255, 255, 0.493);
+  padding: 0px 20px 20px 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 90vw;   /* novo */
+  width: 600px;      /* novo */
+  box-sizing: border-box; /* garante que padding conte no tamanho total */
+}
+
+.checkboxes {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.checkboxes-img {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  justify-items: center;
+  margin-bottom: 15px;
+}
+
+.checkboxes-img label {
+  position: relative;
+  cursor: pointer;
+  border: 2px solid transparent;
+  overflow: hidden;
+  transition: border 0.3s;
+}
+
+.checkboxes-img input[type="checkbox"] {
+  display: none;
+}
+
+.checkboxes-img img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+
+.checkboxes-img input[type="checkbox"]:checked + img {
+  border: 4px solid rgb(226, 2, 2);
+  transform: scale(1.05);
+}
+
+
+.scene, #botao, #resultado {
+  display: none;
+}
+
+.scene {
+  width: 150px;
+  height: 150px;
+  perspective: 800px;
+  margin-top: 20px;
+}
+
+.cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 1s;
+}
+
+.face {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border: 2px solid #333;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.face img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  image-rendering: crisp-edges;
+}
+
+.front  { transform: rotateY(0deg) translateZ(75px); }
+.back   { transform: rotateY(180deg) translateZ(75px); }
+.right  { transform: rotateY(90deg) translateZ(75px); }
+.left   { transform: rotateY(-90deg) translateZ(75px); }
+.top    { transform: rotateX(90deg) translateZ(75px); }
+.bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+#botao {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: rgb(226, 2, 2);
+  font-family: "Chicle";
+  font-size: 1.3em;
+  border: 3px solid rgb(143, 0, 0);
+  color: white;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.596);
+  cursor: pointer;
+}
+
+#botao:hover {
+  background-color: rgb(190, 0, 0);
+  transform: scale(1.05);
+  transition: 0.3s;
+}
+
+#botaoiniciar{
+  padding: 8px 10px;
+  border-radius: 10px;
+  background-color: rgb(226, 2, 2);
+  font-family: "Arial";
+  font-size: 1.3em;
+  border: 2px solid rgb(143, 0, 0);
+  color: white;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.596);
+  cursor: pointer;
+}
+#botaoiniciar:hover {
+  background-color: rgb(190, 0, 0);
+  transform: scale(1.05);
+  transition: 0.3s;
+}
+
+#resultado {
+  margin-top: 20px;
+  font-size: 1.5em;
+  color: white;
+  font-family: "Chicle";
+  text-shadow: 2px 2px 2px black;
+}
+
+  </style>
+
 </head>
 <body>
+
+<div id="selecao-ritmos">
+  <h2>Escolha os 6 ritmos:</h2>
+  <div class="checkboxes-img">
+    <label><input type="checkbox" value="bolo-pao"><img src="img/bolo-pao.jpg" alt="bolo-pao"></label>
+    <label><input type="checkbox" value="bolo-ta"><img src="img/bolo-ta.jpg" alt="bolo-ta"></label>
+    <label><input type="checkbox" value="brocolis-pao"><img src="img/brocolis-pao.jpg" alt="brocolis-pao"></label>
+    <label><input type="checkbox" value="bolo"><img src="img/bolo.jpg" alt="bolo"></label>
+    <label><input type="checkbox" value="chocolate-bolo"><img src="img/chocolate-bolo.jpg" alt="chocolate-bolo"></label>
+    <label><input type="checkbox" value="chocolate-chocolate"><img src="img/chocolate-chocolate.jpg" alt="chocolate-chocolate"></label>
+    <label><input type="checkbox" value="lampada-magica"><img src="img/lampada-magica.jpg" alt="lampada-magica"></label>
+    <label><input type="checkbox" value="pao-bolo"><img src="img/pao-bolo.jpg" alt="pao-bolo"></label>
+    <label><input type="checkbox" value="pao"><img src="img/pao.jpg" alt="pao"></label>
+    <label><input type="checkbox" value="queijo-pao"><img src="img/queijo-pao.jpg" alt="queijo-pao"></label>
+    <label><input type="checkbox" value="paoo"><img src="img/paoo.jpg" alt="paoo"></label>
+    <label><input type="checkbox" value="paoo-paoo"><img src="img/paoo-paoo.jpg" alt="paoo-paoo"></label>
+    <label><input type="checkbox" value="trenzinho-rapido"><img src="img/trenzinho-rapido.jpg" alt="trenzinho-rapido"></label>
+  </div>
+  <button id="botaoiniciar" onclick="iniciarJogo()">Iniciar Jogo</button>
+</div>
+
+
   <div class="scene">
     <div class="cube" id="cube">
-      <div class="face front"><img src="img/1.jpg" alt="1" /></div>
-      <div class="face back"><img src="img/6.jpg" alt="6" /></div>
-      <div class="face right"><img src="img/3.jpg" alt="3" /></div>
-      <div class="face left"><img src="img/4.jpg" alt="4" /></div>
-      <div class="face top"><img src="img/5.jpg" alt="5" /></div>
-      <div class="face bottom"><img src="img/2.jpg" alt="2" /></div>
+      <div class="face front"><img src="img/bolo-pao.jpg" alt="bolo-pao" /></div>
+      <div class="face back"><img src="img/bolo-ta.jpg" alt="bolo-ta" /></div>
+      <div class="face right"><img src="img/brocolis-pao.jpg" alt="brocolis-pao" /></div>
+      <div class="face left"><img src="img/bolo.jpg" alt="bolo" /></div>
+      <div class="face top"><img src="img/chocolate-bolo.jpg" alt="chocolate-bolo" /></div>
+      <div class="face bottom"><img src="img/chocolate-chocolate.jpg" alt="chocolate-chocolate" /></div>
     </div>
   </div>
 
   <button id="botao" onclick="rolarDado()">Rolar Dado</button>
 
-<script>
-  const dado = document.getElementById('cube');
-  let ultimosResultados = [];
-  let rotacaoExtra = 0;
+  <script>
+    const dado = document.getElementById('cube');
+let rotacaoExtra = 0;
+let ultimosResultados = [];
+let ritmosSelecionados = [];
 
-  function rolarDado() {
-    // Gera número novo que não repete mais de 2 vezes
-    let novoValor;
-    do {
-      novoValor = Math.floor(Math.random() * 6) + 1;
-    } while (
-    ultimosResultados.length > 0 &&
-    ultimosResultados[ultimosResultados.  length - 1] === novoValor
-    );
+function iniciarJogo() {
+  const checkboxes = document.querySelectorAll('#selecao-ritmos input[type="checkbox"]:checked');
+  ritmosSelecionados = Array.from(checkboxes).map(cb => cb.value);
 
-    // Atualiza histórico
-    ultimosResultados.push(novoValor);
-    if (ultimosResultados.length > 2) ultimosResultados.shift();
-
-    // Orientações fixas para cada face
-    const rotacoesFixas = {
-      1: [0, 0],
-      2: [0, 180],
-      3: [0, -90],
-      4: [0, 90],
-      5: [-90, 0],
-      6: [90, 0],
-    };
-
-    const [baseX, baseY] = rotacoesFixas[novoValor];
-
-    // A cada jogada, somamos 720° para forçar nova rotação animada
-    rotacaoExtra += 720;
-
-    const finalX = baseX + rotacaoExtra;
-    const finalY = baseY + rotacaoExtra;
-
-    dado.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
+  if (ritmosSelecionados.length !== 6) {
+    alert('Você deve selecionar exatamente 6 ritmos para iniciar o jogo.');
+    return;
   }
-</script>
+
+  document.getElementById('selecao-ritmos').style.display = 'none';
+  document.querySelector('.scene').style.display = 'block';
+  document.getElementById('botao').style.display = 'inline-block';
+  document.getElementById('resultado').style.display = 'block';
+
+  atualizarFacesDoDado();
+}
+
+function atualizarFacesDoDado() {
+  const faces = document.querySelectorAll('.face img');
+
+  for (let i = 0; i < 6; i++) {
+    const ritmo = ritmosSelecionados[i % ritmosSelecionados.length];
+    faces[i].src = `img/${ritmo}.jpg`;
+    faces[i].alt = ritmo;
+  }
+}
+
+function rolarDado() {
+  let novoValor;
+  do {
+    novoValor = Math.floor(Math.random() * 6) + 1;
+  } while (
+    ultimosResultados.length > 0 &&
+    ultimosResultados[ultimosResultados.length - 1] === novoValor
+  );
+
+  ultimosResultados.push(novoValor);
+  if (ultimosResultados.length > 2) ultimosResultados.shift();
+
+  const rotacoesFixas = {
+    1: [0, 0],
+    2: [0, 180],
+    3: [0, -90],
+    4: [0, 90],
+    5: [-90, 0],
+    6: [90, 0],
+  };
+
+  const [baseX, baseY] = rotacoesFixas[novoValor];
+  rotacaoExtra += 720;
+  const finalX = baseX + rotacaoExtra;
+  const finalY = baseY + rotacaoExtra;
+
+  dado.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
+
+  const faceIndex = [1, 6, 3, 4, 5, 2].indexOf(novoValor); // ordem correta das faces
+  const ritmoSorteado = ritmosSelecionados[faceIndex % ritmosSelecionados.length];
+  document.getElementById('resultado').textContent = `Ritmo: ${ritmoSorteado}`;
+}
+document.querySelectorAll('#selecao-ritmos input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const selecionados = document.querySelectorAll('#selecao-ritmos input[type="checkbox"]:checked');
+    const todos = document.querySelectorAll('#selecao-ritmos input[type="checkbox"]');
+    
+    if (selecionados.length === 6) {
+      todos.forEach(c => {
+        if (!c.checked) c.disabled = true;
+      });
+    } else {
+      todos.forEach(c => c.disabled = false);
+    }
+  });
+});
+
+  </script>
 </body>
 </html>
