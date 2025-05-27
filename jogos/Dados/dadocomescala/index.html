@@ -195,6 +195,12 @@
             <label><input type="checkbox" value="DoM2"><img src="imgescala/DoM2.jpg" alt="DoM2"></label>
             <label><input type="checkbox" value="SolM2"><img src="imgescala/SolM2.jpg" alt="SolM2"></label>
             <label><input type="checkbox" value="SiM3"><img src="imgescala/SiM3.jpg" alt="SiM3"></label>
+            <label><input type="checkbox" value="MiM3"><img src="imgescala/MiM3.jpg" alt="MiM3"></label>
+            <label><input type="checkbox" value="LaM3"><img src="imgescala/LaM3.jpg" alt="LaM3"></label>
+            <label><input type="checkbox" value="SibM3"><img src="imgescala/SibM3.jpg" alt="SibM3"></label>
+            <label><input type="checkbox" value="MibM3"><img src="imgescala/MibM3.jpg" alt="MibbM3"></label>
+            <label><input type="checkbox" value="LabM3"><img src="imgescala/LabM3.jpg" alt="LaM3"></label>
+            <label><input type="checkbox" value="FaM4"><img src="imgescala/FaM4.jpg" alt="FaM4"></label>
             </div>
         <button id="botao-proximo-escalas" class="button-style" onclick="iniciarJogo()">Iniciar Jogo</button>
     </div>
@@ -361,7 +367,7 @@
                 6: 5  // bottom (-90)
             };
             const ritmoSorteado = ritmosSelecionados[faceMapping[novoValor]];
-            document.getElementById('resultadoRitmo').textContent = `Ritmo: ${ritmoSorteado.replace(/-/g, ' ')}`;
+            
         }
 
         function sortearEscala() {
@@ -376,7 +382,6 @@
             }
             ultimaEscalaSorteada = novaEscala;
 
-            document.getElementById('resultadoEscala').textContent = `Escala: ${novaEscala.replace(/-/g, ' ')}`;
             const imagemEscala = document.getElementById('imagem-escala-sorteada');
             imagemEscala.src = `imgescala/${novaEscala}.jpg`;
             imagemEscala.alt = novaEscala.replace(/-/g, ' ');
