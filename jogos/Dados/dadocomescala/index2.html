@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dado Musical 3D</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Chicle&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Alinha ao topo */
+            min-height: 100vh;           /* Altura mínima da viewport */
+            padding: 20px;               /* Espaço interno para evitar corte */
+            background: url(img/fundo.png) no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            box-sizing: border-box;
+        }
+
+        .selection-screen {
+            background: rgba(255, 255, 255, 0.493);
+            padding: 0px 10px 20px 10px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 90vw;
+            width: 600px;
+            box-sizing: border-box;
+            margin-bottom: 20px; /* Adicionado espaço abaixo da tela de seleção */
+        }
+
+        .checkboxes-img {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            justify-items: center;
+            margin-bottom: 15px;
+        }
+
+        .checkboxes-img label {
+            position: relative;
+            cursor: pointer;
+            border: 2px solid transparent;
+            overflow: hidden;
+            transition: border 0.3s;
+        }
+
+        .checkboxes-img input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkboxes-img img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .checkboxes-img input[type="checkbox"]:checked + img {
+            border: 4px solid rgb(226, 2, 2);
+            transform: scale(1.05);
+        }
+
+        .scene, #botao, #resultadoRitmo, #selecao-escalas, #sorteio-escalas {
+            display: none;
+        }
+
+        .scene {
+            width: 150px;
+            height: 150px;
+            perspective: 800px;
+            margin-top: 20px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+        }
+
+        .face {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 2px solid #333;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .face img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            image-rendering: crisp-edges;
+        }
+
+        .front  { transform: rotateY(0deg) translateZ(75px); }
+        .back   { transform: rotateY(180deg) translateZ(75px); }
+        .right  { transform: rotateY(90deg) translateZ(75px); }
+        .left   { transform: rotateY(-90deg) translateZ(75px); }
+        .top    { transform: rotateX(90deg) translateZ(75px); }
+        .bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+        .button-style {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background-color: rgb(226, 2, 2);
+            font-family: "Chicle";
+            font-size: 1.3em;
+            border: 3px solid rgb(143, 0, 0);
+            color: white;
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.596);
+            cursor: pointer;
+        }
+
+        .button-style:hover {
+            background-color: rgb(190, 0, 0);
+            transform: scale(1.05);
+            transition: 0.3s;
+        }
+
+        #resultadoRitmo, #resultadoEscala {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: white;
+            font-family: "Chicle";
+            text-shadow: 2px 2px 2px black;
+        }
+
+        #sorteio-escalas {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #imagem-escala-sorteada {
+            width: 150px; /* Tamanho da imagem da escala */
+            height: auto;
+            margin-top: 15px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="selecao-ritmos" class="selection-screen">
+        <h2>Escolha os 6 ritmos:</h2>
+        <div class="checkboxes-img">
+            <label><input type="checkbox" value="bolo-pao"><img src="img/bolo-pao.jpg" alt="bolo-pao"></label>
+            <label><input type="checkbox" value="bolo-ta"><img src="img/bolo-ta.jpg" alt="bolo-ta"></label>
+            <label><input type="checkbox" value="brocolis-pao"><img src="img/brocolis-pao.jpg" alt="brocolis-pao"></label>
+            <label><input type="checkbox" value="bolo"><img src="img/bolo.jpg" alt="bolo"></label>
+            <label><input type="checkbox" value="chocolate-bolo"><img src="img/chocolate-bolo.jpg" alt="chocolate-bolo"></label>
+            <label><input type="checkbox" value="chocolate-chocolate"><img src="img/chocolate-chocolate.jpg" alt="chocolate-chocolate"></label>
+            <label><input type="checkbox" value="lampada-magica"><img src="img/lampada-magica.jpg" alt="lampada-magica"></label>
+            <label><input type="checkbox" value="pao-bolo"><img src="img/pao-bolo.jpg" alt="pao-bolo"></label>
+            <label><input type="checkbox" value="pao"><img src="img/pao.jpg" alt="pao"></label>
+            <label><input type="checkbox" value="queijo-pao"><img src="img/queijo-pao.jpg" alt="queijo-pao"></label>
+            <label><input type="checkbox" value="paoo"><img src="img/paoo.jpg" alt="paoo"></label>
+            <label><input type="checkbox" value="paoo-paoo"><img src="img/paoo-paoo.jpg" alt="paoo-paoo"></label>
+            <label><input type="checkbox" value="trenzinho-rapido"><img src="img/trenzinho-rapido.jpg" alt="trenzinho-rapido"></label>
+            <label><input type="checkbox" value="bolo-bolo"><img src="img/bolo-bolo.jpg" alt="bolo-bolo"></label>
+            <label><input type="checkbox" value="macarrao"><img src="img/macarrao.jpg" alt="macarrao"></label>
+            <label><input type="checkbox" value="mel"><img src="img/mel.jpg" alt="mel"></label>
+            <label><input type="checkbox" value="queijo"><img src="img/queijo.jpg" alt="queijo"></label>
+            <label><input type="checkbox" value="queijo-pao-pao"><img src="img/queijo-pao-pao.jpg" alt="queijo-pao-pao"></label>
+            <label><input type="checkbox" value="salsa-bolo"><img src="img/salsa-bolo.jpg" alt="salsa-bolo"></label>
+            <label><input type="checkbox" value="salsa-salsa"><img src="img/salsa-salsa.jpg" alt="salsa-salsa"></label>
+            <label><input type="checkbox" value="queijo-pao-ligado"><img src="img/queijo-pao-ligado.jpg" alt="queijo-pao-ligado"></label>
+        </div>
+        <button id="botao-proximo-ritmos" class="button-style" onclick="avancarParaSelecaoEscalas()">Próximo</button>
+    </div>
+
+    <div id="selecao-escalas" class="selection-screen">
+        <h2>Escolha as escalas musicais:</h2>
+        <div class="checkboxes-img">
+            <label><input type="checkbox" value="LaM1"><img src="imgescala/LaM1.jpg" alt="LaM1"></label>
+            <label><input type="checkbox" value="ReM1"><img src="imgescala/ReM1.jpg" alt="ReM1"></label>
+            <label><input type="checkbox" value="SolM1"><img src="imgescala/SolM1.jpg" alt="SolM1"></label>
+            <label><input type="checkbox" value="DoM2"><img src="imgescala/DoM2.jpg" alt="DoM2"></label>
+            <label><input type="checkbox" value="SolM2"><img src="imgescala/SolM2.jpg" alt="SolM2"></label>
+            <label><input type="checkbox" value="SiM3"><img src="imgescala/SiM3.jpg" alt="SiM3"></label>
+            </div>
+        <button id="botao-proximo-escalas" class="button-style" onclick="iniciarJogo()">Iniciar Jogo</button>
+    </div>
+
+    <div class="scene">
+        <div class="cube" id="cube">
+            <div class="face front"><img src="" alt="" /></div>
+            <div class="face back"><img src="" alt="" /></div>
+            <div class="face right"><img src="" alt="" /></div>
+            <div class="face left"><img src="" alt="" /></div>
+            <div class="face top"><img src="" alt="" /></div>
+            <div class="face bottom"><img src="" alt="" /></div>
+        </div>
+    </div>
+
+    <button id="botao-rolar-dado" class="button-style" onclick="rolarDado()">Rolar Dado</button>
+    <div id="resultadoRitmo"></div>
+
+    <div id="sorteio-escalas">
+        <div id="resultadoEscala"></div>
+        <img id="imagem-escala-sorteada" src="" alt="Escala Sorteada" style="display: none;">
+        <button id="botao-sortear-escala" class="button-style" onclick="sortearEscala()">Sortear Escala</button>
+        
+    </div>
+
+    <script>
+        const dado = document.getElementById('cube');
+        let rotacaoExtra = 0;
+        let ultimosResultadosRitmos = [];
+        let ritmosSelecionados = [];
+        let escalasSelecionadas = [];
+        let ultimaEscalaSorteada = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inicialmente, apenas a tela de seleção de ritmos está visível
+            document.getElementById('selecao-ritmos').style.display = 'block';
+            document.getElementById('selecao-escalas').style.display = 'none';
+            document.querySelector('.scene').style.display = 'none';
+            document.getElementById('botao-rolar-dado').style.display = 'none';
+            document.getElementById('resultadoRitmo').style.display = 'none';
+            document.getElementById('sorteio-escalas').style.display = 'none';
+        });
+
+        // Habilita/desabilita checkboxes de ritmos
+        document.querySelectorAll('#selecao-ritmos input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const selecionados = document.querySelectorAll('#selecao-ritmos input[type="checkbox"]:checked');
+                const todos = document.querySelectorAll('#selecao-ritmos input[type="checkbox"]');
+
+                if (selecionados.length === 6) {
+                    todos.forEach(c => {
+                        if (!c.checked) c.disabled = true;
+                    });
+                } else {
+                    todos.forEach(c => c.disabled = false);
+                }
+            });
+        });
+
+        // Habilita/desabilita checkboxes de escalas
+        document.querySelectorAll('#selecao-escalas input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const selecionados = document.querySelectorAll('#selecao-escalas input[type="checkbox"]:checked');
+                const todos = document.querySelectorAll('#selecao-escalas input[type="checkbox"]');
+
+                // Aqui você pode definir um limite para o número de escalas selecionadas, se desejar
+                // Por exemplo, para permitir no máximo 10 escalas:
+                const maxEscalas = 10;
+                if (selecionados.length >= maxEscalas) {
+                    todos.forEach(c => {
+                        if (!c.checked) c.disabled = true;
+                    });
+                } else {
+                    todos.forEach(c => c.disabled = false);
+                }
+            });
+        });
+
+        function avancarParaSelecaoEscalas() {
+            const checkboxesRitmos = document.querySelectorAll('#selecao-ritmos input[type="checkbox"]:checked');
+            ritmosSelecionados = Array.from(checkboxesRitmos).map(cb => cb.value);
+
+            if (ritmosSelecionados.length !== 6) {
+                alert('Você deve selecionar exatamente 6 ritmos para avançar.');
+                return;
+            }
+
+            document.getElementById('selecao-ritmos').style.display = 'none';
+            document.getElementById('selecao-escalas').style.display = 'block';
+        }
+
+        function iniciarJogo() {
+            const checkboxesEscalas = document.querySelectorAll('#selecao-escalas input[type="checkbox"]:checked');
+            escalasSelecionadas = Array.from(checkboxesEscalas).map(cb => cb.value);
+
+            if (escalasSelecionadas.length === 0) {
+                alert('Você deve selecionar pelo menos uma escala para iniciar o jogo.');
+                return;
+            }
+
+            document.getElementById('selecao-escalas').style.display = 'none';
+            document.querySelector('.scene').style.display = 'block';
+            document.getElementById('botao-rolar-dado').style.display = 'inline-block';
+            document.getElementById('resultadoRitmo').style.display = 'block';
+            document.getElementById('sorteio-escalas').style.display = 'flex'; // Exibe o container de sorteio de escalas
+
+            atualizarFacesDoDado();
+        }
+
+        function atualizarFacesDoDado() {
+            const faces = document.querySelectorAll('.face img');
+
+            for (let i = 0; i < 6; i++) {
+                const ritmo = ritmosSelecionados[i % ritmosSelecionados.length];
+                faces[i].src = `img/${ritmo}.jpg`;
+                faces[i].alt = ritmo;
+            }
+        }
+
+        function rolarDado() {
+            let novoValor;
+            do {
+                novoValor = Math.floor(Math.random() * 6) + 1;
+            } while (
+                ultimosResultadosRitmos.length > 0 &&
+                ultimosResultadosRitmos[ultimosResultadosRitmos.length - 1] === novoValor
+            );
+
+            ultimosResultadosRitmos.push(novoValor);
+            if (ultimosResultadosRitmos.length > 2) ultimosResultadosRitmos.shift();
+
+            const rotacoesFixas = {
+                1: [0, 0],
+                2: [0, 180],
+                3: [0, -90],
+                4: [0, 90],
+                5: [-90, 0],
+                6: [90, 0],
+            };
+
+            const [baseX, baseY] = rotacoesFixas[novoValor];
+            rotacaoExtra += 720;
+            const finalX = baseX + rotacaoExtra;
+            const finalY = baseY + rotacaoExtra;
+
+            dado.style.transform = `rotateX(${finalX}deg) rotateY(${finalY}deg)`;
+
+            // Mapeia o valor do dado para o índice correto do ritmo selecionado
+            // A ordem das faces é: front (1), back (2), left (3), right (4), top (5), bottom (6)
+            // No seu CSS, as faces são mapeadas para as rotações fixas como:
+            // 1: front (0,0)
+            // 2: back (0,180)
+            // 3: right (0,90) - este é o erro. right é 90deg, left é -90deg.
+            // 4: left (0,-90)
+            // 5: top (90,0)
+            // 6: bottom (-90,0)
+            // A correção abaixo alinha o `novoValor` com os índices do array `ritmosSelecionados`
+            const faceMapping = {
+                1: 0, // front
+                2: 1, // back
+                3: 3, // left (-90)
+                4: 2, // right (90)
+                5: 4, // top (90)
+                6: 5  // bottom (-90)
+            };
+            const ritmoSorteado = ritmosSelecionados[faceMapping[novoValor]];
+            
+        }
+
+        function sortearEscala() {
+            let novaEscala;
+            // Garante que a nova escala sorteada seja diferente da última, se houver mais de uma opção
+            if (escalasSelecionadas.length > 1) {
+                do {
+                    novaEscala = escalasSelecionadas[Math.floor(Math.random() * escalasSelecionadas.length)];
+                } while (novaEscala === ultimaEscalaSorteada);
+            } else {
+                novaEscala = escalasSelecionadas[0]; // Se houver apenas uma escala, sorteie ela
+            }
+            ultimaEscalaSorteada = novaEscala;
+
+            const imagemEscala = document.getElementById('imagem-escala-sorteada');
+            imagemEscala.src = `imgescala/${novaEscala}.jpg`;
+            imagemEscala.alt = novaEscala.replace(/-/g, ' ');
+            imagemEscala.style.display = 'block'; // Mostra a imagem
+        }
+    </script>
+</body>
+</html>
