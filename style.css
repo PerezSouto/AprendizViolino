@@ -236,6 +236,15 @@ div#capamusical >img{
 }
 
 /* Página Certificado*/
+#certificadoimg{
+    text-align: center;
+}
+
+#certificadoimg img{
+    width: 80%;
+    max-width: 400px;
+}
+
 #edital{
     padding-top: 20px;
     font-size: 15px;
@@ -412,7 +421,6 @@ div#capamusical >img{
 #titulocarousel{
     padding-top: 50px;
     margin-bottom: -20px;
-    font-family:;
 }
 
 .title-with-lines {
