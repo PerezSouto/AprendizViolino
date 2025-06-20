@@ -217,6 +217,10 @@ div#ebook > img{
 
 }
 
+#icon1, #icon2, #icon3{
+    vertical-align: middle;
+}
+
 ul#creditos{
     list-style-position: inside;
     font-family: "Ubuntu", sans-serif;
