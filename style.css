@@ -209,6 +209,14 @@ div#ebook > img{
     padding-bottom: 15px;
 }
 
+#conteudoebook{
+    list-style-position: inside;
+    margin-left: 40px;
+    font-family: "Ubuntu", sans-serif;
+    line-height: 20px;
+
+}
+
 ul#creditos{
     list-style-position: inside;
     font-family: "Ubuntu", sans-serif;
