@@ -31,7 +31,7 @@ Grandes telas: acima de 1200px.
     }
 }
 
-@media screen and (min-width:951px){
+@media screen and (min-width:950px){
     div#banner{
         height: 300px;
     }
