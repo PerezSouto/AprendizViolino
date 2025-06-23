@@ -324,7 +324,6 @@ div#capamusical >img{
 }
 
 .interiorjogo > div{
-    border-bottom: 1px solid black;
     width: 40%;
 }
 
@@ -335,16 +334,18 @@ div#capamusical >img{
 .interiorjogo > div > img{
     flex-grow: 1;
     width: 100%;
-    border: px solid black;
+    padding-left: 5px;
+    padding-top: 5px;
 }
 .interiorjogo > p {
     flex-grow: 1;
-    border-bottom: 1px solid;
 }
 
 .botao-jogo{
     display: flex;
     justify-content: center;
+    background: #64406cb2;
+    border-radius: 0px 0px 10px 10px;
 }
 
 .botaojogar{
