@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jogo das Notas Musicais</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f8ff;
+      padding: 0px;
+    }
+
+    h1 {
+        font-size: 20px;
+
+    }
+
+    img {
+      width: 150px;
+      height: auto;
+      margin: 20px auto;
+      display: none;
+    }
+    #imagemContainer {
+    height: 180px; /* ajuste conforme o tamanho típico da imagem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      height: 40px;
+    }
+
+  .notas{
+    display: inline-block;
+      background-color:rgb(2, 190, 2);
+      border-radius: 5px;
+      border: 1px solid #015817;
+      box-shadow:0 3px 0 rgb(0, 82, 0) ;
+      transition: all 0.1s ease;
+      position: relative;
+      top: 0px;
+    }
+
+    .notas:hover{
+      background: #018622;
+      color: white;
+    }
+
+    .notas:active{
+      background-color: #018622;
+      box-shadow: none;
+      top: 4px;
+    }
+    .notas.touchstart{
+      background-color: #018622;
+      box-shadow: none;
+      top: 4px;
+    }
+
+    #novojogo{
+      display: inline-block;
+      background: #915c9c;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 0 #53355a;        
+            transition: all 0.1s ease;
+            position: relative;
+            top: 0px;
+       }
+    
+    #novojogo:hover{
+            background: #bb77c9;
+       }
+
+    #novojogo:active{
+            background-color: #bb77c9;
+            box-shadow: none;
+            top: 4px;
+      }
+
+    #novojogo.touchstart {
+        background-color: #bb77c9;
+        box-shadow: none;
+        top: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎵 Jogo das Notas Musicais</h1>
+  
+  <div id="imagemContainer">
+    <img id="notaImagem" src="" alt="Nota musical" style="display: none;">
+  </div>
+
+  <div id="botoesNotas">
+    <button class="notas" onclick="verificarResposta('dó')">Dó</button>
+    <button class="notas" onclick="verificarResposta('ré')">Ré</button>
+    <button class="notas" onclick="verificarResposta('mi')">Mi</button>
+    <button class="notas" onclick="verificarResposta('fá')">Fá</button>
+    <button class="notas" onclick="verificarResposta('sol')">Sol</button>
+    <button class="notas" onclick="verificarResposta('lá')">Lá</button>
+    <button class="notas" onclick="verificarResposta('si')">Si</button>
+  </div>
+
+  <div class="message" id="mensagemResultado"></div>
+
+  <button id="novojogo" onclick="novoJogo()">Novo Jogo</button>
+
+  <script>
+    const imagens = [
+      { nome: "dó", src: "img/do1.jpg" },
+      { nome: "dó", src: "img/do2.jpg" },
+      { nome: "ré", src: "img/re1.jpg" },
+      { nome: "ré", src: "img/re2.jpg" },
+      { nome: "mi", src: "img/mi1.jpg" },
+      { nome: "mi", src: "img/mi2.jpg" },
+      { nome: "fá", src: "img/fa1.jpg" },
+      { nome: "fá", src: "img/fa2.jpg" },,
+      { nome: "sol", src: "img/sol1.jpg" },
+      { nome: "sol", src: "img/sol2.jpg" },
+      { nome: "sol", src: "img/sol3.jpg" },
+      { nome: "lá", src: "img/la1.jpg" },
+      { nome: "lá", src: "img/la2.jpg" },
+      { nome: "lá", src: "img/la3.jpg" },
+      { nome: "si", src: "img/si1.jpg" },
+      { nome: "si", src: "img/si3.jpg" },
+      { nome: "si", src: "img/si2.jpg" }
+    ];
+
+    let notaCorreta = "";
+
+    function novoJogo() {
+      const sorteado = imagens[Math.floor(Math.random() * imagens.length)];
+      notaCorreta = sorteado.nome;
+      const img = document.getElementById("notaImagem");
+      img.src = sorteado.src;
+      img.style.display = "block";
+
+      document.getElementById("mensagemResultado").textContent = "";
+    }
+
+    function verificarResposta(resposta) {
+      const mensagem = document.getElementById("mensagemResultado");
+
+      if (!notaCorreta) {
+        mensagem.textContent = "Clique em 'Novo Jogo' primeiro!";
+        mensagem.style.color = "orange";
+        return;
+      }
+
+      if (resposta === notaCorreta) {
+        mensagem.textContent = "✅ Correto!";
+        mensagem.style.color = "green";
+      } else {
+        mensagem.textContent = `❌ Nota incorreta! A resposta era: ${notaCorreta.toUpperCase()}`;
+        mensagem.style.color = "red";
+        mensagem.style.fontSize = "15px";
+      }
+
+      notaCorreta = "";
+    }
+  </script>
+
+</body>
+</html>
