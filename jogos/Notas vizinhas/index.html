@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Árvore Musical</title>
+  <title>Notas Vizinhas</title>
   <style>
     body {
       font-family: sans-serif;
@@ -161,6 +161,39 @@
         border: 3px dashed #007bff; /* Highlight active slot */
         box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
     }
+
+        .botoes{
+      display: inline-block;
+      background: #915c9c;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 0 #53355a;        
+            transition: all 0.1s ease;
+            position: relative;
+            top: 0px;
+            width: 200px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: bolder;
+       }
+    
+    .botoes:hover{
+            background: #bb77c9;
+       }
+
+    .botoes:active{
+            background-color: #bb77c9;
+            box-shadow: none;
+            top: 4px;
+      }
+
+    .botoes.touchstart {
+        background-color: #bb77c9;
+        box-shadow: none;
+        top: 4px;
+    }
+
   </style>
 </head>
 <body>
@@ -191,6 +224,10 @@
     <div class="nota">Si</div>
   </div>
 </div>
+ <div>
+    <a href=""><input class="botoes" type="button" value="Novo Jogo"></a>
+    <a href=""><input class="botoes" type="button" value="Sair"></a>
+  </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
