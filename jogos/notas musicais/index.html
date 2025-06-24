@@ -76,7 +76,7 @@
       top: 4px;
     }
 
-    #novojogo{
+    .novojogo{
       display: inline-block;
       background: #915c9c;
             color: white;
@@ -88,17 +88,17 @@
             width: 130px;
        }
     
-    #novojogo:hover{
+    .novojogo:hover{
             background: #bb77c9;
        }
 
-    #novojogo:active{
+    .novojogo:active{
             background-color: #bb77c9;
             box-shadow: none;
             top: 4px;
       }
 
-    #novojogo.touchstart {
+    .novojogo.touchstart {
         background-color: #bb77c9;
         box-shadow: none;
         top: 4px;
@@ -152,7 +152,8 @@
 
   <div class="message" id="mensagemResultado"></div>
 
-  <button id="novojogo" onclick="novoJogo()">Novo Jogo</button>
+  <button class="novojogo" onclick="novoJogo()">Novo Jogo</button>
+  <a href=""><button class="novojogo" type="button">Sair</button></a>
 
   <script>
     const imagens = [
