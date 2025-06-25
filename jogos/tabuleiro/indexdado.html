@@ -16,6 +16,12 @@
       align-items: center;
     }
 
+  #container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
     .fundo-wrapper {
       position: relative;
       width: 100vw; /* escala com a tela */
@@ -157,51 +163,95 @@
   box-shadow: 2px 3px 5px 1px rgba(0, 15, 3, 0.514);
 }
 
+#divbotoes{
+  display: flex;
+  justify-content: center; /* centraliza os botões horizontalmente */
+  gap: 10px;                /* espaço entre os botões */
+}
+
+.botoes{
+      display: inline-block;
+      background: #915c9c;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 0 #53355a;        
+            transition: all 0.1s ease;
+            position: relative;
+            top: 0px;
+            width: 200px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: bolder;
+       }
+    
+    .botoes:hover{
+            background: #bb77c9;
+       }
+
+    .botoes:active{
+            background-color: #bb77c9;
+            box-shadow: none;
+            top: 4px;
+      }
+
+    .botoes.touchstart {
+        background-color: #bb77c9;
+        box-shadow: none;
+        top: 4px;
+    }
+
   </style>
 </head>
 <body>
-  <div class="fundo-wrapper">
-    <div class="slot slot1"></div>
-    <div class="slot slot2"></div>
-    <div class="slot slot3"></div>
-    <div class="slot slot4"></div>
-    <div class="slot slot5"></div>
-    <div class="slot slot6"></div>
-    <div class="slot slot7"></div>
-    <div class="slot slot8"></div>
-    <div class="slot slot9"></div>
-    <div class="slot slot10"></div>
-    <div class="slot slot11"></div>
-    <div class="slot slot12"></div>
-    <div class="slot slot13"></div>
-    <div class="slot slot14"></div>
-    <div class="slot slot15"></div>
-    <div class="slot slot16"></div>
-    <div class="slot slot17"></div>
-    <div class="slot slot18"></div>
-    <div class="slot slot19"></div>
-    <div class="slot slot20"></div>
-    <div class="slot slot21"></div>
-    <div class="figuras" id="figuras">
-  <div class="figura" id="figura1"><img src="logo-ficha.png" alt="personagem aipim"></div>
-</div>
-  <div class="dado-container">
-  <div class="dado" id="dado">
-    <div class="face face1"><img src="face1.png" alt="1"></div>
-    <div class="face face2"><img src="face2.png" alt="2"></div>
-    <div class="face face3"><img src="face3.png" alt="3"></div>
-    <div class="face face4"><img src="face4.png" alt="4"></div>
-    <div class="face face5"><img src="face5.png" alt="5"></div>
-    <div class="face face6"><img src="face6.png" alt="6"></div>
+  
+  <div id="conteiner">
+    <div class="fundo-wrapper">
+      <div class="slot slot1"></div>
+      <div class="slot slot2"></div>
+      <div class="slot slot3"></div>
+      <div class="slot slot4"></div>
+      <div class="slot slot5"></div>
+      <div class="slot slot6"></div>
+      <div class="slot slot7"></div>
+      <div class="slot slot8"></div>
+      <div class="slot slot9"></div>
+      <div class="slot slot10"></div>
+      <div class="slot slot11"></div>
+      <div class="slot slot12"></div>
+      <div class="slot slot13"></div>
+      <div class="slot slot14"></div>
+      <div class="slot slot15"></div>
+      <div class="slot slot16"></div>
+      <div class="slot slot17"></div>
+      <div class="slot slot18"></div>
+      <div class="slot slot19"></div>
+      <div class="slot slot20"></div>
+      <div class="slot slot21"></div>
+      <div class="figuras" id="figuras">
+    <div class="figura" id="figura1"><img src="logo-ficha.png" alt="personagem aipim"></div>
+    </div>
+    <div class="dado-container">
+    <div class="dado" id="dado">
+      <div class="face face1"><img src="face1.png" alt="1"></div>
+      <div class="face face2"><img src="face2.png" alt="2"></div>
+      <div class="face face3"><img src="face3.png" alt="3"></div>
+      <div class="face face4"><img src="face4.png" alt="4"></div>
+      <div class="face face5"><img src="face5.png" alt="5"></div>
+      <div class="face face6"><img src="face6.png" alt="6"></div>
+    </div>
+    <button onclick="rolarDado()" class="botao-dado">🎲Rolar Dado</button>
+    </div>
+    </div>
+    
+    <div id="divbotoes">
+      <a href="indexdado.html"><input class="botoes" type="button" value="Novo Jogo"></a>
+      <a href="../../../Jogos.html"><input class="botoes" type="button" value="Sair"></a>
+    </div>
   </div>
-  <button onclick="rolarDado()" class="botao-dado">🎲Rolar Dado</button>
-</div>
-
-  </div>
-
-
 
 </body>
+
 <script>
   const figuras = document.querySelectorAll('.figura');
   const slots = document.querySelectorAll('.slot');
