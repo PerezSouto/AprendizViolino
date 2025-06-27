@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo de Compasso 4/4</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #game-container {
+      width: 900px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #figuras-disponiveis {
+      margin-bottom: 30px;
+      padding: 10px;
+      border: 2px dashed #ccc;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+#figuras-disponiveis .figura-musical.semicolcheia { width: 6.25%; }
+#figuras-disponiveis .figura-musical.colcheia     { width: 12.5%; }
+#figuras-disponiveis .figura-musical.seminima     { width: 25%; }
+#figuras-disponiveis .figura-musical.minima       { width: 50%; }
+#figuras-disponiveis .figura-musical.semibreve    { width: 100%; }
+
+
+    #compasso {
+      height: 100px;
+      width: 100%;
+      background-color: #e8f4ff;
+      border: 2px solid #a3c2e1;
+      border-radius: 5px;
+      display: grid;
+      grid-template-columns: repeat(16, 1fr); /* 16 colunas = 4 tempos de 0.25 cada */
+      align-items: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    /* Linhas de pulso */
+    .pulso {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: #d0d0d0;
+    }
+
+    .linha-25 { left: 25%; }
+    .linha-50 { left: 50%; }
+    .linha-75 { left: 75%; }
+
+    .figura-musical {
+      height: 80%;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2em;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+      border: 1px solid #555;
+    }
+
+    .figura-musical.semicolcheia { grid-column: span 1; background-color: #9b59b6; }
+    .figura-musical.colcheia     { grid-column: span 2; background-color: #f1c40f; }
+    .figura-musical.seminima     { grid-column: span 4; background-color: #3498db; }
+    .figura-musical.minima       { grid-column: span 8; background-color: #2ecc71; }
+    .figura-musical.semibreve    { grid-column: span 16; background-color: #e74c3c; }
+
+    .selecionada {
+      outline: 3px solid #ff9900;
+      box-shadow: 0 0 10px #ffa500;
+    }
+
+    #controles {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      margin: 0 10px;
+    }
+
+    #verificar-btn {
+      background-color: #27ae60;
+      color: white;
+    }
+
+    #limpar-btn {
+      background-color: #c0392b;
+      color: white;
+    }
+
+    #mensagem {
+      margin-top: 15px;
+      font-size: 1.2em;
+      font-weight: bold;
+      min-height: 25px;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <h1>Jogo do Compasso 4/4</h1>
+    <p>Selecione uma figura e clique no compasso para adicioná-la.</p>
+
+    <div id="figuras-disponiveis">
+      <div class="figura-musical semicolcheia" data-valor="0.25" id="fig-semicolcheia">𝅘𝅥𝅯</div>
+      <div class="figura-musical colcheia" data-valor="0.5" id="fig-colcheia">♪</div>
+      <div class="figura-musical seminima" data-valor="1" id="fig-seminima">♩</div>
+      <div class="figura-musical minima" data-valor="2" id="fig-minima">𝅗𝅥</div>
+      <div class="figura-musical semibreve" data-valor="4" id="fig-semibreve">𝅝</div>
+    </div>
+
+    <div id="compasso">
+      <div class="pulso linha-25"></div>
+      <div class="pulso linha-50"></div>
+      <div class="pulso linha-75"></div>
+    </div>
+
+    <div id="controles">
+      <button id="verificar-btn">Verificar Compasso</button>
+      <button id="limpar-btn">Limpar</button>
+    </div>
+
+    <p id="mensagem"></p>
+  </div>
+
+  <script>
+    const figurasDisponiveis = document.querySelectorAll('.figura-musical');
+    const compasso = document.getElementById('compasso');
+    const verificarBtn = document.getElementById('verificar-btn');
+    const limparBtn = document.getElementById('limpar-btn');
+    const mensagemEl = document.getElementById('mensagem');
+
+    let figuraSelecionada = null;
+
+    // Seleciona a figura ao clicar
+    figurasDisponiveis.forEach(figura => {
+      figura.addEventListener('click', () => {
+        figurasDisponiveis.forEach(f => f.classList.remove('selecionada'));
+        figura.classList.add('selecionada');
+        figuraSelecionada = figura;
+      });
+    });
+
+    // Insere figura no compasso ao clicar nele
+    compasso.addEventListener('click', (event) => {
+      if (figuraSelecionada && !event.target.classList.contains('figura-musical')) {
+        const clone = figuraSelecionada.cloneNode(true);
+        clone.classList.remove('selecionada');
+        clone.removeAttribute('id');
+        compasso.appendChild(clone);
+        mensagemEl.textContent = '';
+      }
+    });
+
+    // Verificar compasso
+    verificarBtn.addEventListener('click', () => {
+      let total = 0;
+      const figurasNoCompasso = compasso.querySelectorAll('.figura-musical');
+      figurasNoCompasso.forEach(figura => {
+        total += parseFloat(figura.dataset.valor);
+      });
+
+      if (total === 4) {
+        mensagemEl.textContent = '✅ Parabéns! O compasso está preenchido corretamente!';
+        mensagemEl.style.color = 'green';
+      } else if (total > 4) {
+        mensagemEl.textContent = `❌ Você excedeu o limite de tempos do compasso. Total: ${total} tempos. O correto é 4.`;
+        mensagemEl.style.color = 'red';
+      } else {
+        mensagemEl.textContent = `⏳ Ainda falta preencher. Total: ${total} tempos. Faltam ${4 - total}.`;
+        mensagemEl.style.color = 'orange';
+      }
+    });
+
+    // Limpar compasso
+    limparBtn.addEventListener('click', () => {
+      const clones = compasso.querySelectorAll('.figura-musical');
+      clones.forEach(clone => clone.remove());
+      mensagemEl.textContent = '';
+    });
+  </script>
+</body>
+</html>
+
