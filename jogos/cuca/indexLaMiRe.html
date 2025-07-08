@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .game-area {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    #fundo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    #personagem, #inimigo {
+      position: absolute;
+      bottom: 16%; /* Ajuste conforme a imagem */
+      width: 13%;
+      z-index: 1;
+    }
+
+    #personagem {
+      left: 5%;
+    }
+
+    #inimigo {
+      right: 5%;
+    }
+
+    #topRightButtons {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2;
+    }
+
+    #startScreen {
+      width: 300px;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.712);
+      padding: 10px 15px;
+      border-radius: 10px;
+      color: white;
+      font-size: 1.2rem;
+      text-align: center
+    }
+
+    #startScreen > button{
+        width: 130px;
+        font-size: 17px;
+        padding: 8px;
+        margin-top: 0px;
+        margin-bottom: 10px;
+    }
+
+    .botaostart {
+      margin: 5px;
+      padding: 5px 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    /* começa aqui para ajustar */
+
+    .hud {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: white;
+    }
+
+    #hud {
+      display: none; /* Esconde a HUD até o jogo começar */
+      top: 20%;
+      width:350px;
+    }
+
+    #noteImage {
+      height: 180px;
+      margin-bottom: 10px;
+    }
+
+    #options button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 18px;
+      border-radius: 0px;
+    }
+
+    #feedback {
+      font-weight: bold;
+      margin-top: 10px;
+      color: white;
+      font-size: 20px;
+    }
+
+    #timerBar {
+      height: 10px;
+      width: 100%;
+      background-color: red;
+      transition: width 0.1s linear;
+      margin-top: 10px;
+    }
+
+    #statusBar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-size: 16px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0px 15px;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    #level {
+      margin-top: 5px;
+      font-size: 22px;
+      color: yellow;
+      font-weight: bold;
+    }
+
+    #gameOver {
+      display: none;
+      position: absolute;
+      width: 300px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 48px;
+      background: rgb(26, 25, 25);
+      padding: 20px;
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    #gameOver button {
+      margin-top: 15px;
+      font-size: 20px;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+
+    #levelUpMessage {
+      display: none;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 30px;
+      color: yellow;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px black;
+      animation: pop 1s ease-out;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Acaba aqui **/
+
+    @media (min-width: 1000px){
+      #personagem, #inimigo {
+      bottom: 9%;
+    }
+
+    #startScreen{
+      width: 500px;
+      font-size: 1.5rem;
+    }
+    #statusBar{
+      font-size: 20px;
+    }
+
+    #hud {
+      top: 5%;
+      width: 500px;
+    }
+
+    #noteImage {
+      height: 200px;
+    }
+
+    #levelUpMessage {
+      font-size: 40px;
+    }
+
+    #personagem, #inimigo {
+      width: 10%;
+    }
+    
+
+    }
+  </style>
+</head>
+<body>
+  <div class="game-area">
+    <!-- Imagem de fundo como elemento HTML -->
+    <img src="imagens/fundo.jpg" id="fundo" alt="Cenário de fundo" />
+
+    <!-- Personagem e inimigo -->
+    <img id="personagem" src="imagens/personagem.png" alt="Personagem" />
+    <img id="inimigo" src="imagens/inimigo.png" alt="Inimigo" />
+
+    <!-- Botão Sair e Pausa -->
+    <div id="topRightButtons">
+    <button onclick="pauseGame()">⏸️ Pausar</button>
+      <a href="teste.html"><button>⏹️ Sair</button></a>
+    </div>
+
+    <div id="statusBar">
+      <p id="lives">❤️❤️❤️</p>
+      <p id="level">Nível: 1</p>
+    </div>
+
+    <div class="hud" id="hud">
+      <img id="noteImage" src="" alt="Nota musical" />
+      <div id="options"></div>
+      <div id="timerBar"></div>
+      <p id="feedback"></p>
+      <div id="levelUpMessage">Nível 2!</div>
+    </div>
+
+    <div id="gameOver">
+      GAME OVER<br>
+      <button onclick="restartGame()">Reiniciar</button>
+    </div>
+
+    <!-- Tela de seleção de tipo de jogo -->
+    <div id="startScreen">
+      <p>🎵 Bem-vindo às Cordas Lá-Mi-Ré!</p>
+      <button onclick="startGame()">▶️ Jogar</button>
+    </div>
+  </div>
+
+  <script>
+   const noteImages = [
+    { note: "Dó4", src: "imagens/do2.jpg" },
+      { note: "Ré3", src: "imagens/re1.jpg" },
+      { note: "Mi3", src: "imagens/mi1.jpg" },
+      { note: "Fá3", src: "imagens/fa1.jpg" },
+      { note: "Sol3", src: "imagens/sol2.jpg" },
+      { note: "Lá3", src: "imagens/la2.jpg" },
+      { note: "Si3", src: "imagens/si2.jpg" },
+      { note: "Ré4", src: "imagens/re2.jpg" },
+      { note: "Mi4", src: "imagens/mi2.jpg" },
+      { note: "Fá4", src: "imagens/fa2.jpg" },
+      { note: "Sol4", src: "imagens/sol3.jpg" },
+      { note: "Lá4", src: "imagens/la3.jpg" },
+      { note: "Si4", src: "imagens/si3.jpg" },
+];
+
+let noteQueue = [];
+function shuffleNotes() {
+  noteQueue = [...noteImages];
+  for (let i = noteQueue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [noteQueue[i], noteQueue[j]] = [noteQueue[j], noteQueue[i]];
+  }
+}
+
+let currentNote = null;
+let timer = null;
+let timeLeft = 5000;
+let startTime = 0;
+let lives = 3;
+let correctAnswers = 0;
+let level = 1;
+let baseTime = 12000;
+
+const noteImage = document.getElementById("noteImage");
+const optionsContainer = document.getElementById("options");
+const feedback = document.getElementById("feedback");
+const personagem = document.getElementById("personagem");
+const inimigo = document.getElementById("inimigo");
+const timerBar = document.getElementById("timerBar");
+const livesDisplay = document.getElementById("lives");
+const gameOverScreen = document.getElementById("gameOver");
+const levelDisplay = document.getElementById("level");
+const levelUpMessage = document.getElementById("levelUpMessage");
+const startScreen = document.getElementById("startScreen");
+const hud = document.getElementById("hud");
+
+function startGame() {
+  startScreen.style.display = "none";
+  hud.style.display = "block";
+  lives = 3;
+  level = 1;
+  correctAnswers = 0;
+  baseTime = 12000;
+  updateLivesDisplay();
+  updateLevelDisplay();
+  shuffleNotes();
+  startRound();
+}
+
+function updateLivesDisplay() {
+  livesDisplay.textContent = "❤️".repeat(lives);
+}
+
+function updateLevelDisplay() {
+  levelDisplay.textContent = `Nível: ${level}`;
+}
+
+function showLevelUpMessage() {
+  levelUpMessage.textContent = `Nível ${level}!`;
+  levelUpMessage.style.display = "block";
+  setTimeout(() => {
+    levelUpMessage.style.display = "none";
+  }, 1000);
+}
+
+function startRound() {
+  feedback.textContent = "";
+  optionsContainer.innerHTML = "";
+  timerBar.style.width = "100%";
+  inimigo.style.right = "100px";
+  personagem.style.transform = "translateX(0)";
+
+  if (noteQueue.length === 0) shuffleNotes();
+  currentNote = noteQueue.pop();
+  noteImage.src = currentNote.src;
+
+      const uniqueOptions = [...new Set(noteImages.map(n => n.note.replace(/[0-9]/g, "")))];
+      uniqueOptions.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        optionsContainer.appendChild(btn);
+      });
+
+  timeLeft = baseTime;
+  startTime = Date.now();
+  clearInterval(timer);
+  timer = setInterval(updateTimer, 100);
+}
+
+function updateTimer() {
+  const elapsed = Date.now() - startTime;
+  timeLeft = baseTime - elapsed;
+  if (timeLeft < 0) timeLeft = 0;
+
+  timerBar.style.width = `${(timeLeft / baseTime) * 100}%`;
+
+  const progress = 1 - (timeLeft / baseTime);
+  const start = 100;
+  const end = window.innerWidth * 0.8;
+  const newRight = start + (end - start) * progress;
+  inimigo.style.right = `${newRight}px`;
+
+  if (timeLeft <= 0) {
+    clearInterval(timer);
+    loseLife(true);
+  }
+}
+
+    function checkAnswer(note) {
+      clearInterval(timer);
+
+      if (note === currentNote.note.replace(/[0-9]/g, "")) {
+        feedback.textContent = "✅ Acertou!";
+        correctAnswers++;
+
+        if (correctAnswers % 5 === 0) {
+          level++;
+          baseTime = Math.max(2000, baseTime - 2000);
+          updateLevelDisplay();
+          showLevelUpMessage();
+        }
+
+        attack();
+      } else {
+        feedback.textContent = "❌ Errou!";
+        loseLife(false);
+      }
+    }
+
+function attack() {
+  personagem.style.transform = "translateX(20px)";
+  setTimeout(() => {
+    personagem.style.transform = "translateX(0)";
+    inimigo.style.right = "-200px";
+    setTimeout(startRound, 2000);
+  }, 300);
+}
+
+function enemyAttack() {
+  inimigo.style.right = "120px";
+  personagem.style.transform = "translateX(-20px)";
+  setTimeout(() => {
+    personagem.style.transform = "translateX(0)";
+    startRound();
+  }, 2000);
+}
+
+function loseLife(timeExpired = false) {
+  lives--;
+  updateLivesDisplay();
+
+  if (lives <= 0) {
+    gameOver();
+  } else {
+    if (timeExpired) {
+      feedback.textContent = "💥 A Cuca pegou você!";
+    }
+    enemyAttack();
+  }
+}
+
+function gameOver() {
+  clearInterval(timer);
+  feedback.textContent = "";
+  gameOverScreen.style.display = "block";
+}
+
+function restartGame() {
+  gameOverScreen.style.display = "none";
+  startGame();
+}
+
+let paused = false;
+
+function pauseGame() {
+  if (paused) {
+    paused = false;
+    startTime = Date.now() - (baseTime - timeLeft); // retoma de onde parou
+    timer = setInterval(updateTimer, 100);
+    feedback.textContent = "";
+  } else {
+    paused = true;
+    clearInterval(timer);
+    feedback.textContent = "⏸️ Jogo Pausado";
+  }
+}
+  </script>
+</body>
+</html>
