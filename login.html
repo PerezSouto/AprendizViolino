@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Aprendiz de Violino</title>
+    <link rel="shortcut icon" href="imagens/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mediaqueries.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <style>
+        .container {
+      text-align: center;
+    }
+
+    .caixa {
+      background-color: #00935D;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      width: 200px;
+      color: black;
+      border-radius: 7px;
+    }
+
+    .caixa::placeholder {
+      color: black;
+    }
+
+    #login, #cadastro {
+      margin-top: 10px;
+      background-color: #64406C;
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      cursor: pointer;
+      border-radius: 7px;
+      margin-right: 5px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: rgb(3, 0, 0);
+    }
+
+    #text{
+        text-align: center;
+    }
+    </style>
+
+</head>
+<body>
+    <header>
+        <div id="banner"></div>
+        <span id="iconeburger" class="material-symbols-outlined" onclick="clickMenu()">menu</span>
+        <nav id="hamburguer">
+            <a href="index.html">Inicio</a>
+            <a href="autora.html">Autora</a>
+            <a href="ebook.html">Ebook</a>
+            <a href="certificado.html">Certificado</a>
+            <a href="Jogos.html">Jogos</a>
+            <a href="musical.html">Musical</a>
+            <a href="oficinas.html">Oficinas</a>
+            <a href="Animacoes.html">Animações</a>
+            <a href="artigos.html">Artigos</a>
+            <a href="podcast.html">Podcast</a>
+            <a href="contato.html">Contato</a>
+        </nav>
+        <nav id="menugrande">
+            <a href="index.html">Início</a>
+            <a href="autora.html">Autora</a>
+            <a href="ebook.html">Ebook</a>
+            <a href="certificado.html">Certificado</a>
+            <a href="Jogos.html">Jogos</a>
+            <a href="musical.html">Musical</a>
+            <a href="oficinas.html">Oficinas</a>
+            <a href="Animacoes.html">Animações</a>
+            <a href="artigos.html">Artigos</a>
+            <a href="podcast.html">Podcast</a>
+            <a href="contato.html">Contato</a>
+        </nav>
+    </header>
+    <main>
+        <article>
+            <h1>Área do Aluno</h1>
+            <p id="text">Este espaço é exclusivo para os alunos particulares de Keeyth Vianna.</p>
+        </article>
+
+        <div class="container">
+          <article>
+             <label for="email">E-mail</label>
+             <input id="email" class="caixa" type="email" placeholder="Digite seu E-mail">
+             <label for="password">Senha</label>
+             <input id="password" class="caixa" type="password" placeholder="Digite sua senha">
+          </article>
+
+          <article>
+             <input id="login" type="button" value="Entrar">
+          </article>
+        </div>
+
+    </main>
+    <footer>
+        <p> &copy; 2017-2025 O Aprendiz de Violino</p>
+        <div class="redes">
+            <a href="https://www.instagram.com/oaprendizdeviolino/" target="_blank"><img src="imagens/instagram-icono.png" alt="logo instagram"></a>
+            <a href="https://www.youtube.com/channel/UCyp5XrutqbnQCS0HmBV9VWg" target="blank"><img src="imagens/youtube-icono.png" alt="logo youtube"></a>
+        </div>
+        <p><a id="privacidade" href="Politicaprivacidade.html">Política de privacidade e Termos de uso</a></p>
+
+    </footer>
+    <script>
+        function clickMenu(){
+                if (hamburguer.style.display == 'block') {
+                    hamburguer.style.display = 'none'
+                } else {
+                    hamburguer.style.display = 'block'
+                }
+            }
+
+        //Script do carrousel
+          const carousel = document.getElementById("carousel");
+
+function duplicateItems() {
+  const originalItems = Array.from(carousel.children);
+
+  originalItems.forEach(item => {
+    const cloneStart = item.cloneNode(true);
+    cloneStart.classList.add('clone');
+    carousel.insertBefore(cloneStart, carousel.firstChild);
+  });
+
+  originalItems.forEach(item => {
+    const cloneEnd = item.cloneNode(true);
+    cloneEnd.classList.add('clone');
+    carousel.appendChild(cloneEnd);
+  });
+}
+
+function centerCarousel() {
+  const allItems = carousel.querySelectorAll(".carousel-item");
+  const clones = carousel.querySelectorAll(".carousel-item.clone");
+  const originalItems = Array.from(allItems).filter(item => !item.classList.contains("clone"));
+  
+  const middleIndex = Math.floor(originalItems.length / 2);
+  const middleItem = originalItems[middleIndex];
+
+  // Remove transição para reposicionar instantaneamente
+  carousel.style.scrollBehavior = "auto";
+  carousel.scrollLeft = middleItem.offsetLeft - (carousel.offsetWidth / 2) + (middleItem.offsetWidth / 2);
+
+  // Reativa transição suave após reposicionar
+  setTimeout(() => {
+    carousel.style.scrollBehavior = "smooth";
+  }, 50);
+}
+
+
+function handleInfiniteScroll() {
+  const items = carousel.querySelectorAll(".carousel-item");
+  const itemWidth = items[0].offsetWidth + 20;
+  const totalItems = items.length;
+  const third = totalItems / 3;
+
+  const scrollLeft = carousel.scrollLeft;
+  const maxScrollLeft = carousel.scrollWidth;
+  
+  // Buffer maior para antecipar o reposicionamento
+  const buffer = itemWidth * 1.5; 
+
+  // Limites ajustados com buffer
+  const firstCloneBoundary = itemWidth * (third) - buffer;
+  const lastCloneBoundary = itemWidth * (third * 2) + buffer;
+
+  if (scrollLeft < firstCloneBoundary) {
+    carousel.style.scrollBehavior = "auto";
+    carousel.scrollLeft = scrollLeft + itemWidth * third;
+    setTimeout(() => {
+      carousel.style.scrollBehavior = "smooth";
+    }, 50);
+  } else if (scrollLeft > lastCloneBoundary) {
+    carousel.style.scrollBehavior = "auto";
+    carousel.scrollLeft = scrollLeft - itemWidth * third;
+    setTimeout(() => {
+      carousel.style.scrollBehavior = "smooth";
+    }, 50);
+  }
+}
+
+
+function scrollCarousel(direction) {
+  const itemWidth = carousel.querySelector(".carousel-item").offsetWidth + 20;
+  carousel.scrollBy({ left: direction * itemWidth, behavior: "smooth" });
+}
+
+window.addEventListener("load", () => {
+  duplicateItems();
+  centerCarousel();
+  carousel.addEventListener("scroll", () => {
+    requestAnimationFrame(handleInfiniteScroll);
+  });
+});
+
+window.addEventListener("resize", centerCarousel);
+    </script>
+
+<script type="module">
+    // Importa módulos do Firebase v9.6.1
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyApHSOyYUImfmUWYrao2AOEH0rMwJm3ShE",
+      authDomain: "app-do-aluno-13dde.firebaseapp.com",
+      projectId: "app-do-aluno-13dde",
+      storageBucket: "app-do-aluno-13dde.appspot.com",
+      messagingSenderId: "911749754839",
+      appId: "1:911749754839:web:1f3e47b181df83dea8a592"
+    };
+
+    // Inicializa o app e auth
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Login
+    const loginBtn = document.getElementById("login");
+    loginBtn.addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("password").value;
+
+    signInWithEmailAndPassword(auth, email, senha)
+    .then(userCredential => {
+        // alert("Login bem-sucedido!"); // <-- Remova ou comente esta linha
+        window.location.href = "home.html"; // Redireciona direto para a página
+    })
+    .catch(error => {
+        alert("Erro no login: " + error.message);
+    });
+    });
+  </script>
+
+</body>
+</html>
