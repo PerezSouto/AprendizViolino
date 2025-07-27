@@ -93,26 +93,9 @@
         </nav>
     </header>
     <main>
-        <article>
-            <h1>Portal do Aluno*</h1>
-        </article>
+          <h1>Bem-vindo à área do aluno!</h1>
+  <button onclick="firebase.auth().signOut().then(() => location.href='index.html')">Sair</button>
 
-        <div class="container">
-          <article>
-             <label for="email">E-mail</label>
-             <input id="email" class="caixa" type="email" placeholder="Digite seu E-mail">
-             <label for="password">Senha</label>
-             <input id="password" class="caixa" type="password" placeholder="Digite sua senha">
-          </article>
-
-          <article>
-             <input id="login" type="button" value="Entrar">
-          </article>
-
-          <article>
-            <p id="text">*Esta área é um espaço exclusivo para os alunos particulares de Keeyth Vianna.</p>
-          </article>
-        </div>
 
     </main>
     <footer>
@@ -217,42 +200,27 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("resize", centerCarousel);
-    </script>
-
-<script type="module">
-    // Importa módulos do Firebase v9.6.1
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
+</script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyApHSOyYUImfmUWYrao2AOEH0rMwJm3ShE",
-      authDomain: "app-do-aluno-13dde.firebaseapp.com",
-      projectId: "app-do-aluno-13dde",
-      storageBucket: "app-do-aluno-13dde.appspot.com",
-      messagingSenderId: "911749754839",
-      appId: "1:911749754839:web:1f3e47b181df83dea8a592"
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU-PROJETO.firebaseapp.com",
+      projectId: "SEU-PROJETO",
+      appId: "SUA_APP_ID"
     };
 
-    // Inicializa o app e auth
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    firebase.initializeApp(firebaseConfig);
 
-    // Login
-    const loginBtn = document.getElementById("login");
-    loginBtn.addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("password").value;
-
-    signInWithEmailAndPassword(auth, email, senha)
-    .then(userCredential => {
-        // alert("Login bem-sucedido!"); // <-- Remova ou comente esta linha
-        window.location.href = "home.html"; // Redireciona direto para a página
-    })
-    .catch(error => {
-        alert("Erro no login: " + error.message);
-    });
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        // Se não estiver logado, volta para a tela inicial
+        window.location.href = "index.html";
+      }
     });
   </script>
+
 
 </body>
 </html>
