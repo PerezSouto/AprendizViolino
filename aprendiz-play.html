@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aprendiz Play</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+    }
+
+    #titulo{text-align: center; }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e1e1e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #777;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #4d4d4d;
+      border-radius: 5px;
+      outline: none;
+      opacity: 0.7;
+      transition: opacity .2s;
+    }
+    input[type=range]:hover {
+      opacity: 1;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      background: #ffffff;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    }
+    input[type=range]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: #ffffff;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+      :root {
+    /* Altura padrão do player para telas maiores (md para cima) */
+    --player-height: 90px;
+  }
+
+  @media (max-width: 767px) { /* Breakpoint do Tailwind para telas < md */
+    :root {
+      /* Altura ajustada do player para telas pequenas, sem o volume */
+      --player-height: 135px; 
+    }
+  }
+  </style>
+</head>
+<body class="text-white">
+
+<div class="overflow-hidden" style="height: calc(100vh - var(--player-height));">
+  <div id="main-container" class="h-full block md:flex">
+    
+    <aside id="song-list-panel" class="w-full md:w-80 lg:w-96 bg-[#000000] p-4 space-y-4 overflow-y-auto h-full">
+      <h1 id="titulo" class="text-2xl font-bold">O Aprendiz de Violino</h1>
+      <nav>
+        <ul id="song-list" class="space-y-2"></ul>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+      </nav>
+    </aside>
+
+    <div id="details-screen" class="hidden h-full overflow-y-auto p-6 bg-gradient-to-b from-gray-800 to-[#121212] relative md:block flex-1">
+      <button id="back-btn" class="absolute top-4 left-4 text-white bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-md md:hidden">
+        ← Voltar
+      </button>
+      <div id="main-view-content" class="mt-10 md:mt-0 h-full">
+          <div class="flex items-center justify-center h-full text-gray-400">
+            <p>Selecione uma música para ver os detalhes</p>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <footer id="player-bar" class="fixed bottom-0 left-0 w-full bg-[#181818] border-t border-gray-800 p-3 flex flex-col md:flex-row items-center justify-between z-50" style="min-height: var(--player-height);">
+  <div class="flex flex-col md:flex-row items-center gap-3 w-full md:w-1/4 mb-2 md:mb-0 justify-center md:justify-start order-1 md:order-none">
+    <img id="player-album-art" src="https://placehold.co/64x64/1DB954/FFFFFF?text=V" alt="Capa do Álbum" class="w-16 h-16 rounded-md hidden md:block">
+    <div class="text-center md:text-left">
+      <p id="player-track-title" class="font-semibold text-sm">Nenhuma faixa selecionada</p>
+      <p id="player-song-title" class="text-xs text-gray-400">Selecione uma música</p>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center gap-2 w-full md:w-1/2 max-w-lg order-2 md:order-none">
+    <div class="flex items-center gap-4">
+      <button id="prev-btn" class="text-gray-400 hover:text-white transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"><path d="M7 6v12l-6-6zM8 6l12 6-12 6z"/></svg>
+      </button>
+      <button id="play-pause-btn" class="bg-white text-black rounded-full p-3 hover:scale-105 transition-transform">
+        <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="hidden" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+      </button>
+      <button id="next-btn" class="text-gray-400 hover:text-white transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"><path d="M17 6v12l6-6zM16 6l-12 6 12 6z"/></svg>
+      </button>
+    </div>
+    <div class="flex items-center gap-2 w-full">
+      <span id="current-time" class="text-xs text-gray-400">0:00</span>
+      <input id="progress-bar" type="range" value="0" min="0" max="100" class="w-full">
+      <span id="total-time" class="text-xs text-gray-400">0:00</span>
+    </div>
+  </div>
+
+  <div class="hidden md:flex items-center justify-center md:justify-end gap-2 w-full md:w-1/4 mt-2 md:mt-0 order-3 md:order-none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+    <input id="volume-control" type="range" value="100" min="0" max="100" class="w-24">
+  </div>
+</footer>
+
+ <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const songs = [
+{
+                    id: 1,
+                    title: "A Barata - Corda Solta",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=1",
+                    tracks: [
+                        { name: "Piano (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/0k7znhxaampik5zvclja5/1-A-barata-corda-solta-85.mp3?rlkey=5rh0f8dwpw3jsudbwi01ouchq&st=43xi5v7s&dl=0" },
+                        { name: " Piano (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/2yg9ruj3ipu0b4myiczus/2-A-barata-corda-solta-75.mp3?rlkey=k0y2g4x14ds2obiodvbhim4bp&st=ejovp7v4&dl=0" },
+                        { name: "Piano (65 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/xwzg97e5xin3jvk199z91/3-A-barata-corda-solta-65.mp3?rlkey=dl6v83688b58s3vhv4rw5k30i&st=kraja879&dl=0" },
+                        { name: "Piano (55 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/o745f7oodryw5vqengfbk/4-A-barata-corda-solta-55.mp3?rlkey=jkcc2iiw64n7dneo2gic4xyrb&st=cpbx3sk9&dl=0" },
+                    ]
+                },
+
+                {
+                    id: 2,
+                    title: "A Barata",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=2",
+                    tracks: [
+                        { name: "Violino e Piano (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/tnq27wta3mi1nagl4wnje/5-A-barata-Com-violino-75.mp3?rlkey=0mu800k033ecmf5iuxkmwucan&st=1chhif9h&dl=0" },
+                        { name: "Apenas Piano (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/b789cbcwf64sf6227t0xw/6-A-barata-performance-playback-piano-75.mp3?rlkey=ziwk589k7ehxnx41pi4q84ag1&st=ccdwxren&dl=0" },
+                        { name: "Piano Lento (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/77690rbkzpzy2tsyk0mlj/7-A-barata-70.wav?rlkey=3y7pmt8b10nn4sb006nfxc8sp&st=l2w7nq73&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/u9jsh2u1n88wwg4p5imf5/8-A-barata-60.wav?rlkey=6v6qu5049h1vhuv3hge3lnncm&st=b828s8wt&dl=0" },
+                        { name: "Piano Lento (55 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/csvsv0p6wb4sit7ff4l4w/9-A-barata-55.wav?rlkey=4ecxf9xdjdx49hw3ir83n992g&st=o03u2niy&dl=0" },
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "A pobre e a rica",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=3",
+                    tracks: [
+                        { name: "Violino e Piano (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/ryyneho06yknomnvl7k3m/10-A-pobre-e-a-rica-Com-violino-85.mp3?rlkey=9bm1662kel4llb5dw30wg4es6&st=lbxmg10s&dl=0" },
+                        { name: "Apenas Piano (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/is4hf8fkcjpnchsy9x1pj/11-A-pobre-e-a-rica-performance-playback-piano-85.mp3?rlkey=wu3aznrc2q99l19pck1m4vla9&st=k1fj9cf2&dl=0" },
+                        { name: "Piano Lento (72 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/fsi8psp3zo7ry8hcp5dbp/12-A-pobre-e-a-rica-72.mp3?rlkey=noq5phyz3jq22875ujv3ycigd&st=kkt4n081&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/9kzkhorq044pg1owhihqs/13-A-pobre-e-a-rica-60.mp3?rlkey=lsxn2auetpkuipwrm0aj5ftxh&st=27tox81u&dl=0" },
+                        { name: "Piano Lento (50 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/rmnsy44q4b736vshkpbe7/14-A-pobre-e-a-rica-50.mp3?rlkey=w3zpny9njj6b4a9y843g1mbjx&st=8ed8l7rz&dl=0" },
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "Atirei o pau no gato",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=4",
+                    tracks: [
+                        { name: "Violino e Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/w756vvjh6mjwrwzyzv69v/15-Atirei-o-pau-no-gato-Com-violino-90.mp3?rlkey=4z1uzytlzszwist8qsc9d6bdi&st=brs4htvh&dl=0" },
+                        { name: "Apenas Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/0wd3za1gki700te0tab7l/16-Atirei-o-pau-no-gato-performance-playback-piano-90.mp3?rlkey=zkb4y3z7jltujd62doqi1ejzu&st=cxetcaxb&dl=0" },
+                        { name: "Piano Lento (80 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/gyj7tyfwiqu5bvlz2t2fp/17-Atirei-o-pau-no-gato-80.mp3?rlkey=hrvqz14b47b4iljtoxcwvk58t&st=zoe0yzx4&dl=0" },
+                        { name: "Piano Lento (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/bl0vmb41419zwd8t8vskr/18-Atirei-o-pau-no-gato-70.mp3?rlkey=icq26i6ue2fa6vmt1vgtxxwu1&st=olvrvc8t&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/ryd3al26l54w2ocyb01or/19-Atirei-o-pau-no-gato-60.mp3?rlkey=ad6grvyzl9r7xu7sjjp2pze5c&st=p77s9br1&dl=0" },
+                    ]
+                },
+                {
+                    id: 5,
+                    title: "Capelinha de Melão",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=5",
+                    tracks: [
+                        { name: "Violino e Piano (100 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/93ge8oae5op9u3feus43m/20-Capelinha-de-mel-o-Com-violino-100.mp3?rlkey=azf31i2o9ucg6eszuoiv7g7pa&st=940ju4hn&dl=0" },
+                        { name: "Apenas Piano (100 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/602p6tf5oubjeyv046ji0/21-Capelinha-de-mel-o-performance-playback-piano-100.mp3?rlkey=7dzfp2czpvwz08hn95rvonjw2&st=u37wmqkp&dl=0" },
+                        { name: "Piano Lento (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/drze8yht47fxjepnvc3jf/22-Capelinha-de-mel-o-90.mp3?rlkey=h123kzmv7ere0ia6aqmjsw3nc&st=m4c96xl1&dl=0" },
+                        { name: "Piano Lento (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/ud70v4smtkjrra9g6ssp9/23-Capelinha-de-mel-o-85.mp3?rlkey=y2ar6gtq4wyymha1qukba4co6&st=1genuumd&dl=0" },
+                        { name: "Piano Lento (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/v0suhca23m8eqxf3iwfpb/24-Capelinha-de-mel-o-70.mp3?rlkey=zo91fnwcp903qtw2tz16lqpbn&st=21ay7b43&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/hc6m4w5llpueaz8kkv8pd/25-Capelinha-de-mel-o-60.mp3?rlkey=k04dp62rdyzkonmz72rktepj6&st=tt9utdoz&dl=0" },
+                    ]
+                },
+
+                                {
+                    id: 6,
+                    title: "Ciranda cirandinha - Corda Solta",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=6",
+                    tracks: [
+                        { name: "Corda Solta (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/3fe9zeayfrqkh2elk2otz/26-Ciranda-cirandinha-corda-solta-85.mp3?rlkey=vy0666rj8vq469oqire4os1z2&st=z42z8sx7&dl=0" },
+                        { name: "Corda Solta (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/gkg858ohigk3n9p7wkqo7/27-Ciranda-cirandinha-corda-solta-75.mp3?rlkey=62o3i2ipll7d351sqx2rj9ti6&st=fk2i56lb&dl=0" },
+                        { name: "Corda Solta (65 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/hn88xh03agv1kjb622knf/28-Ciranda-cirandinha-corda-solta-65.mp3?rlkey=r0prrbm66y42rkrl3bdm3s4o8&st=bkrlrc9v&dl=0" },
+                        { name: "Corda Solta (55 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/qc6jjzgzmjbkldmlmjw4a/29-Ciranda-cirandinha-corda-solta-55.mp3?rlkey=50gn8xsqz3fiqtndy66hv65l9&st=8xj90uua&dl=0" },
+                    ]
+                },
+
+                                {
+                    id: 7,
+                    title: "Ciranda cirandinha",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=7",
+                    tracks: [
+                        { name: "Violino e Piano (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/6t881b4kkga21k0flz7m4/30-Ciranda-cirandinha-Com-violino-85.mp3?rlkey=ak51xuto6lx9fyh6cjsxhicva&st=oikgrs73&dl=0" },
+                        { name: "Apenas Piano 85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/g7gir6rld9ejavjo31sb0/31-Ciranda-cirandinha-performance-playback-piano-85.mp3?rlkey=vkr4w344msicpo1vjjluib4kf&st=kp3afcww&dl=0" },
+                        { name: "Piano Lento (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/1mfl4e89docgelemjuxr0/32-Ciranda-cirandinha-75.mp3?rlkey=cbhvcukbupf3c9in5nte79fn2&st=baubi934&dl=0" },
+                        { name: "Piano Lento (65 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/edtnn85zkmxt6pvazse8v/33-Ciranda-cirandinha-65.mp3?rlkey=zz34kxikujl77h7m31pdmt8y2&st=i3xqlv5s&dl=0" },
+                        { name: "Piano Lento (55 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/28wfgw0avjpjlzo06qb1p/34-Ciranda-cirandinha-55.mp3?rlkey=fa47e99ioa7q540kezwj4wnfd&st=z2yie1ex&dl=0" },
+                    ]
+                },
+
+                                {
+                    id: 8,
+                    title: "Eu vi uma barata",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=8",
+                    tracks: [
+                        { name: "Violino e Piano (72 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/vm3612uqhrwovlsaewlq0/35-Eu-vi-uma-barata-Com-violino-72.mp3?rlkey=rtbmuv612mtylm7g010qrxd8n&st=uw4umnyd&dl=0" },
+                        { name: "Apenas Piano (72 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/10og5enzgosdxbmaaj00w/36-Eu-vi-uma-barata-performance-playback-piano-72.mp3?rlkey=7de2c4kufssg9skoqksp3oam0&st=pf6s11sn&dl=0" },
+                        { name: "Piano Lento (62 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/0wrq1ycurimgz1x17keuw/37-Eu-vi-uma-barata-62.mp3?rlkey=ffk3b11e1x4h6dovnmg9z0p89&st=lfc2104n&dl=0" },
+                        { name: "Piano Lento (52 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/fsu5acx8z14op2igeq7z8/38-Eu-vi-uma-barata-52.mp3?rlkey=x6vmr54xdpq3f38x6cvfh9v3y&st=dvv1ss1i&dl=0" },
+                    ]
+                },
+
+                                {
+                    id: 9,
+                    title: "Fui a Espanha",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=9",
+                    tracks: [
+                        { name: "Violino e Piano (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/sf8hqe47hr8e98xnasdcu/39-Fui-a-Espanha-Com-violino-85.mp3?rlkey=14dwxlwzqc8lkcxos18jia04t&st=v7mo3jd3&dl=0" },
+                        { name: "Apenas Piano (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/7pd47mx7hf8t2dakhqyrn/40-Fui-a-Espanha-performance-playback-piano-85.mp3?rlkey=5q3k6dpj860942aue7ew9tpe8&st=tjo5gj8b&dl=0" },
+                        { name: "Piano Lento (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/16ks6tj75a62mh00e4py4/41-Fui-a-Espanha-70.mp3?rlkey=s1koto75j1gl76ob4jk2ngm3b&st=tvfd9c3p&dl=0" },
+                        { name: "Piano Lento (65 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/jmos1xtmpygmfeulyao0q/42-Fui-a-Espanha-65.mp3?rlkey=8rhbhgrfqvl88bijl97ta0x3d&st=yvkpn2v6&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/0ytk3qiq7a16z91f50x56/43-Fui-a-Espanha-60.mp3?rlkey=8u02x573i6elt74cq5qtiltl2&st=o0ke7bfg&dl=0" },
+                    ]
+                },
+
+                                {
+                    id: 10,
+                    title: "Marcha Soldado - Corda Solta",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=10",
+                    tracks: [
+                        { name: "Corda Solta (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/echm0ciwb8jsgv9ri9kco/44-Marcha-soldado-corda-solta-90.mp3?rlkey=3qy4lmbcarb8wrjac8yjtcu9v&st=u7devrzj&dl=0" },
+                        { name: "Corda Solta (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/n9fc4dvd4lp3wwlhon9c6/45-Marcha-soldado-corda-solta-85.mp3?rlkey=mm33efixti89kxpkoaye3g9xy&st=uuopa926&dl=0" },
+                        { name: "Corda Solta (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/2pqbnymfe2oqqrote5yic/46-Marcha-soldado-corda-solta-70.mp3?rlkey=83q6manrjzvgqcrwe60wtemdm&st=of7wdwwc&dl=0" },
+                        { name: "Corda Solta (65 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/mbvg73juu5gprd5tjqioo/47-Marcha-soldado-corda-solta-65.mp3?rlkey=yp9lfaubv6oze2w9nt5r2kq9n&st=rwytrnj7&dl=0" },
+                        { name: "Corda Solta (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/oz14gz8vrul7kq3g19abl/48-Marcha-soldado-corda-solta-60.mp3?rlkey=0qtiir1xbl220jifhlw6ar405&st=5zwh50wb&dl=0" },
+                    ]
+                },
+
+                                {
+                    id: 11,
+                    title: "Marcha Soldado",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=11",
+                    tracks: [
+                        { name: "Violino e Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/idj5ngo0uipwf8tovxmt9/49-Marcha-Soldado-Com-violino-90.mp3?rlkey=t87h0vvrng1498x82ck9j6omb&st=w5d5a8cn&dl=0" },
+                        { name: "Apenas Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/penx4zptv03lfgi9p8ivy/50-Marcha-Soldado-performance-playback-piano-90.mp3?rlkey=x000mri3xfduy3ztf8vuhlg87&st=u1qnr5zu&dl=0" },
+                        { name: "Piano Lento (80 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/vrni5dbsrhbnvocm3rrln/51-Marcha-soldado-80.mp3?rlkey=15t55ekivq1hkm7dwp9551c8e&st=xp2uns1l&dl=0" },
+                        { name: "Piano Lento (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/vl3b1grnydkofgiymo20d/52-Marcha-soldado-70.mp3?rlkey=n8t33vunisav2sadztkkfijbf&st=rpj0zweu&dl=0" },
+                        { name: "Piano Lento (65 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/rw8ojou9iine4adp2t5cj/53-Marcha-soldado-65.mp3?rlkey=l8lg8qmkjv7l2d87a1yl6kkma&st=ctey536u&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/ll7wh1qfg9rf8ca8idekw/54-Marcha-soldado-60.mp3?rlkey=wyaefbrrftaqo1gnh59qqub2s&st=27ydb9d7&dl=0" },
+                    ]
+                },
+
+                                {
+                    id: 12,
+                    title: "Margarida",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=12",
+                    tracks: [
+                        { name: "Violino e Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/9fi6ycno49jrdihk2up2j/55-Margarida-Com-violino-90.mp3?rlkey=arzxg3uc1nrqtkvcyg359nkwq&st=rdrcb2dv&dl=0" },
+                        { name: "Apenas Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/c3oubyysicrm8oq5semw9/56-Margarida-performance-playback-piano-90.mp3?rlkey=5s9hg5xdpqiq8c1b8wqqb0t2t&st=60bio9rw&dl=0" },
+                        { name: "Piano Lento (80 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/sxxs034h78ni514sr0o6k/57-Margarida-80.mp3?rlkey=riaesbmswiedlmi0zqqqp4ucr&st=ycsoj568&dl=0" },
+                        { name: "Piano Lento (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/gq7jkw3os3j5pi2zc1fw3/58-Margarida-70.mp3?rlkey=v1gpfkdorz6fzs6h0k0dsjvi1&st=pzzzvywk&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/hrhw4nm7rs79cw9uqipb3/59-Margarida-60.wav?rlkey=17y2qe9q2ull9z5uzdymo12t8&st=7sn4vnq7&dl=0" },
+                          { name: "Piano Lento (50 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/qm9y617rg7isronj30j6p/60-Margarida-50.mp3?rlkey=udjdqo2v67xuihvqfl6jvt71g&st=wlwyvxhf&dl=0" },
+                    ]
+                },
+
+                                {
+                    id: 13,
+                    title: "Na corda da viola",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=13",
+                    tracks: [
+                        { name: "Violino e Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/5qqzjtnon4e7bui1aih9d/61-Na-corda-da-viola-Com-violino-90.mp3?rlkey=kvzphv3914nc80802zv1wx4fy&st=j3p07ovq&dl=0" },
+                        { name: "Apenas Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/wj23jh4zbbxd62zpnhhpo/62-Na-corda-da-viola-performance-playback-piano-90.mp3?rlkey=texp5twhys13eo3gzrnojbtis&st=lqkg2qwz&dl=0" },
+                        { name: "Piano Lento (80 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/xwnf1pssgz877bei2zjug/63-Na-corda-da-viola-80.mp3?rlkey=thzyhqm3km59pjdp2qfobeixk&st=1c13r3j3&dl=0" },
+                        { name: "Piano Lento (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/k60398z5i03zua9oalibx/64-Na-corda-da-viola-70.mp3?rlkey=xjx1t26td2dpx8g2h80094mg6&st=tym2mz5a&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/0qqrw0caxkmc2whijykcg/65-Na-corda-da-viola-60.mp3?rlkey=umzvxx46bct1y8l58iw1v3yuj&st=bv4xrhk4&dl=0" },
+                        { name: "Piano Lento (50 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/wjqe32i0b2da81hydo2s7/66-Na-corda-da-viola-50.mp3?rlkey=xs8osyyd91l0a16ql1amf65dc&st=zyfid5g1&dl=0" },
+                    ]
+                },
+
+                                {
+                    id: 14,
+                    title: "O cravo brigou com a rosa - Corda Solta",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=14",
+                    tracks: [
+                        { name: "Corda Solta (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/g0na37yi5zitsttqm6hq7/67-O-cravo-brigou-com-a-rosa-corda-solta-75.mp3?rlkey=md4otda4lnuv8lsmibmwrfgnn&st=2itzk9p1&dl=0" },
+                        { name: "Corda Solta (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/pbb89un60jgh4jjxqxmku/68-O-cravo-brigou-com-a-rosa-corda-solta-70.mp3?rlkey=cjdape0dny5g88ateo2xluwm9&st=d6wvijut&dl=0" },
+                        { name: "Corda Solta (65 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/3qrfhy81xatnw3ursoj7x/69-O-cravo-brigou-com-a-rosa-corda-solta-65.mp3?rlkey=k8k421o34rqgyojzo5a4qo2az&st=2er6219y&dl=0" },
+                        ]
+                },
+
+                                              {
+                    id: 15,
+                    title: "O cravo brigou com a rosa",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=15",
+                    tracks: [
+                        { name: "Violino e Piano (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/acbx2o02gzpbrwynop3ny/70-O-cravo-brigou-com-a-rosa-Com-violino-75.mp3?rlkey=drsr194dquizu4ximgmmt4ws7&st=bq40afrm&dl=0" },
+                        { name: "Apenas Piano (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/8zdwv6t9jcdapyznz11w6/71-O-cravo-brigou-com-a-rosa-performance-playback-piano-75.mp3?rlkey=0lt1wk46aupcswbsb056yrttu&st=y5mdmpxo&dl=0" },
+                        { name: "Piano Lento (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/8lhowz65837bflvs9r6ky/72-O-cravo-brigou-com-a-rosa-70.mp3?rlkey=njos04eldjjndp672npg8tegg&st=waatzhoc&dl=0" },
+                        { name: "Piano Lento (65 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/mm8ntv7cfdq8x7rrwb851/73-O-cravo-brigou-com-a-rosa-65.mp3?rlkey=b0wqnhp2nnmnkimr3skif1128&st=fc84fwlg&dl=0" },
+                    ]
+                },
+
+                                              {
+                    id: 16,
+                    title: "Passa passa gavião",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=16",
+                    tracks: [
+                        { name: "Violino e Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/jsem8koetnlwdrxn5m5i2/74-Passa-passa-gavi-o-Com-violino-90.mp3?rlkey=560ht8bnk9t7gia3094g16k92&st=jh08r7yj&dl=0" },
+                        { name: "Apenas Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/qc6wfc0u5nh0z0fxoovtu/75-Passa-passa-gavi-o-performance-playback-piano-90.mp3?rlkey=gvka2hmptdou464tmtv19wh2h&st=1ejzvght&dl=0" },
+                        { name: "Piano Lento (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/qncapo5flrdg2jbf8i6dp/76-Passa-passa-gavi-o-85.mp3?rlkey=wjsoz7upi77psbv262p3mib75&st=8sc2b1yu&dl=0" },
+                        { name: "Piano Lento (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/390ikcpainv8bdsfcjgkc/77-Passa-passa-gavi-o-75.mp3?rlkey=xs47r13egjzeecomx92f594jg&st=o2ilnvn8&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/9m0ksnf7oruth6mjg2h9x/78-Passa-passa-gavi-o-60.mp3?rlkey=8zns44bustxaode8q6v449xga&st=akwwk987&dl=0" },
+                    ]
+                },
+
+                                              {
+                    id: 17,
+                    title: "Pezinho",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=17",
+                    tracks: [
+                        { name: "Violino e Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/dbxl41ide39qrq1fk2vgx/79-Pezinho-Com-violino-90.mp3?rlkey=5yce1hv0mtm0j52ben60tyay7&st=xajgvxeo&dl=0" },
+                        { name: "Apenas Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/79o12ewbwfqutaoziucqm/80-Pezinho-performance-playback-piano-90.mp3?rlkey=daia9517u95db0o5vvp542iuh&st=548ma0zj&dl=0" },
+                        { name: "Piano Lento (83 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/njjhhtd7bdgqxxghu9f8q/81-Pezinho-83.mp3?rlkey=1hb6gdz4de9ty2j31qfsd1azc&st=9mdxkklh&dl=0" },
+                        { name: "Piano Lento (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/oxbgizzlwjxxio02t0rwh/82-Pezinho-75.mp3?rlkey=axojv8q7blqh4k3usvcrxltg5&st=9heks5zl&dl=0" },
+                        { name: "Piano Lento (65 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/altpq113bq68vqtm25o5u/83-Pezinho-65.mp3?rlkey=mtnr5et3w4mtw3ts92fgrqsv3&st=jmrtidss&dl=0" },
+                        { name: "Piano Lento (60 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/5j77whi6ci1lqzw06y2nc/84-Pezinho-60.mp3?rlkey=bem574wey0bgdoji9vmavopz3&st=m7md13m5&dl=0" },
+                    ]
+                },
+
+                
+                                              {
+                    id: 18,
+                    title: "Pirulito",
+                    composer: "Folclórica",
+                    albumArt: "https://placehold.co/128x128/9b59b6/FFFFFF?text=18",
+                    tracks: [
+                        { name: "Violino e Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/j6thp0duv0xk2dby8eu8e/85-Pirulito-Com-violino-90.mp3?rlkey=60he8cnyqpjflhcjklykjzvwq&st=2ezf7txd&dl=0" },
+                        { name: "Apenas Piano (90 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/q5yxgwfn9va3ezopjs255/86-Pirulito-performance-playback-piano-90.mp3?rlkey=xwwydziabqvwultle37rmjtb4&st=qscxekxf&dl=0" },
+                        { name: "Piano Lento (85 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/jesllz2vldar31zash0wc/87-Pirulito-85.mp3?rlkey=qblwwels9pccri53egwnhvq30&st=czh5ugdj&dl=0" },
+                        { name: "Piano Lento (75 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/1zr0evo7yavihhoyfxg27/88-Pirulito-75.mp3?rlkey=d46ldzhyg4f1aw20rl4w6xdnd&st=u8fhqff1&dl=0" },
+                        { name: "Piano Lento (70 bpm)", src: "https://dl.dropboxusercontent.com/scl/fi/3yqpxr459rl4ru8sncctc/89-Pirulito-70.mp3?rlkey=uddl3du8i3ww00sv74o35tmx8&st=ujrno2os&dl=0" },
+                    ]
+                },
+    ];
+
+    const songListEl = document.getElementById('song-list');
+    const mainViewContentEl = document.getElementById('main-view-content');
+    const playerAlbumArtEl = document.getElementById('player-album-art');
+    const playerTrackTitleEl = document.getElementById('player-track-title');
+    const playerSongTitleEl = document.getElementById('player-song-title');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progressBar = document.getElementById('progress-bar');
+    const currentTimeEl = document.getElementById('current-time');
+    const totalTimeEl = document.getElementById('total-time');
+    const volumeControl = document.getElementById('volume-control');
+
+    // CORREÇÃO: Selecionando os novos elementos de painel
+    const songListPanel = document.getElementById('song-list-panel');
+    const detailsScreen = document.getElementById('details-screen');
+    const backBtn = document.getElementById('back-btn');
+
+    let audio = new Audio();
+    let currentSongIndex = -1;
+    let currentTrackIndex = -1;
+    let isPlaying = false;
+
+    function renderSongList() {
+      songListEl.innerHTML = '';
+      songs.forEach((song, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a href="#" class="flex items-center gap-3 p-2 rounded-md hover:bg-gray-800 transition-colors" data-song-index="${index}">
+            <img src="${song.albumArt}" class="w-10 h-10 rounded-md" />
+            <div>
+              <p class="font-semibold">${song.title}</p>
+              <p class="text-sm text-gray-400">${song.composer}</p>
+            </div>
+          </a>
+        `;
+        songListEl.appendChild(li);
+      });
+    }
+
+function renderSongDetails(songIndex) {
+  const song = songs[songIndex];
+  mainViewContentEl.innerHTML = `
+    <div class="flex flex-row items-start items-center gap-3">
+      
+      <img src="${song.albumArt}" class="w-12 h-12 md:w-35 md:h-35 rounded-lg shadow-2xl" />
+      
+      <div class="text-center md:text-left">
+        <h2 class="text-2xl md:text-4xl font-bold">${song.title}</h2>
+        
+      </div>
+    </div>
+    <div class="mt-8">
+    
+      <ul id="track-list" class="space-y-2">
+        ${song.tracks.map((track, index) => `
+          <li class="flex items-center p-3 rounded-md hover:bg-white/10 transition-colors cursor-pointer" data-track-index="${index}">
+            <span class="text-gray-400 w-8">${index + 1}.</span>
+            <span class="flex-1">${track.name}</span>
+            <button class="play-track-btn p-2 rounded-full hover:bg-white/20">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  `;
+
+  const isMobile = window.innerWidth < 768;
+  if (isMobile) {
+    songListPanel.classList.add('hidden');
+    detailsScreen.classList.remove('hidden');
+  } else {
+    songListPanel.classList.remove('hidden');
+    detailsScreen.classList.remove('hidden');
+  }
+
+  document.querySelectorAll('#track-list li').forEach(item => {
+    item.addEventListener('click', () => {
+      const trackIndex = parseInt(item.dataset.trackIndex);
+      loadTrack(songIndex, trackIndex);
+    });
+  });
+}
+
+    function loadTrack(songIndex, trackIndex) {
+      currentSongIndex = songIndex;
+      currentTrackIndex = trackIndex;
+      const song = songs[songIndex];
+      const track = song.tracks[trackIndex];
+
+      audio.src = track.src;
+      playerAlbumArtEl.src = song.albumArt;
+      playerTrackTitleEl.textContent = track.name;
+      playerSongTitleEl.textContent = song.title;
+
+      playAudio();
+    }
+
+    function playAudio() {
+      isPlaying = true;
+      audio.play();
+      playIcon.classList.add('hidden');
+      pauseIcon.classList.remove('hidden');
+    }
+
+    function pauseAudio() {
+      isPlaying = false;
+      audio.pause();
+      playIcon.classList.remove('hidden');
+      pauseIcon.classList.add('hidden');
+    }
+
+    function togglePlayPause() {
+      if (currentSongIndex === -1) return;
+      isPlaying ? pauseAudio() : playAudio();
+    }
+
+    function playNext() {
+      if (currentSongIndex === -1) return;
+      const song = songs[currentSongIndex];
+      currentTrackIndex = (currentTrackIndex + 1) % song.tracks.length;
+      loadTrack(currentSongIndex, currentTrackIndex);
+    }
+
+    function playPrev() {
+      if (currentSongIndex === -1) return;
+      const song = songs[currentSongIndex];
+      currentTrackIndex = (currentTrackIndex - 1 + song.tracks.length) % song.tracks.length;
+      loadTrack(currentSongIndex, currentTrackIndex);
+    }
+
+    function updateProgress() {
+      if (audio.duration) {
+        const progressPercent = (audio.currentTime / audio.duration) * 100;
+        progressBar.value = progressPercent;
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+      }
+    }
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function updateVolume() {
+      audio.volume = volumeControl.value / 100;
+    }
+
+    progressBar.addEventListener('input', function () {
+      if (audio.duration) {
+        audio.currentTime = (progressBar.value / 100) * audio.duration;
+      }
+    });
+
+    songListEl.addEventListener('click', (e) => {
+      const songLink = e.target.closest('a');
+      if (songLink) {
+        e.preventDefault();
+        const songIndex = parseInt(songLink.dataset.songIndex);
+        document.querySelectorAll('#song-list a').forEach(a => a.classList.remove('bg-gray-700'));
+        songLink.classList.add('bg-gray-700');
+        renderSongDetails(songIndex);
+      }
+    });
+
+    playPauseBtn.addEventListener('click', togglePlayPause);
+    nextBtn.addEventListener('click', playNext);
+    prevBtn.addEventListener('click', playPrev);
+    volumeControl.addEventListener('input', updateVolume);
+
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', () => {
+      totalTimeEl.textContent = formatTime(audio.duration);
+    });
+    audio.addEventListener('ended', () => {
+      pauseAudio();
+      progressBar.value = 0;
+      currentTimeEl.textContent = '0:00';
+    });
+
+    // CORREÇÃO: Lógica do botão voltar agora manipula os painéis
+    backBtn.addEventListener('click', () => {
+      detailsScreen.classList.add('hidden');
+      songListPanel.classList.remove('hidden');
+    });
+
+    function init() {
+      renderSongList();
+      updateVolume();
+    }
+
+    init();
+  });
+  
+ </script>
+
+ <!-- Firebase v9+ com sintaxe modular -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+  // Sua configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyApHSOyYUImfmUWYrao2AOEH0rMwJm3ShE",
+    authDomain: "app-do-aluno-13dde.firebaseapp.com",
+    projectId: "app-do-aluno-13dde",
+    storageBucket: "app-do-aluno-13dde.appspot.com",
+    messagingSenderId: "911749754839",
+    appId: "1:911749754839:web:1f3e47b181df83dea8a592"
+  };
+
+  // Inicializa Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Verifica se o usuário está logado
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      // Redireciona para o login se não estiver autenticado
+      window.location.href = "login.html";
+    } else {
+      console.log("Usuário autenticado:", user.email);
+      // Aqui você pode carregar conteúdo exclusivo ou continuar normalmente
+    }
+  });
+</script>
+</body>
+</html>
