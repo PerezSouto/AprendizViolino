@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Figuras Musicais e Pausas</title>
+  <style>
+/* Configurações
+Cores:
+-Roxo oscuro sombra: #53355a
+-Roxo medio background boton: #915c9c
+-Roxo claro hover: #bb77c9
+-Verde:#007C4A */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.5em;
+    }
+    header {
+      font-family: 'Roboto';
+      padding: 1rem;
+      color: black;
+    }
+    #progreso {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    #progreso h1 { font-size: 1.3em; }
+    #progreso img { width: 70px; }
+    #progreso .imgprogreso{
+            width: 50px;
+        }
+
+    main {
+      font-family: 'Roboto';
+      font-weight: 500;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    article {
+      text-align: center;
+      width: 100%;
+      min-height: 30vh;
+      background-color: white;
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    article img{
+        width: 50px;
+    }
+    footer {
+      font-family: 'Roboto';
+      font-weight: 600;
+      text-align: center;
+      background-color: white;
+      color: black;
+      padding: 1rem;
+    }
+    .botaocontinuar {
+      display: inline-block;
+      background: #915c9c;
+      color: white;
+      padding: 10px 40px;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 0 #53355a;        
+      transition: all 0.1s ease;
+      position: relative;
+      top: 0px;
+    }
+    .botaocontinuar:hover{
+            background: #bb77c9;
+        }
+
+    .botaocontinuar:active {
+      background-color: #bb77c9;
+      box-shadow: none;
+      top: 4px;
+    }
+    .botaocontinuar.touchstart {
+    background-color: #bb77c9;
+    box-shadow: none;
+    top: 4px;
+    } 
+
+
+    .botaopc {
+      position: relative;
+      background: rgb(224, 224, 224);
+      color: black;
+      padding: 10px 40px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 0 rgb(56, 56, 56);
+      margin: 10px;
+      cursor: pointer;
+      top: 0px;
+    }
+    .botaopc:hover {
+      background: rgb(179, 179, 179);
+    }
+    .botaocontinuar.desativado {
+      background: #ccc;
+      color: #666;
+      box-shadow: none;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div id="progreso">
+            <img src="../img-progresao/coruja5.png" alt="imagem coruja indicando o Bloco 1">
+            <h1>Figuras Musicais e Pausas</h1>
+            <img class="imgprogreso" src="../img-progresao/88.png" alt="Imagem porcentagem de progessão">
+    </div>
+  </header>
+  <main>
+    <article>
+      <p>Quantos tempos dura esta figura?</p> <br>
+      <img src="imagens/semibreve.jpg" alt="">
+      
+      <div class="botaopc" id="opc1">4 tempos</div>
+      <div class="botaopc" id="opc2">2 tempos</div>
+      <div class="botaopc" id="opc3">1 tempo</div>
+    </article>
+  </main>
+  <footer>
+    <a href="#" class="botaocontinuar desativado" id="btnVerificar"><p id="textoBotao">Verificar</p></a>
+  </footer>
+<script>
+  const botoes = document.querySelectorAll('.botaopc');
+  const verificarBtn = document.getElementById('btnVerificar');
+  const textoBotao = document.getElementById('textoBotao');
+  const botaoCorreto = document.getElementById('opc1');
+  let botaoSelecionado = null;
+  let estado = 'verificar'; // estados possíveis: 'verificar', 'tentar', 'finalizado'
+
+  // Quando clicar em uma das opções
+  botoes.forEach(botao => {
+    botao.addEventListener('click', () => {
+      // Resetar visuais
+      botoes.forEach(b => {
+        b.style.background = 'rgb(224, 224, 224)';
+        b.style.boxShadow = '0px 4px 0 rgb(56, 56, 56)';
+        b.style.top = '0px';
+        b.style.color = 'black';
+      });
+
+      // Estilizar botão selecionado
+      botao.style.background = 'yellow';
+      botao.style.boxShadow = 'none';
+      botao.style.top = '4px';
+      botaoSelecionado = botao;
+
+      // Ativar botão verificar
+      verificarBtn.classList.remove('desativado');
+      verificarBtn.style.pointerEvents = 'auto';
+      verificarBtn.style.background = '#915c9c';
+      verificarBtn.style.boxShadow = '0 4px 0 #53355a';
+      verificarBtn.href = '#';
+      textoBotao.textContent = 'Verificar';
+      estado = 'verificar';
+    });
+  });
+
+  verificarBtn.addEventListener('click', () => {
+    if (!botaoSelecionado || verificarBtn.classList.contains('desativado')) return;
+
+    if (estado === 'verificar') {
+      if (botaoSelecionado === botaoCorreto) {
+        // Acertou
+        botaoSelecionado.style.background = 'green';
+        botaoSelecionado.style.color = 'white';
+
+        verificarBtn.classList.remove('desativado');
+        verificarBtn.style.background = '#915c9c';
+        verificarBtn.style.boxShadow = '0 4px 0 #53355a';
+        verificarBtn.style.pointerEvents = 'auto';
+        verificarBtn.href = '#'; // ainda não muda de página
+        textoBotao.textContent = 'Continuar';
+
+        // Desativar cliques nas opções
+        botoes.forEach(b => b.style.pointerEvents = 'none');
+
+        estado = 'finalizado';
+      } else {
+        // Errou
+        botaoSelecionado.style.background = 'red';
+        botaoSelecionado.style.color = 'white';
+        textoBotao.textContent = 'Tentar novamente';
+        estado = 'tentar';
+      }
+    } else if (estado === 'tentar') {
+      // Resetar estilos de todos os botões
+      botoes.forEach(b => {
+        b.style.background = 'rgb(224, 224, 224)';
+        b.style.boxShadow = '0px 4px 0 rgb(56, 56, 56)';
+        b.style.top = '0px';
+        b.style.color = 'black';
+        b.style.pointerEvents = 'auto';
+      });
+
+      // Resetar botão verificar
+      verificarBtn.classList.add('desativado');
+      verificarBtn.style.background = '#ccc';
+      verificarBtn.style.boxShadow = 'none';
+      verificarBtn.style.pointerEvents = 'none';
+      verificarBtn.href = '#';
+      textoBotao.textContent = 'Verificar';
+      botaoSelecionado = null;
+      estado = 'verificar';
+    } else if (estado === 'finalizado') {
+      // Agora sim muda de página
+      window.location.href = 'painel11.html'; // <- Altere para o link da próxima etapa
+    }
+  });
+    // Adiciona o efeito touchstart ao botão Verificar/Continuar
+  verificarBtn.addEventListener('touchstart', function () {
+    if (!verificarBtn.classList.contains('desativado')) {
+      verificarBtn.classList.add('touchstart');
+    }
+  });
+
+  verificarBtn.addEventListener('touchend', function () {
+    verificarBtn.classList.remove('touchstart');
+  });
+
+  verificarBtn.addEventListener('touchcancel', function () {
+    verificarBtn.classList.remove('touchstart');
+  });
+</script>
+
+
+
+
+</body>
+</html>

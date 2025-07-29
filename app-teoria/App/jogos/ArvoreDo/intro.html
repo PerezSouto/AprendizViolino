@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo</title>
+    <style>
+        /* Configurações
+Cores:
+-Roxo oscuro sombra: #53355a
+-Roxo medio background boton: #915c9c
+-Roxo claro hover: #bb77c9
+-Verde:#007C4A */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.5em;
+        }
+
+        header {
+            font-family: 'Roboto';
+            padding: 1rem;
+            color: black;
+        }
+        #progreso {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem; /* Espaço entre o h1 e a imagem */
+        }
+        #progreso h1{
+            font-size: 1.3em;
+        }
+        #progreso img{
+            width: 70px;
+        }
+        #progreso .imgprogreso{
+            width: 50px;
+        }
+
+
+        main {
+            font-family: 'Roboto';
+            font-weight: 500;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        article {
+            text-align: center;
+            width:100%;
+            min-height: 30vh;
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        p{
+            text-align: left;
+        }
+
+        footer {
+            font-family: 'Roboto';
+            font-weight: 600;
+            text-align: center;
+            background-color: white;
+            color: black;
+            padding: 1rem;
+        }
+        .botaocontinuar{
+            display: inline-block;
+            background: #915c9c;
+            color: white;
+            padding: 10px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 0 #53355a;        
+            transition: all 0.1s ease;
+            position: relative;
+            top: 0px;
+        }
+        .botaocontinuar:hover{
+            background: #bb77c9;
+        }
+
+        .botaocontinuar:active{
+            background-color: #bb77c9;
+            box-shadow: none;
+            top: 4px;
+        }
+
+        .botaocontinuar.touchstart {
+        background-color: #bb77c9;
+        box-shadow: none;
+        top: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div id="progreso">  
+            <h1>Jogo: Árvore Musical</h1>
+        </div>
+
+    </header>
+    <main>
+        <article>
+            <p>🎵 <strong>Bem-vindo ao jogo da Árvore Musical!</strong></p> <br>
+            <p>Neste jogo, você vai treinar sua memória e aprender a sequência correta das notas musicais: Dó, Ré, Mi, Fá, Sol, Lá, Si.</p> <br>
+            <p>🎯 <strong>Objetivo:</strong> Ajudar você a aprender e memorizar a ordem das notas musicais de forma divertida e interativa!</p> <br>
+            <p>🕹️ <strong>Como jogar:</strong> <br>
+1-No tronco da árvore, há 8 espaços que devem ser preenchidos com as notas musicais. <br>
+2-À direita, você encontrará as notas musicais disponíveis. <br>
+3-Para posicionar uma nota, clique sobre ela e depois clique no espaço desejado na árvore. <br>
+4-Errou? Sem problema! Você pode tentar novamente. <br>
+5-Complete a sequência correta para finalizar o jogo!</p>
+        </article>
+
+    </main>
+    <footer>
+        <a href="arvore.html" class="botaocontinuar"><p>Continuar</p></a>
+    </footer>
+
+        <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const botao = document.querySelector(".botaocontinuar");
+
+        botao.addEventListener("touchstart", function () {
+            botao.classList.add("touchstart");
+        });
+
+        botao.addEventListener("touchend", function () {
+            botao.classList.remove("touchstart");
+        });
+
+        botao.addEventListener("touchcancel", function () {
+            botao.classList.remove("touchstart");
+        });
+    });
+</script>
+</body>
+</html>

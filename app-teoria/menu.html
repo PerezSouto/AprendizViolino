@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aprendiz Teoria</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    article {
+      text-align: center;
+      width: 100%;
+      min-height: 30vh;
+      padding-top: 10%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+    }
+
+    .map-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 700 / 500;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .map-background {
+      width: 100%;
+      object-fit: cover;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* POSIÇÕES DOS BOTÕES */
+    #botao1 { top: 25%; left: 44%; }
+    #botao2 { top: 40%; left: 25%; }
+    #botao3 { top: 70%; left: 8%; }
+    #botao4 { top: 100%; left: 8%; }
+    #botao5 { top: 124%; left: 23%; }
+    #botao6 { top: 95%; left: 49%; }
+    #botao7 { top: 121%; left: 70%; }
+    #botao8 { top: 175%; left: 73%; }
+    #botao9 { top: 225%; left: 58%; }
+    #botao10 { top: 202%; left: 29%; }
+    #botao11 { top: 240%; left: 10%; }
+    #botao12 { top: 271%; left: 26%; }
+    #botao13 { top: 274%; left: 50%; }
+    #botao14 { top: 323%; left: 57%; }
+    #botao15 { top: 366%; left: 55%; }
+
+    #botao1, #botao2, #botao3, #botao4, #botao5, #botao6,
+    #botao7, #botao8, #botao9, #botao10, #botao11, #botao12,
+    #botao13, #botao14, #botao15 {
+      position: absolute;
+    }
+
+    .botaomenu img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .botaomenu {
+      display: inline-block;
+      border-radius: 50%;
+      box-shadow: 0 4px 0 #FD5E00;
+      transition: all 0.1s ease;
+      position: relative;
+      top: 0px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .botaomenu:hover,
+    .botaomenu:active {
+      top: 4px;
+      box-shadow: none;
+    }
+
+    .botaomenu.touchstart {
+      box-shadow: none;
+      top: 4px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed; /* CORRIGIDO */
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .modal-conteudo {
+      background-color: #fdd700;
+      padding: 1.5rem;
+      border-radius: 15px;
+      width: 200px;
+      max-width: 90vw;
+      max-height: 90vh;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      overflow-y: auto;
+    }
+
+    .fechar {
+      position: absolute;
+      top: 0.3rem;
+      right: 0.8rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #53355a;
+    }
+
+    .botao-entrar {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.5rem 1.2rem;
+      background-color: #915c9c;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0 4px 0 #53355a;
+      position: relative;
+      top: 0;
+      transition: all 0.1s ease;
+    }
+
+    .botao-entrar:hover {
+      top: 4px;
+      box-shadow: none;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <article class="map-container">
+      <img src="App/icones-menu/fundo.jpg" alt="fundo de paisagem jogo" class="map-background">
+
+          <!-- Botão 1 -->
+      <a id="botao1" class="botaomenu" data-modal="modal1">
+        <img src="App/icones-menu/1.png" alt="Botão 1" />
+      </a>
+
+      <!-- Botão 2 -->
+      <a id="botao2" class="botaomenu" data-modal="modal2">
+        <img src="App/icones-menu/2.png" alt="Botão 2" />
+      </a>
+
+      <!-- Botão 6 -->
+      <a id="botao3" class="botaomenu" data-modal="modal6">
+        <img src="App/icones-menu/jogo.png" alt="Botão 5" />
+      </a>
+
+      <!-- Botão 8 -->
+      <a id="botao4" class="botaomenu" data-modal="modal8">
+        <img src="App/icones-menu/jogo.png" alt="Botão 8" />
+      </a>
+
+      <!-- Botão 3 -->
+      <a id="botao5" class="botaomenu" data-modal="modal3">
+        <img src="App/icones-menu/3.png" alt="Botão 3" />
+      </a>
+
+       <!-- Botão 4 -->
+      <a id="botao6" class="botaomenu" data-modal="modal4">
+        <img src="App/icones-menu/4.png" alt="Botão 4" />
+      </a>
+
+          <!-- Botão 10 -->
+      <a id="botao7" class="botaomenu" data-modal="modal10">
+        <img src="App/icones-menu/jogo.png" alt="Botão 10" />
+      </a>
+
+      <!-- Botão 7 -->
+      <a id="botao8" class="botaomenu" data-modal="modal7">
+        <img src="App/icones-menu/5.png" alt="Botão 7" />
+      </a>
+
+      <!-- Botão 9 -->
+      <a id="botao9" class="botaomenu" data-modal="modal9">
+        <img src="App/icones-menu/6.png" alt="Botão 9" />
+      </a>
+
+      <!-- Botão 5 -->
+      <a id="botao10" class="botaomenu" data-modal="modal5">
+        <img src="App/icones-menu/jogo.png" alt="Botão 5" />
+      </a>
+
+      <!-- Botão 11 -->
+      <a id="botao11" class="botaomenu" data-modal="modal11">
+        <img src="App/icones-menu/7.png" alt="Botão 11" />
+      </a>
+
+      <!-- Botão 12 -->
+      <a id="botao12" class="botaomenu" data-modal="modal12">
+        <img src="App/icones-menu/8.png" alt="Botão 12" />
+      </a>
+
+      <!-- Botão 13 -->
+      <a id="botao13" class="botaomenu" data-modal="modal13">
+        <img src="App/icones-menu/9.png" alt="Botão 13" />
+      </a>
+
+      <!-- Botão 14 -->
+      <a id="botao14" class="botaomenu" data-modal="modal14">
+        <img src="App/icones-menu/10.png" alt="Botão 14" />
+      </a>
+
+      <!-- Botão 15 -->
+      <a id="botao15" class="botaomenu" data-modal="modal15">
+        <img src="App/icones-menu/jogo.png" alt="Botão 14" />
+      </a>
+
+      <br> <br> <br> <br> <br> <br>
+
+
+
+
+
+      <!-- Modal 1 -->
+      <div id="modal1" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 1: Introdução: A Música</p>
+          <a href="App/Aula1-Intro/index.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 2 -->
+      <div id="modal2" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 2: Notas Musicais</p>
+          <a href="App/Aula2-notas musicais/painel1.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 3 -->
+      <div id="modal3" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 3: Notação Musical</p>
+          <a href="App/Aula3-Notaçao musical/painel1.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 4 -->
+      <div id="modal4" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 4: Notas na Pauta</p>
+          <a href="App/Aula4-Notas na Pauta/painel1.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 5 -->
+      <div id="modal5" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Jogo: Figuras Musicais e Pausas</p>
+          <a href="App/jogos/figuras e pausas/intro.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 6 -->
+      <div id="modal6" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Jogo: Arvore Musical</p>
+          <a href="App/jogos/ArvoreDo/intro.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 7 -->
+      <div id="modal7" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 5: Figuras Musicais e Pausas</p>
+          <a href="App/Aula5-Figuras Musicais/painel1.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 8 -->
+      <div id="modal8" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Jogo: Notas Vizinhas</p>
+          <a href="App/jogos/Notas vizinhas/intro.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 9 -->
+      <div id="modal9" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 6: Desenho das Figuras</p>
+          <a href="App/Aula6-Desenho das figuras/painel1.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 10 -->
+      <div id="modal10" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Jogo: Notas Musicais</p>
+          <a href="App/jogos/notas musicais/intro.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 11 -->
+      <div id="modal11" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 7: Tom e Semitom</p>
+          <a href="App/Aula7-Tom e semitom/Painel1.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 12 -->
+      <div id="modal12" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 8: Acidentes ou Alterações</p>
+          <a href="App/Aula8-Acidente ou Alteração/painel1.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 13 -->
+      <div id="modal13" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 9: Ponto de aumento e Ligadura</p>
+          <a href="App/Aula9-Ponto de aumento e Ligadura/painel1.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 14 -->
+      <div id="modal14" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Aula 10: Compasso e Unidade de Tempo</p>
+          <a href="App/Aula10-Compasso e Unidade de Tempo/painel1.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+
+      <!-- Modal 15 -->
+      <div id="modal15" class="modal">
+        <div class="modal-conteudo">
+          <span class="fechar">&times;</span>
+          <p>Jogo: Compasso e Unidade de Tempo</p>
+          <a href="App/jogos/compasso/intro.html" class="botao-entrar">Entrar</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer></footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const botoes = document.querySelectorAll(".botaomenu");
+
+      botoes.forEach(botao => {
+        const modalId = botao.dataset.modal;
+        const modal = document.getElementById(modalId);
+        const fecharBtn = modal.querySelector(".fechar");
+
+        botao.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // Fecha todos os modais antes de abrir
+          document.querySelectorAll(".modal").forEach(m => {
+            m.style.display = "none";
+          });
+
+          modal.style.display = "block";
+
+          const rect = botao.getBoundingClientRect();
+          const modalWidth = modal.offsetWidth;
+          const modalHeight = modal.offsetHeight;
+
+          let top = rect.bottom + 5;
+          let left = rect.left;
+
+          const screenWidth = window.innerWidth;
+          const screenHeight = window.innerHeight;
+
+          // Ajusta posição se o modal ultrapassar a tela na horizontal
+          if (left + modalWidth > screenWidth) {
+            left = screenWidth - modalWidth - 10;
+          }
+
+          // Se passar da parte inferior da tela, abre acima do botão
+          if (top + modalHeight > screenHeight) {
+            top = rect.top - modalHeight - 5;
+          }
+
+          // Evita que o modal fique fora da tela pela esquerda
+          if (left < 0) {
+            left = 10;
+          }
+
+          // Evita que o modal fique fora da tela no topo
+          if (top < 0) {
+            top = 10;
+          }
+
+          modal.style.top = `${top}px`;
+          modal.style.left = `${left}px`;
+        });
+
+        fecharBtn.addEventListener("click", function () {
+          modal.style.display = "none";
+        });
+      });
+
+      // Fecha os modais ao clicar fora
+      function fecharModais(event) {
+        const modais = document.querySelectorAll(".modal");
+        modais.forEach(modal => {
+          if (
+            modal.style.display === "block" &&
+            !modal.contains(event.target) &&
+            !event.target.closest(".botaomenu")
+          ) {
+            modal.style.display = "none";
+          }
+        });
+      }
+
+      window.addEventListener("click", fecharModais);
+      window.addEventListener("touchstart", fecharModais);
+    });
+  </script>
+</body>
+</html>

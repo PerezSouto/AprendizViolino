@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo Musical</title>
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    background:#3DB26E;
+    }
+
+    h3{
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    #container {
+    text-align: center;
+    max-width: 900px;
+  }
+
+    .target-area {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+      justify-content: center;
+    }
+
+    .drop-zone {
+      width: 90px;
+      height: 90px;
+      background-color: white;
+      border: 5px dashed yellow;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      text-align: center;
+    }
+
+    .drop-zone img {
+      max-width: 90px;
+      max-height: 90px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .draggable {
+      padding: 2px;
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    .draggable img {
+      width: 55px;
+      height: auto;
+    }
+
+    .draggable.selected {
+      border: 2px solid blue;
+    }
+
+    .options img {
+      width: 55px;
+      height: auto;
+      max-height: 55px;
+    }
+
+    #botoesverificar{
+      text-align: center;
+    }
+
+    .verificar{
+      display: inline-block;
+      margin-top: 30px;
+      background: #915c9c;
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 3px 0 #53355a;        
+      transition: all 0.1s ease;
+      position: relative;
+      top: 0px;
+      width: 140px;
+      padding: 8px;
+      font-size: 18px;
+      font-weight: bolder;
+    }
+    
+    .verificar:hover{
+            background: #bb77c9;
+       }
+
+    .verificar:active{
+            background-color: #bb77c9;
+            box-shadow: none;
+            top: 4px;
+      }
+
+    .verificar.touchstart {
+        background-color: #bb77c9;
+        box-shadow: none;
+        top: 4px;
+    }
+
+    #resultado{
+      height: 30px;
+      font-size: 25px;
+      font-weight: bolder;
+    }
+
+      @media screen and (min-width: 700px){
+
+        .draggable {
+      padding: 8px;
+    }
+
+      .drop-zone {
+      width: 180px;
+      height: 180px;
+    }
+
+    .drop-zone img {
+      max-width: 180px;
+      max-height: 180px;
+    }
+
+        
+      .draggable img {
+      width: 100px;
+    }
+
+    .options img {
+      width: 100px;
+      height: auto;
+      max-height: 100px;
+    }
+
+    #resultado{
+      font-size: 35px;
+    }
+
+    .verificar{
+      margin-top: 25px;
+      width: 160px;
+      padding: 10px;
+      font-size: 20px;
+    }
+
+    #sair{
+      margin-top:-30px;
+    }
+
+      }
+
+  </style>
+</head>
+<body>
+  <div id="conteiner">
+    <div class="target-area">
+      <div class="drop-zone" data-type="nome">Nome</div>
+      <div class="drop-zone" data-type="figura">Figura</div>
+      <div class="drop-zone" data-type="pausa">Pausa</div>
+    </div>
+    <h3>Nomes:</h3>
+    <div class="options">
+      <!-- Nomes -->
+      <img src="imagens/nome-semibreve.jpg" class="draggable" data-type="nome" data-name="Semibreve">
+      <img src="imagens/nome-minima.jpg" class="draggable" data-type="nome" data-name="Mínima">
+      <img src="imagens/nome-seminima.jpg" class="draggable" data-type="nome" data-name="Semínima">
+      <img src="imagens/nome-colcheia.jpg" class="draggable" data-type="nome" data-name="Colcheia">
+      <img src="imagens/nome-semicolcheia.jpg" class="draggable" data-type="nome" data-name="Semicolcheia">
+    </div>
+    <h3>Figuras:</h3>
+    <div class="options">
+          <!-- Figuras -->
+      <img src="imagens/figura-seminima.jpg" class="draggable" data-type="figura" data-name="Semínima">
+      <img src="imagens/figura-semibreve.jpg" class="draggable" data-type="figura" data-name="Semibreve">
+      <img src="imagens/figura-colcheia.jpg" class="draggable" data-type="figura" data-name="Colcheia">
+      <img src="imagens/figura-minima.jpg" class="draggable" data-type="figura" data-name="Mínima">
+    
+      <img src="imagens/figura-semicolcheia.jpg" class="draggable" data-type="figura" data-name="Semicolcheia">
+    </div>
+    <h3>Pausas:</h3>
+    <div class="options">
+    <!-- Pausas -->
+      <img src="imagens/pausa-minima.jpg" class="draggable" data-type="pausa" data-name="Mínima">
+      <img src="imagens/pausa-colcheia.jpg" class="draggable" data-type="pausa" data-name="Colcheia">
+      <img src="imagens/pausa-seminima.jpg" class="draggable" data-type="pausa" data-name="Semínima">
+      <img src="imagens/pausa-semicolcheia.jpg" class="draggable" data-type="pausa" data-name="Semicolcheia">
+      <img src="imagens/pausa-semibreve.jpg" class="draggable" data-type="pausa" data-name="Semibreve">
+    </div>
+    <div id="botoesverificar">
+      <button class="verificar" onclick="verificar()">Verificar</button>
+      <a href="index.html"><button class="verificar" type="button">Novo Jogo</button></a>
+      <p id="resultado"></p>
+      <a href="/menu.html"><button id="sair" class="verificar" type="button">Sair</button></a>
+    </div>
+    
+  </div>
+
+  <script>
+    let imagemSelecionada = null;
+
+    // Selecionar imagem
+    document.querySelectorAll('.draggable').forEach(img => {
+      img.addEventListener('click', () => {
+        document.querySelectorAll('.draggable').forEach(i => i.classList.remove('selected'));
+        imagemSelecionada = img.cloneNode(true);
+        img.classList.add('selected');
+      });
+    });
+
+    // Clicar na drop-zone
+    document.querySelectorAll('.drop-zone').forEach(zone => {
+      zone.addEventListener('click', () => {
+        if (imagemSelecionada && imagemSelecionada.dataset.type === zone.dataset.type) {
+          zone.innerHTML = '';
+          zone.appendChild(imagemSelecionada.cloneNode(true));
+          document.querySelectorAll('.draggable').forEach(i => i.classList.remove('selected'));
+          imagemSelecionada = null;
+        } else if (imagemSelecionada) {
+          alert('Tipo incorreto! Selecione uma imagem do tipo: ' + zone.dataset.type);
+        }
+      });
+    });
+
+    // Verificar resposta
+    function verificar() {
+      const zonas = document.querySelectorAll('.drop-zone');
+      let nome = zonas[0].querySelector('img')?.dataset.name;
+      let figura = zonas[1].querySelector('img')?.dataset.name;
+      let pausa = zonas[2].querySelector('img')?.dataset.name;
+
+      if (nome && figura && pausa) {
+        if (nome === figura && nome === pausa) {
+          document.getElementById('resultado').textContent = '✅ Correto!';
+        } else {
+          document.getElementById('resultado').textContent = '❌ Tente novamente.';
+        }
+      } else {
+        document.getElementById('resultado').textContent = 'Preencha todos os campos.';
+      }
+    }
+  </script>
+</body>
+</html>

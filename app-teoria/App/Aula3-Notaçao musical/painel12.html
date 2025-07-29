@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notação Musical</title>
+    <style>
+        /* Configurações
+Cores:
+-Roxo oscuro sombra: #53355a
+-Roxo medio background boton: #915c9c
+-Roxo claro hover: #bb77c9
+-Verde:#007C4A */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.5em;
+        }
+
+        header {
+            font-family: 'Roboto';
+            padding: 1rem;
+            color: black;
+        }
+        #progreso {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem; /* Espaço entre o h1 e a imagem */
+        }
+        #progreso h1{
+            font-size: 1.3em;
+        }
+        #progreso img{
+            width: 70px;
+        }
+        #progreso .imgprogreso{
+            width: 50px;
+        }
+
+
+        main {
+            font-family: 'Roboto';
+            font-weight: 500;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        article img{
+            width: 50%;
+        }
+
+        article {
+            text-align: center;
+            width:100%;
+            min-height: 30vh;
+            background-color: white;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        footer {
+            font-family: 'Roboto';
+            font-weight: 600;
+            text-align: center;
+            background-color: white;
+            color: black;
+            padding: 1rem;
+        }
+        .botaocontinuar{
+            display: inline-block;
+            background: #915c9c;
+            color: white;
+            padding: 10px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 0 4px 0 #53355a;        
+            transition: all 0.1s ease;
+            position: relative;
+            top: 0px;
+        }
+        .botaocontinuar:hover{
+            background: #bb77c9;
+        }
+
+        .botaocontinuar:active{
+            background-color: #bb77c9;
+            box-shadow: none;
+            top: 4px;
+        }
+
+        .botaocontinuar.touchstart {
+        background-color: #bb77c9;
+        box-shadow: none;
+        top: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div id="progreso">
+            <img src="../img-progresao/coruja3.png" alt="imagem coruja indicando o Bloco 1">
+            <h1>Notação Musical</h1>
+            <img class="imgprogreso" src="../img-progresao/95.png" alt="Imagem porcentagem de progessão">
+</div>
+
+    </header>
+    <main>
+        <article>
+            <p>Cada clave dá seu nome à nota escrita em sua linha. Portanto, como a clave de Sol começa na segunda linha do pentagrama, a nota localizada na segunda linha se chama Sol</p> <br>
+            <img src="imagens/Notasol.jpg" alt="imagem pentagrama nota sol">
+
+        </article>
+
+    </main>
+    <footer>
+        <a href="painel13.html" class="botaocontinuar"><p>Continuar</p></a>
+    </footer>
+
+        <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const botao = document.querySelector(".botaocontinuar");
+
+        botao.addEventListener("touchstart", function () {
+            botao.classList.add("touchstart");
+        });
+
+        botao.addEventListener("touchend", function () {
+            botao.classList.remove("touchstart");
+        });
+
+        botao.addEventListener("touchcancel", function () {
+            botao.classList.remove("touchstart");
+        });
+    });
+</script>
+</body>
+</html>
