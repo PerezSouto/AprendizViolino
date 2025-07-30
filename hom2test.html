@@ -117,11 +117,19 @@
                 </div>
            </section>
 
-           <section id="blocoAluno" style="display:none; margin-top: 30px;">
-            <h2>Olá, <span id="nomeAluno"></span>!</h2>
-            <h3>Sua trilha de aulas:</h3>
-            <ul id="listaAulas" style="text-align:left; max-width: 500px; margin:auto;"></ul>
-           </section>
+<section id="blocoAluno" style="display:none; margin-top: 30px;">
+  <h2>Olá, <span id="nomeAluno"></span>!</h2>
+
+  <h3>Aulas feitas:</h3>
+  <ul id="listaAulasFeitas"></ul>
+
+  <h3>Comentário do professor:</h3>
+  <p id="comentarioProfessor"></p>
+
+  <h3>Conteúdo a ser estudado na próxima aula:</h3>
+  <p><strong>Data:</strong> <span id="dataProximaAula"></span></p>
+  <p><strong>Conteúdo:</strong> <span id="conteudoProximaAula"></span></p>
+</section>
 
 
 
@@ -267,18 +275,23 @@ getDoc(docRef).then((docSnap) => {
   if (docSnap.exists()) {
     const dados = docSnap.data();
 
-    document.getElementById("nomeAluno").innerText = dados.nome;
+document.getElementById("nomeAluno").innerText = dados.nome;
 
-    const lista = document.getElementById("listaAulas");
-    lista.innerHTML = '';
-    const aulas = dados.aulas || {};
-    for (const [nome, info] of Object.entries(aulas)) {
-      const li = document.createElement('li');
-      li.innerText = `${nome}: ${info.status}${info.comentario ? " - " + info.comentario : ""}`;
-      lista.appendChild(li);
-    }
+const lista = document.getElementById("listaAulasFeitas");
+lista.innerHTML = '';
+(dados.aulasFeitas || []).forEach(data => {
+  const li = document.createElement('li');
+  li.innerText = data;
+  lista.appendChild(li);
+});
 
-    document.getElementById("blocoAluno").style.display = 'block';
+document.getElementById("comentarioProfessor").innerText = dados.comentarioProfessor || "Nenhum comentário ainda.";
+
+const proxima = dados.proximaAula || {};
+document.getElementById("dataProximaAula").innerText = proxima.data || "Não definida.";
+document.getElementById("conteudoProximaAula").innerText = proxima.conteudo || "Sem conteúdo definido.";
+
+document.getElementById("blocoAluno").style.display = 'block';
   } else {
     alert("Dados do aluno não encontrados.");
   }

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel da Professora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    h1, h2 {
+      color: #4B0082;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    button {
+      margin-top: 10px;
+      background-color: #4B0082;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    textarea, input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    #formularioEdicao {
+      margin-top: 30px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Painel da Professora 🎻</h1>
+
+  <h2>Lista de Alunos</h2>
+  <ul id="listaAlunos">Carregando alunos...</ul>
+
+  <div id="formularioEdicao" style="display:none;">
+    <h2>Editando: <span id="nomeEdicao"></span></h2>
+
+    <label>Aulas feitas (separe por vírgulas):</label>
+    <textarea id="aulasFeitas"></textarea>
+
+    <label>Comentário do professor:</label>
+    <textarea id="comentario"></textarea>
+
+    <label>Data da próxima aula:</label>
+    <input type="text" id="dataProxima" placeholder="Ex: 05/08/2025">
+
+    <label>Conteúdo a ser estudado:</label>
+    <textarea id="conteudoProxima"></textarea>
+
+    <button onclick="salvarEdicao()">Salvar Alterações</button>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    // Configuração do seu Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyApHSOyYUImfmUWYrao2AOEH0rMwJm3ShE",
+      authDomain: "app-do-aluno-13dde.firebaseapp.com",
+      projectId: "app-do-aluno-13dde",
+      storageBucket: "app-do-aluno-13dde.appspot.com",
+      messagingSenderId: "911749754839",
+      appId: "1:911749754839:web:1f3e47b181df83dea8a592"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Verifica se é a professora
+    onAuthStateChanged(auth, user => {
+      if (!user || user.email !== "keeyth@oaprendiz.com") {
+        alert("Acesso restrito.");
+        window.location.href = "login.html";
+      } else {
+        carregarAlunos();
+      }
+    });
+
+    // Carrega lista de alunos
+    async function carregarAlunos() {
+      const alunosCol = collection(db, "alunos");
+      const alunosSnap = await getDocs(alunosCol);
+      const lista = document.getElementById("listaAlunos");
+      lista.innerHTML = "";
+
+      alunosSnap.forEach(docSnap => {
+        const aluno = docSnap.data();
+        const uid = docSnap.id;
+const li = document.createElement("li");
+li.innerHTML = `<strong>${aluno.nome}</strong><br>`;
+const botao = document.createElement("button");
+botao.textContent = "Editar";
+botao.addEventListener("click", () => editarAluno(uid, aluno));
+li.appendChild(botao);
+lista.appendChild(li);
+      });
+    }
+
+    // Formulário
+    let uidSelecionado = null;
+
+    function editarAluno(uid, aluno) {
+  uidSelecionado = uid;
+  document.getElementById("nomeEdicao").innerText = aluno.nome || "";
+  const aulas = aluno.aulasFeitas;
+document.getElementById("aulasFeitas").value = Array.isArray(aulas) ? aulas.join(", ") : aulas || "";
+  document.getElementById("comentario").value = aluno.comentarioProfessor || "";
+  document.getElementById("dataProxima").value = aluno.proximaAula?.data || "";
+  document.getElementById("conteudoProxima").value = aluno.proximaAula?.conteudo || "";
+
+  document.getElementById("formularioEdicao").style.display = "block";
+    }
+
+    async function salvarEdicao() {
+      const aulas = document.getElementById("aulasFeitas").value.split(",").map(a => a.trim()).filter(Boolean);
+      const comentario = document.getElementById("comentario").value;
+      const dataProx = document.getElementById("dataProxima").value;
+      const conteudoProx = document.getElementById("conteudoProxima").value;
+
+      const ref = doc(db, "alunos", uidSelecionado);
+      await updateDoc(ref, {
+        aulasFeitas: aulas,
+        comentarioProfessor: comentario,
+        proximaAula: {
+          data: dataProx,
+          conteudo: conteudoProx
+        }
+      });
+
+      alert("Dados salvos com sucesso!");
+      location.reload();
+    }
+  </script>
+</body>
+</html>
