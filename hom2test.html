@@ -235,6 +235,7 @@ window.addEventListener("resize", centerCarousel);
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"; // <-- adicionado
 
   // Sua configuração do Firebase
   const firebaseConfig = {
@@ -258,6 +259,32 @@ window.addEventListener("resize", centerCarousel);
     } else {
       console.log("Usuário autenticado:", user.email);
       // Aqui você pode carregar conteúdo exclusivo ou continuar normalmente
+      const db = getFirestore(app);
+const uid = user.uid;
+
+const docRef = doc(db, "alunos", uid);
+getDoc(docRef).then((docSnap) => {
+  if (docSnap.exists()) {
+    const dados = docSnap.data();
+
+    document.getElementById("nomeAluno").innerText = dados.nome;
+
+    const lista = document.getElementById("listaAulas");
+    lista.innerHTML = '';
+    const aulas = dados.aulas || {};
+    for (const [nome, info] of Object.entries(aulas)) {
+      const li = document.createElement('li');
+      li.innerText = `${nome}: ${info.status}${info.comentario ? " - " + info.comentario : ""}`;
+      lista.appendChild(li);
+    }
+
+    document.getElementById("blocoAluno").style.display = 'block';
+  } else {
+    alert("Dados do aluno não encontrados.");
+  }
+});
+
+
     }
   });
 </script>
