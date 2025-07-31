@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Aprendiz de Violino</title>
+    <link rel="shortcut icon" href="imagens/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mediaqueries.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <style>
+        .container {
+      text-align: center;
+    }
+
+    #arealuno{
+      background-color: #009E6D;
+      border-radius: 7px;
+      font-weight: bolder;
+
+    }
+
+    .caixa {
+      background-color: darkgrey;
+      padding: 10px;
+      margin-top: 5px;
+      border: none;
+      width: 200px;
+      color: black;
+      border-radius: 7px;
+    }
+
+    .caixa::placeholder {
+      color: black;
+    }
+
+    #login, #cadastro {
+      margin-top: 10px;
+      background-color: #64406C;
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      cursor: pointer;
+      border-radius: 7px;
+      margin-right: 5px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bolder;
+      color: black;
+    }
+
+    #text{
+        text-align: center;
+    }
+    </style>
+
+</head>
+<body>
+    <header>
+        <div id="banner"></div>
+        <span id="iconeburger" class="material-symbols-outlined" onclick="clickMenu()">menu</span>
+        <nav id="hamburguer">
+            <a href="index.html">Inicio</a>
+            <a href="autora.html">Autora</a>
+            <a href="ebook.html">Ebook</a>
+            <a href="certificado.html">Certificado</a>
+            <a href="Jogos.html">Jogos</a>
+            <a href="musical.html">Musical</a>
+            <a href="oficinas.html">Oficinas</a>
+            <a href="Animacoes.html">Animações</a>
+            <a href="artigos.html">Artigos</a>
+            <a href="podcast.html">Podcast</a>
+            <a href="contato.html">Contato</a>
+            <a id="arealuno" href="login.html">Portal Aluno</a>
+        </nav>
+        <nav id="menugrande">
+            <a href="index.html">Início</a>
+            <a href="autora.html">Autora</a>
+            <a href="ebook.html">Ebook</a>
+            <a href="certificado.html">Certificado</a>
+            <a href="Jogos.html">Jogos</a>
+            <a href="musical.html">Musical</a>
+            <a href="oficinas.html">Oficinas</a>
+            <a href="Animacoes.html">Animações</a>
+            <a href="artigos.html">Artigos</a>
+            <a href="podcast.html">Podcast</a>
+            <a href="contato.html">Contato</a>
+            <a id="arealuno" href="login.html">Portal Aluno</a>
+        </nav>
+    </header>
+    <main>
+          <h1>Bem-vindo ao Portal do aluno!</h1>
+
+          <section class="conteinerjogos">
+                <h2>Aprendiz Play</h2>
+                <div class="interiorjogo">
+                    <div><img src="imagens/aprendizplay.jpg" alt="foto do app aprendiz play"></div>
+                    <p><strong>O Aprendiz Play é um serviço de streaming digital que dá acesso aos áudios do método O Aprendiz de Violino.</strong> </label></p>
+                </div>
+                <div class="botao-jogo">
+                    <p class="botaojogar"><a href="aprendiz-play.html" target="_blank">Entrar</a> <span class="material-symbols-outlined">library_music</span></p>
+                </div>
+           </section>
+
+           <section class="conteinerjogos">
+                <h2>Aprendiz Teoria</h2>
+                <div class="interiorjogo">
+                    <div><img src="imagens/appteoria.jpg" alt="foto do app aprendiz play"></div>
+                    <p><strong>O Aprendiz Teoria é uma plataforma gamificada para iniciantes em teoria musical, que transforma o aprendizado em uma experiência interativa e divertida. Com lições práticas, exercícios dinâmicos e jogos educativos, o usuário desenvolve seus conhecimentos musicais de forma leve, progressiva e motivadora. </strong> </label></p>
+                </div>
+                <div class="botao-jogo">
+                    <p class="botaojogar"><a href="app-teoria/index.html" target="_blank">Entrar</a> <span class="material-symbols-outlined">auto_stories</span></p>
+                </div>
+           </section>
+
+<section id="blocoAluno" style="display:none; margin-top: 30px;">
+  <h2>Olá, <span id="nomeAluno"></span>!</h2>
+  <h3>Sua caderneta de aulas:</h3>
+  
+  <div id="historicoContainer"></div>
+
+</section>
+
+
+
+
+    </main>
+    <footer>
+        <p> © 2017-2025 O Aprendiz de Violino</p>
+        <div class="redes">
+            <a href="https://www.instagram.com/oaprendizdeviolino/" target="_blank"><img src="imagens/instagram-icono.png" alt="logo instagram"></a>
+            <a href="https://www.youtube.com/channel/UCyp5XrutqbnQCS0HmBV9VWg" target="blank"><img src="imagens/youtube-icono.png" alt="logo youtube"></a>
+        </div>
+        <p><a id="privacidade" href="Politicaprivacidade.html">Política de privacidade e Termos de uso</a></p>
+
+    </footer>
+    <script>
+        function clickMenu(){
+                if (hamburguer.style.display == 'block') {
+                    hamburguer.style.display = 'none'
+                } else {
+                    hamburguer.style.display = 'block'
+                }
+            }
+
+        // Script do carrousel (não foi modificado)
+        // ... (seu script de carrossel continua aqui sem alterações)
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+  // Sua configuração do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyApHSOyYUImfmUWYrao2AOEH0rMwJm3ShE",
+    authDomain: "app-do-aluno-13dde.firebaseapp.com",
+    projectId: "app-do-aluno-13dde",
+    storageBucket: "app-do-aluno-13dde.appspot.com",
+    messagingSenderId: "911749754839",
+    appId: "1:911749754839:web:1f3e47b181df83dea8a592"
+  };
+
+  // Inicializa Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Verifica se o usuário está logado
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      // Redireciona para o login se não estiver autenticado
+      window.location.href = "login.html";
+    } else {
+      console.log("Usuário autenticado:", user.email);
+      const db = getFirestore(app);
+      const uid = user.uid;
+      const docRef = doc(db, "alunos", uid);
+      
+      getDoc(docRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          const dados = docSnap.data();
+
+          document.getElementById("nomeAluno").innerText = dados.nome;
+
+          // =========================================================================
+          // MODIFICAÇÃO 2: Lógica JavaScript para criar o histórico de aulas.
+          // =========================================================================
+          
+          // Pega o container do histórico no HTML
+          const container = document.getElementById("historicoContainer");
+          container.innerHTML = ''; // Limpa qualquer conteúdo anterior
+
+          // Verifica se existe um histórico de aulas e se não está vazio
+          if (dados.historicoAulas && dados.historicoAulas.length > 0) {
+              
+              // Opcional: Inverte a ordem para mostrar a aula mais recente primeiro
+              const historicoInvertido = [...dados.historicoAulas].reverse();
+
+              // Cria o HTML para cada aula registrada usando um loop
+              historicoInvertido.forEach(aula => {
+                  // Cria um 'div' para agrupar as informações da aula
+                  const aulaDiv = document.createElement('div');
+                  // Aplica um estilo simples para separar as aulas
+                  aulaDiv.style.border = '1px solid #ccc';
+                  aulaDiv.style.padding = '15px';
+                  aulaDiv.style.margin = '10px 0';
+                  aulaDiv.style.borderRadius = '8px';
+                  aulaDiv.style.backgroundColor = '#f9f9f9'; // Cor de fundo suave
+
+                  // Adiciona o conteúdo da aula dentro do 'div'
+                  aulaDiv.innerHTML = `
+                      <h4 style="margin-top:0;"><strong>Data:</strong> ${aula.data || "Não definida"}</h4>
+                      <p><strong>Conteúdo estudado:</strong> ${aula.conteudo || "Nenhum"}</p>
+                      <p style="margin-bottom:0;"><strong>Comentários do professor:</strong> ${aula.comentario || "Nenhum"}</p>
+                  `;
+
+                  // Adiciona o bloco da aula ao container principal
+                  container.appendChild(aulaDiv);
+              });
+
+          } else {
+              // Mensagem para alunos que ainda não têm aulas registradas
+              container.innerText = "Nenhuma aula registrada ainda. Aguarde a primeira atualização do seu professor!";
+          }
+          // =========================================================================
+          // FIM DA MODIFICAÇÃO NO JAVASCRIPT
+          // =========================================================================
+
+          document.getElementById("blocoAluno").style.display = 'block';
+
+        } else {
+          alert("Dados do aluno não encontrados.");
+        }
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

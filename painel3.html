@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel da Professora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h1, h2 {
+      color: #4B0082;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 10px;
+      background-color: #4B0082;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    textarea, input {
+      width: calc(100% - 18px); /* Ajuste para o padding */
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box; /* Garante que o padding não aumente a largura */
+    }
+    label {
+      font-weight: bold;
+      color: #333;
+    }
+    #formularioContainer {
+      margin-top: 30px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    #historicoExistente li {
+        background-color: #f9f9f9;
+        border-left: 4px solid #4B0082;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Painel da Professora 🎻</h1>
+
+  <h2>Lista de Alunos</h2>
+  <ul id="listaAlunos">Carregando alunos...</ul>
+
+  <div id="formularioContainer" style="display:none;">
+    <h2>Registrar aula para: <span id="nomeAlunoEdicao"></span></h2>
+
+    <h3>Histórico de Aulas</h3>
+    <ul id="historicoExistente"></ul>
+    <hr>
+    
+    <h3>Adicionar Nova Aula</h3>
+    <label for="dataAula">Data da Aula:</label>
+    <input type="text" id="dataAula" placeholder="Ex: 30/07/2025">
+
+    <label for="conteudoAula">Conteúdo Estudado:</label>
+    <textarea id="conteudoAula" rows="4"></textarea>
+
+    <label for="comentarioAula">Comentários da Aula:</label>
+    <textarea id="comentarioAula" rows="4"></textarea>
+
+    <button onclick="salvarNovaAula()">Adicionar Aula ao Histórico</button>
+  </div>
+
+  <script type="module">
+    // =========================================================================
+    // MODIFICAÇÃO 2: Importado 'arrayUnion' para adicionar itens a uma lista
+    // =========================================================================
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    // Configuração do seu Firebase (sem alterações)
+    const firebaseConfig = {
+      apiKey: "AIzaSyApHSOyYUImfmUWYrao2AOEH0rMwJm3ShE",
+      authDomain: "app-do-aluno-13dde.firebaseapp.com",
+      projectId: "app-do-aluno-13dde",
+      storageBucket: "app-do-aluno-13dde.appspot.com",
+      messagingSenderId: "911749754839",
+      appId: "1:911749754839:web:1f3e47b181df83dea8a592"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Verificação de acesso (sem alterações)
+    onAuthStateChanged(auth, user => {
+      if (!user || user.email !== "keeyth@oaprendiz.com") {
+        alert("Acesso restrito.");
+        window.location.href = "login.html";
+      } else {
+        carregarAlunos();
+      }
+    });
+
+    async function carregarAlunos() {
+      const alunosCol = collection(db, "alunos");
+      const alunosSnap = await getDocs(alunosCol);
+      const lista = document.getElementById("listaAlunos");
+      lista.innerHTML = "";
+
+      alunosSnap.forEach(docSnap => {
+        const aluno = docSnap.data();
+        const uid = docSnap.id;
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${aluno.nome}</strong><br>`;
+        const botao = document.createElement("button");
+        botao.textContent = "Registrar Aula"; // Texto do botão alterado
+        // ==========================================================================================
+        // MODIFICAÇÃO 3: A função do botão agora é 'selecionarAluno' para preparar o formulário
+        // ==========================================================================================
+        botao.addEventListener("click", () => selecionarAluno(uid, aluno));
+        li.appendChild(botao);
+        lista.appendChild(li);
+      });
+    }
+
+    let uidSelecionado = null;
+
+    function selecionarAluno(uid, aluno) {
+      uidSelecionado = uid;
+      document.getElementById("nomeAlunoEdicao").innerText = aluno.nome || "";
+      
+      // Limpa e preenche o histórico de aulas existentes
+      const historicoLista = document.getElementById("historicoExistente");
+      historicoLista.innerHTML = "";
+      if (aluno.historicoAulas && aluno.historicoAulas.length > 0) {
+        // Mostra as mais recentes primeiro
+        [...aluno.historicoAulas].reverse().forEach(aula => {
+            const item = document.createElement("li");
+            item.innerHTML = `<b>${aula.data}</b>: ${aula.conteudo.substring(0, 50)}...`;
+            historicoLista.appendChild(item);
+        });
+      } else {
+        historicoLista.innerHTML = "<li>Nenhuma aula registrada ainda.</li>";
+      }
+
+      // Limpa os campos do formulário para a nova aula
+      document.getElementById("dataAula").value = "";
+      document.getElementById("conteudoAula").value = "";
+      document.getElementById("comentarioAula").value = "";
+
+      document.getElementById("formularioContainer").style.display = "block";
+      window.scrollTo(0, document.body.scrollHeight); // Rola a página para baixo
+    }
+
+    // =========================================================================
+    // MODIFICAÇÃO 4: Função 'salvar' reescrita para usar 'arrayUnion'
+    // =========================================================================
+    async function salvarNovaAula() {
+      if (!uidSelecionado) {
+        alert("Nenhum aluno selecionado.");
+        return;
+      }
+      
+      // Pega os dados do novo formulário
+      const data = document.getElementById("dataAula").value;
+      const conteudo = document.getElementById("conteudoAula").value;
+      const comentario = document.getElementById("comentarioAula").value;
+      
+      if (!data || !conteudo || !comentario) {
+          alert("Por favor, preencha todos os campos da nova aula.");
+          return;
+      }
+
+      // Cria o objeto da nova aula
+      const novaAula = {
+        data: data,
+        conteudo: conteudo,
+        comentario: comentario
+      };
+
+      const ref = doc(db, "alunos", uidSelecionado);
+      
+      // Usa 'arrayUnion' para adicionar a nova aula ao array 'historicoAulas' sem apagar as antigas
+      await updateDoc(ref, {
+        historicoAulas: arrayUnion(novaAula)
+      });
+
+      alert("Nova aula adicionada com sucesso!");
+      location.reload(); // Recarrega a página para ver a lista atualizada
+    }
+
+    // Disponibiliza a função globalmente para o botão 'onclick'
+    window.selecionarAluno = selecionarAluno;
+    window.salvarNovaAula = salvarNovaAula;
+  </script>
+</body>
+</html>
