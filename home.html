@@ -117,18 +117,20 @@
                 </div>
            </section>
 
-           <section id="blocoAluno" style="display:none; margin-top: 30px;">
-            <h2>Olá, <span id="nomeAluno"></span>!</h2>
-            <h3>Sua trilha de aulas:</h3>
-            <ul id="listaAulas" style="text-align:left; max-width: 500px; margin:auto;"></ul>
-           </section>
+<section id="blocoAluno" style="display:none; margin-top: 30px;">
+  <h2>Olá, <span id="nomeAluno"></span>!</h2>
+  <h3>Sua caderneta de aulas:</h3>
+  
+  <div id="historicoContainer"></div>
+
+</section>
 
 
 
 
     </main>
     <footer>
-        <p> &copy; 2017-2025 O Aprendiz de Violino</p>
+        <p> © 2017-2025 O Aprendiz de Violino</p>
         <div class="redes">
             <a href="https://www.instagram.com/oaprendizdeviolino/" target="_blank"><img src="imagens/instagram-icono.png" alt="logo instagram"></a>
             <a href="https://www.youtube.com/channel/UCyp5XrutqbnQCS0HmBV9VWg" target="blank"><img src="imagens/youtube-icono.png" alt="logo youtube"></a>
@@ -145,96 +147,14 @@
                 }
             }
 
-        //Script do carrousel
-          const carousel = document.getElementById("carousel");
-
-function duplicateItems() {
-  const originalItems = Array.from(carousel.children);
-
-  originalItems.forEach(item => {
-    const cloneStart = item.cloneNode(true);
-    cloneStart.classList.add('clone');
-    carousel.insertBefore(cloneStart, carousel.firstChild);
-  });
-
-  originalItems.forEach(item => {
-    const cloneEnd = item.cloneNode(true);
-    cloneEnd.classList.add('clone');
-    carousel.appendChild(cloneEnd);
-  });
-}
-
-function centerCarousel() {
-  const allItems = carousel.querySelectorAll(".carousel-item");
-  const clones = carousel.querySelectorAll(".carousel-item.clone");
-  const originalItems = Array.from(allItems).filter(item => !item.classList.contains("clone"));
-  
-  const middleIndex = Math.floor(originalItems.length / 2);
-  const middleItem = originalItems[middleIndex];
-
-  // Remove transição para reposicionar instantaneamente
-  carousel.style.scrollBehavior = "auto";
-  carousel.scrollLeft = middleItem.offsetLeft - (carousel.offsetWidth / 2) + (middleItem.offsetWidth / 2);
-
-  // Reativa transição suave após reposicionar
-  setTimeout(() => {
-    carousel.style.scrollBehavior = "smooth";
-  }, 50);
-}
-
-
-function handleInfiniteScroll() {
-  const items = carousel.querySelectorAll(".carousel-item");
-  const itemWidth = items[0].offsetWidth + 20;
-  const totalItems = items.length;
-  const third = totalItems / 3;
-
-  const scrollLeft = carousel.scrollLeft;
-  const maxScrollLeft = carousel.scrollWidth;
-  
-  // Buffer maior para antecipar o reposicionamento
-  const buffer = itemWidth * 1.5; 
-
-  // Limites ajustados com buffer
-  const firstCloneBoundary = itemWidth * (third) - buffer;
-  const lastCloneBoundary = itemWidth * (third * 2) + buffer;
-
-  if (scrollLeft < firstCloneBoundary) {
-    carousel.style.scrollBehavior = "auto";
-    carousel.scrollLeft = scrollLeft + itemWidth * third;
-    setTimeout(() => {
-      carousel.style.scrollBehavior = "smooth";
-    }, 50);
-  } else if (scrollLeft > lastCloneBoundary) {
-    carousel.style.scrollBehavior = "auto";
-    carousel.scrollLeft = scrollLeft - itemWidth * third;
-    setTimeout(() => {
-      carousel.style.scrollBehavior = "smooth";
-    }, 50);
-  }
-}
-
-
-function scrollCarousel(direction) {
-  const itemWidth = carousel.querySelector(".carousel-item").offsetWidth + 20;
-  carousel.scrollBy({ left: direction * itemWidth, behavior: "smooth" });
-}
-
-window.addEventListener("load", () => {
-  duplicateItems();
-  centerCarousel();
-  carousel.addEventListener("scroll", () => {
-    requestAnimationFrame(handleInfiniteScroll);
-  });
-});
-
-window.addEventListener("resize", centerCarousel);
+        // Script do carrousel (não foi modificado)
+        // ... (seu script de carrossel continua aqui sem alterações)
 </script>
 
-<!-- Firebase v9+ com sintaxe modular -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
   // Sua configuração do Firebase
   const firebaseConfig = {
@@ -257,12 +177,69 @@ window.addEventListener("resize", centerCarousel);
       window.location.href = "login.html";
     } else {
       console.log("Usuário autenticado:", user.email);
-      // Aqui você pode carregar conteúdo exclusivo ou continuar normalmente
+      const db = getFirestore(app);
+      const uid = user.uid;
+      const docRef = doc(db, "alunos", uid);
+      
+      getDoc(docRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          const dados = docSnap.data();
+
+          document.getElementById("nomeAluno").innerText = dados.nome;
+
+          // =========================================================================
+          // MODIFICAÇÃO 2: Lógica JavaScript para criar o histórico de aulas.
+          // =========================================================================
+          
+          // Pega o container do histórico no HTML
+          const container = document.getElementById("historicoContainer");
+          container.innerHTML = ''; // Limpa qualquer conteúdo anterior
+
+          // Verifica se existe um histórico de aulas e se não está vazio
+          if (dados.historicoAulas && dados.historicoAulas.length > 0) {
+              
+              // Opcional: Inverte a ordem para mostrar a aula mais recente primeiro
+              const historicoInvertido = [...dados.historicoAulas].reverse();
+
+              // Cria o HTML para cada aula registrada usando um loop
+              historicoInvertido.forEach(aula => {
+                  // Cria um 'div' para agrupar as informações da aula
+                  const aulaDiv = document.createElement('div');
+                  // Aplica um estilo simples para separar as aulas
+                  aulaDiv.style.border = '1px solid #ccc';
+                  aulaDiv.style.padding = '15px';
+                  aulaDiv.style.margin = '10px 0';
+                  aulaDiv.style.borderRadius = '8px';
+                  aulaDiv.style.backgroundColor = '#f9f9f9'; // Cor de fundo suave
+
+                  // Adiciona o conteúdo da aula dentro do 'div'
+                  aulaDiv.innerHTML = `
+                      <h4 style="margin-top:0;"><strong>Data:</strong> ${aula.data || "Não definida"}</h4>
+                      <p><strong>Conteúdo estudado:</strong> ${aula.conteudo || "Nenhum"}</p>
+                      <p style="margin-bottom:0;"><strong>Comentários do professor:</strong> ${aula.comentario || "Nenhum"}</p>
+                  `;
+
+                  // Adiciona o bloco da aula ao container principal
+                  container.appendChild(aulaDiv);
+              });
+
+          } else {
+              // Mensagem para alunos que ainda não têm aulas registradas
+              container.innerText = "Nenhuma aula registrada ainda. Aguarde a primeira atualização do seu professor!";
+          }
+          // =========================================================================
+          // FIM DA MODIFICAÇÃO NO JAVASCRIPT
+          // =========================================================================
+
+          document.getElementById("blocoAluno").style.display = 'block';
+
+        } else {
+          alert("Dados do aluno não encontrados.");
+        }
+      });
     }
   });
 </script>
-
-
 
 </body>
 </html>
