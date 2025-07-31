@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Painel da Professora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h1, h2 {
+      color: #4B0082;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 10px;
+      background-color: #4B0082;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    button.excluir {
+      background-color: #c00;
+      margin-top: 0;
+      margin-left: 10px;
+    }
+    textarea, input {
+      width: calc(100% - 18px);
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    label {
+      font-weight: bold;
+      color: #333;
+    }
+    #formularioContainer {
+      margin-top: 30px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+    }
+    #historicoExistente li {
+      background-color: #f9f9f9;
+      border-left: 4px solid #4B0082;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Painel da Professora 🎻</h1>
+
+  <h2>Lista de Alunos</h2>
+  <ul id="listaAlunos">Carregando alunos...</ul>
+
+  <div id="formularioContainer" style="display:none;">
+    <h2>Registrar aula para: <span id="nomeAlunoEdicao"></span></h2>
+
+    <h3>Histórico de Aulas</h3>
+    <ul id="historicoExistente"></ul>
+    <hr>
+    
+    <h3>Adicionar Nova Aula</h3>
+    <label for="dataAula">Data da Aula:</label>
+    <input type="text" id="dataAula" placeholder="Ex: 30/07/2025">
+
+    <label for="conteudoAula">Conteúdo Estudado:</label>
+    <textarea id="conteudoAula" rows="4"></textarea>
+
+    <label for="comentarioAula">Comentários da Aula:</label>
+    <textarea id="comentarioAula" rows="4"></textarea>
+
+    <button onclick="salvarNovaAula()">Adicionar Aula ao Histórico</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      updateDoc,
+      arrayUnion,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyApHSOyYUImfmUWYrao2AOEH0rMwJm3ShE",
+      authDomain: "app-do-aluno-13dde.firebaseapp.com",
+      projectId: "app-do-aluno-13dde",
+      storageBucket: "app-do-aluno-13dde.appspot.com",
+      messagingSenderId: "911749754839",
+      appId: "1:911749754839:web:1f3e47b181df83dea8a592"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, user => {
+      if (!user || user.email !== "keeyth@oaprendiz.com") {
+        alert("Acesso restrito.");
+        window.location.href = "login.html";
+      } else {
+        carregarAlunos();
+      }
+    });
+
+    async function carregarAlunos() {
+      const alunosCol = collection(db, "alunos");
+      const alunosSnap = await getDocs(alunosCol);
+      const lista = document.getElementById("listaAlunos");
+      lista.innerHTML = "";
+
+      alunosSnap.forEach(docSnap => {
+        const aluno = docSnap.data();
+        const uid = docSnap.id;
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${aluno.nome}</strong><br>`;
+        const botao = document.createElement("button");
+        botao.textContent = "Registrar Aula";
+        botao.addEventListener("click", () => selecionarAluno(uid, aluno));
+        li.appendChild(botao);
+        lista.appendChild(li);
+      });
+    }
+
+    let uidSelecionado = null;
+    let alunoSelecionado = null;
+
+    function selecionarAluno(uid, aluno) {
+      uidSelecionado = uid;
+      alunoSelecionado = aluno;
+      document.getElementById("nomeAlunoEdicao").innerText = aluno.nome || "";
+
+      const historicoLista = document.getElementById("historicoExistente");
+      historicoLista.innerHTML = "";
+
+      if (aluno.historicoAulas && aluno.historicoAulas.length > 0) {
+        [...aluno.historicoAulas].reverse().forEach((aula, indexReverso) => {
+          const indexReal = aluno.historicoAulas.length - 1 - indexReverso;
+          const item = document.createElement("li");
+          item.innerHTML = `
+            <b>${aula.data}</b>: ${aula.conteudo.substring(0, 50)}...
+            <button class="excluir" onclick="deletarAula('${uid}', ${indexReal})">Excluir</button>
+          `;
+          historicoLista.appendChild(item);
+        });
+      } else {
+        historicoLista.innerHTML = "<li>Nenhuma aula registrada ainda.</li>";
+      }
+
+      document.getElementById("dataAula").value = "";
+      document.getElementById("conteudoAula").value = "";
+      document.getElementById("comentarioAula").value = "";
+
+      document.getElementById("formularioContainer").style.display = "block";
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    async function salvarNovaAula() {
+      if (!uidSelecionado) {
+        alert("Nenhum aluno selecionado.");
+        return;
+      }
+
+      const data = document.getElementById("dataAula").value;
+      const conteudo = document.getElementById("conteudoAula").value;
+      const comentario = document.getElementById("comentarioAula").value;
+
+      if (!data || !conteudo || !comentario) {
+        alert("Por favor, preencha todos os campos da nova aula.");
+        return;
+      }
+
+      const novaAula = {
+        data,
+        conteudo,
+        comentario
+      };
+
+      const ref = doc(db, "alunos", uidSelecionado);
+
+      await updateDoc(ref, {
+        historicoAulas: arrayUnion(novaAula)
+      });
+
+      alert("Nova aula adicionada com sucesso!");
+      location.reload();
+    }
+
+    // NOVA FUNÇÃO PARA DELETAR AULAS
+    async function deletarAula(uid, indexAula) {
+      if (!confirm("Tem certeza que deseja excluir esta aula?")) return;
+
+      const ref = doc(db, "alunos", uid);
+      const snap = await getDoc(ref);
+
+      if (!snap.exists()) {
+        alert("Aluno não encontrado.");
+        return;
+      }
+
+      const dados = snap.data();
+      const historico = dados.historicoAulas || [];
+
+      if (indexAula < 0 || indexAula >= historico.length) {
+        alert("Índice inválido.");
+        return;
+      }
+
+      historico.splice(indexAula, 1); // Remove a aula pelo índice
+
+      await updateDoc(ref, {
+        historicoAulas: historico
+      });
+
+      alert("Aula excluída com sucesso!");
+      location.reload();
+    }
+
+    window.selecionarAluno = selecionarAluno;
+    window.salvarNovaAula = salvarNovaAula;
+    window.deletarAula = deletarAula;
+  </script>
+</body>
+</html>
