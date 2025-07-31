@@ -119,7 +119,7 @@
 
 <section id="blocoAluno" style="display:none; margin-top: 30px;">
   <h2>Olá, <span id="nomeAluno"></span>!</h2>
-  <h3>Sua caderneta de aulas:</h3>
+  <h3>Diário de aula:</h3>
   
   <div id="historicoContainer"></div>
 
@@ -214,9 +214,11 @@
 
                   // Adiciona o conteúdo da aula dentro do 'div'
                   aulaDiv.innerHTML = `
-                      <h4 style="margin-top:0;"><strong>Data:</strong> ${aula.data || "Não definida"}</h4>
-                      <p><strong>Conteúdo estudado:</strong> ${aula.conteudo || "Nenhum"}</p>
-                      <p style="margin-bottom:0;"><strong>Comentários do professor:</strong> ${aula.comentario || "Nenhum"}</p>
+                      <h4 style="margin-top:0;"><strong>Data da aula:</strong> ${aula.data || "Não definida"}</h4>
+    <p><strong>Anotações da aula:</strong> ${aula.anotacoes || "Nenhuma"}</p>
+    <p style="margin-bottom:0;"><strong>Postura e posição do instrumento:</strong> ${aula.postura || "Nenhuma observação"}</p>
+    <p><strong>Música de revisão:</strong> ${aula.musicaRevisao || "Nenhuma"}</p>
+   
                   `;
 
                   // Adiciona o bloco da aula ao container principal
