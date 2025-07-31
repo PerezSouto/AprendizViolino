@@ -86,23 +86,19 @@
     <h3>Histórico de Aulas</h3>
     <ul id="historicoExistente"></ul>
     <hr>
-
+    
     <h3><span id="tituloFormulario">Adicionar Nova Aula</span></h3>
-
     <label for="dataAula">Data da Aula:</label>
     <input type="text" id="dataAula" placeholder="Ex: 30/07/2025">
-
-    <label for="nomeAluno">Nome do Aluno:</label>
-    <input type="text" id="nomeAluno" placeholder="Ex: Francisco">
 
     <label for="anotacoesAula">Anotações da Aula:</label>
     <textarea id="anotacoesAula" rows="4"></textarea>
 
-    <label for="anotacoesPostura">Anotações de postura e posição do instrumento:</label>
-    <textarea id="anotacoesPostura" rows="4"></textarea>
+    <label for="posturaAula">Postura e Posição do Instrumento:</label>
+    <textarea id="posturaAula" rows="4"></textarea>
 
-    <label for="musicaRecordar">Música para Recordar:</label>
-    <input type="text" id="musicaRecordar">
+    <label for="musicaRevisaoAula">Música de Revisão:</label>
+    <textarea id="musicaRevisaoAula" rows="2"></textarea>
 
     <button id="botaoSalvar" onclick="salvarNovaAula()">Adicionar Aula ao Histórico</button>
     <button id="botaoCancelar" class="cancelar" onclick="cancelarEdicao()" style="display:none;">Cancelar Edição</button>
@@ -179,7 +175,11 @@
           const indexReal = aluno.historicoAulas.length - 1 - indexReverso;
           const item = document.createElement("li");
           item.innerHTML = `
-            <b>${aula.data}</b>: ${aula["Anotações da aula"]?.substring(0, 50) || "Sem anotações"}...
+            <b>${aula.data}</b><br>
+            <b>Anotações:</b> ${aula.anotacoes}<br>
+            <b>Postura:</b> ${aula.postura}<br>
+            <b>Música de Revisão:</b> ${aula.musicaRevisao}
+            <br>
             <button class="excluir" onclick="deletarAula('${uid}', ${indexReal})">Excluir</button>
             <button class="editar" onclick="editarAula(${indexReal})">Editar</button>
           `;
@@ -196,11 +196,10 @@
 
     function editarAula(index) {
       const aula = alunoSelecionado.historicoAulas[index];
-      document.getElementById("dataAula").value = aula.data || "";
-      document.getElementById("nomeAluno").value = aula.nome || "";
-      document.getElementById("anotacoesAula").value = aula["Anotações da aula"] || "";
-      document.getElementById("anotacoesPostura").value = aula["Anotações de postura e posição do instrumento"] || "";
-      document.getElementById("musicaRecordar").value = aula["Música para recordar"] || "";
+      document.getElementById("dataAula").value = aula.data;
+      document.getElementById("anotacoesAula").value = aula.anotacoes;
+      document.getElementById("posturaAula").value = aula.postura;
+      document.getElementById("musicaRevisaoAula").value = aula.musicaRevisao;
 
       indexAulaEditando = index;
       estaEditando = true;
@@ -216,10 +215,9 @@
 
     function limparFormulario() {
       document.getElementById("dataAula").value = "";
-      document.getElementById("nomeAluno").value = "";
       document.getElementById("anotacoesAula").value = "";
-      document.getElementById("anotacoesPostura").value = "";
-      document.getElementById("musicaRecordar").value = "";
+      document.getElementById("posturaAula").value = "";
+      document.getElementById("musicaRevisaoAula").value = "";
 
       estaEditando = false;
       indexAulaEditando = null;
@@ -236,24 +234,16 @@
       }
 
       const data = document.getElementById("dataAula").value;
-      const nome = document.getElementById("nomeAluno").value;
-      const anotacoesAula = document.getElementById("anotacoesAula").value;
-      const anotacoesPostura = document.getElementById("anotacoesPostura").value;
-      const musicaRecordar = document.getElementById("musicaRecordar").value;
+      const anotacoes = document.getElementById("anotacoesAula").value;
+      const postura = document.getElementById("posturaAula").value;
+      const musicaRevisao = document.getElementById("musicaRevisaoAula").value;
 
-      if (!data || !nome || !anotacoesAula || !anotacoesPostura) {
-        alert("Por favor, preencha todos os campos obrigatórios.");
+      if (!data || !anotacoes || !postura || !musicaRevisao) {
+        alert("Por favor, preencha todos os campos da aula.");
         return;
       }
 
-      const novaAula = {
-        data,
-        nome,
-        "Anotações da aula": anotacoesAula,
-        "Anotações de postura e posição do instrumento": anotacoesPostura,
-        "Música para recordar": musicaRecordar || ""
-      };
-
+      const novaAula = { data, anotacoes, postura, musicaRevisao };
       const ref = doc(db, "alunos", uidSelecionado);
       const snap = await getDoc(ref);
 
@@ -263,8 +253,7 @@
       }
 
       const dados = snap.data();
-      let historico = Array.isArray(dados.historicoAulas) ? dados.historicoAulas : [];
-
+      let historico = dados.historicoAulas || [];
 
       if (estaEditando) {
         historico[indexAulaEditando] = novaAula;
