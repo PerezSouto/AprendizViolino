@@ -246,13 +246,19 @@ window.addEventListener("resize", centerCarousel);
       const senha = document.getElementById("password").value;
 
     signInWithEmailAndPassword(auth, email, senha)
-    .then(userCredential => {
-        // alert("Login bem-sucedido!"); // <-- Remova ou comente esta linha
-        window.location.href = "home.html"; // Redireciona direto para a página
-    })
-    .catch(error => {
-        alert("Erro no login: " + error.message);
-    });
+  .then(userCredential => {
+    const user = userCredential.user;
+
+    // Verifica se é o professor
+    if (user.email === "keeyth@oaprendiz.com") {
+      window.location.href = "painelprof.html"; // Página do professor
+    } else {
+      window.location.href = "home.html"; // Página dos alunos
+    }
+  })
+  .catch(error => {
+    alert("Erro no login: " + error.message);
+  });
     });
   </script>
 
