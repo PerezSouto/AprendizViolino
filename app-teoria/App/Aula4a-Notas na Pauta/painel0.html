@@ -121,7 +121,10 @@ Cores:
         <div id="progreso">
             <img src="../img-progresao/coruja4.png" alt="imagem coruja indicando o Bloco 1">
             <h1>Notas na Pauta</h1>
-            <img class="imgprogreso" src="../img-progresao/0.png" alt="Imagem porcentagem de progessão">
+            <!-- Botão Sair -->
+    <div id="topRightButtons">
+      <a href="../../menu.html"><button>⏹️ Voltar Menu</button></a>
+    </div>
 </div>
 
     </header>
@@ -140,6 +143,10 @@ Cores:
     </footer>
 
         <script>
+                function exitGame() {
+      window.location.href = "menu.html"; // ajuste conforme necessário
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         const botao = document.querySelector(".botaocontinuar");
 
