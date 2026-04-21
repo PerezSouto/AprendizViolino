@@ -126,10 +126,10 @@ Cores:
   </header>
   <main>
     <article>
-      <p>Quais são as notas vizinhas de Mi:</p> <br>
-      <div class="botaopc" id="opc1">Dó e Fá</div>
-      <div class="botaopc" id="opc2">Ré e Sol</div>
-      <div class="botaopc" id="opc3">Ré e Fá</div>
+      <p>Quais são as notas vizinhas de Si:</p> <br>
+      <div class="botaopc" id="opc1">Lá e Dó</div>
+      <div class="botaopc" id="opc2">Sol e Lá</div>
+      <div class="botaopc" id="opc3">Ré e Lá</div>
     </article>
   </main>
   <footer>
@@ -139,7 +139,7 @@ Cores:
   const botoes = document.querySelectorAll('.botaopc');
   const verificarBtn = document.getElementById('btnVerificar');
   const textoBotao = document.getElementById('textoBotao');
-  const botaoCorreto = document.getElementById('opc2');
+  const botaoCorreto = document.getElementById('opc1');
   let botaoSelecionado = null;
   let estado = 'verificar'; // estados possíveis: 'verificar', 'tentar', 'finalizado'
 
@@ -219,7 +219,7 @@ Cores:
       estado = 'verificar';
     } else if (estado === 'finalizado') {
       // Agora sim muda de página
-      window.location.href = 'painel5.html'; // <- Altere para o link da próxima etapa
+      window.location.href = 'painel6.html'; // <- Altere para o link da próxima etapa
     }
   });
     // Adiciona o efeito touchstart ao botão Verificar/Continuar
